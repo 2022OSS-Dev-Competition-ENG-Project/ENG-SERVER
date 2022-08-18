@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.managerservice.mapper.FacilityMapper">
+
+    <resultMap type="com.example.managerservice.dto.FacilityDto" id="facilityInfo" >
+        <result property="facility_no" column="facilityNo"/>
+        <result property="userId" column="mg_user_uuid"/>
+        <result property="facility_name" column="facilityName"/>
+        <result property="facility_address" column="facilityAddress"/>
+        <result property="facility_qr_code" column="facilityQrCode"/>
+    </resultMap>
+
+    <insert id="registerFacility" parameterType="com.example.managerservice.dto.FacilityDto">
+        INSERT INTO facility (
+            facility_no,
+            mg_user_uuid,
+            facility_name,
+            facility_address,
+            facility_qr_code
+        )
+        values (
+                    #{facilityNo},
+                    #{userId},
+                    #{facilityName},
+                    #{facilityAddress},
+                    #{facilityQrCode}
+               )
+    </insert>
+
+    <select id="findDetailFacility" resultMap="facilityInfo">
+        SELECT *
+        FROM facility
+        WHERE facility_address = #{facilityAddress}
+    </select>
+
+    <select id="nameAndAddressToDto" resultMap="facilityInfo">
+        <![CDATA[
+        SELECT *
+        FROM facility
+        WHERE facility_name = #{facilityName} AND facility_address = #{facilityAddress}
+        ]]>
+    </select>
+</mapper>

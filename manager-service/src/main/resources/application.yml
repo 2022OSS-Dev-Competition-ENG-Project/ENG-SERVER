@@ -1,0 +1,14 @@
+server:
+  port: 10001
+
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://203.250.32.29:5001/engbase
+    username: rooteng
+    password: eng1234
+
+mybatis:
+  type-aliases-package: com.example.mappertut.model
+  mapper-locations: mybatis-mapper/*.xml
+  configuration.map-underscore-to-camel-case: true

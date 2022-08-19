@@ -102,6 +102,8 @@ public class UserController {
         }
     }
 
+
+
     // 사용자가 등록한 시설물 리스트 출력
 //    @GetMapping("/shop/name/search/")
 //    public List<UserFacilityDto> UserFacilityList(UserFacilityDto userFacilityDto){

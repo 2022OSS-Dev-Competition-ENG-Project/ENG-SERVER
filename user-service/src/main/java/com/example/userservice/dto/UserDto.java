@@ -3,6 +3,7 @@ package com.example.userservice.dto;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class UserDto {
@@ -16,4 +17,5 @@ public class UserDto {
     private Date UserBirth;
     private String UserType;
     private String UserLoginKey;
+
 }

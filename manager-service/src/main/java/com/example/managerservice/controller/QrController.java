@@ -14,6 +14,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Locale;
 
 @Slf4j
 @RestController
@@ -22,6 +23,8 @@ public class QrController {
 
     private QrService qrService;
     private FacilityService facilityService;
+
+    String out;
 
     @Autowired
     public QrController(QrService qrService, FacilityService facilityService) {
@@ -37,9 +40,11 @@ public class QrController {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         log.info("입력 데이터 : " + fd.getFacilityName() +", " + fd.getFacilityAddress());
         log.info("데이터 검색 시작");
+
         String fileDir = facilityService.nameAndAddressToDto(fd).getFacilityQrCode();
 
 
+        out.toLowerCase(Locale.ROOT);
         try{
             fis = new FileInputStream(fileDir);
         } catch(FileNotFoundException e){

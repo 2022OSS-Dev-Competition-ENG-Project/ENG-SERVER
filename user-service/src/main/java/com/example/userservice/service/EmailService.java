@@ -1,6 +1,6 @@
 package com.example.userservice.service;
 
-import com.example.userserver.constant.SignUpConstant;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -24,7 +24,7 @@ public class EmailService {
         SimpleMailMessage message = new SimpleMailMessage();
         String key = createKey();
         message.setTo(userEmail);
-        message.setSubject(SignUpConstant.SIGNUP_SEND_MAIL_TITLE);
+        message.setSubject(SIGNUP_SEND_MAIL_TITLE);
         message.setText(SignUpConstant.SIGNUP_SEND_MAIL_CONTENT.replaceAll("\\$key", key));
         javaMailSender.send(message);
         redisService.setDataExpire(userEmail,key,60 * 3L);

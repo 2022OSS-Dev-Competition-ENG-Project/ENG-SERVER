@@ -26,11 +26,13 @@ public class UserController {
         this.securityService = securityService;
         this.emailService = emailService;
     }
+
     private UserService userService;
     private PasswordEncoder passwordEncoder;
     private SecurityService securityService;
     private EmailService emailService;
     String token;
+
 
     @PostMapping("/user-service/signup")
     public ResponseEntity<String> retrieveAllUser(@RequestBody UserDto userDto) {

@@ -20,6 +20,4 @@ class UserConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().disable() //로그인창 열지 않기
                 .headers().frameOptions().disable();
     }
-    //코드 추가
-
 }

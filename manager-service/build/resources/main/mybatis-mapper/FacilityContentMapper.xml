@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.managerservice.mapper.FacilityContentMapper">
+
+    <resultMap type="com.example.managerservice.dto.FacilityContentDto" id="facilityContentInfo" >
+        <result property="facility_content_num" column="facilityContentNum"/>
+        <result property="facility_content_title" column="facilityContentTitle"/>
+        <result property="facility_content_text" column="facilityContentText"/>
+        <result property="facility_content_img" column="facilityContentImg"/>
+        <result property="facility_content_date" column="facilityContentDate"/>
+        <result property="facility_content_look" column="facilityContentLook"/>
+        <result property="facility_content_type" column="facilityContentType"/>
+        <result property="facility_no" column="facilityNo"/>
+        <result property="user_uuid" column="userUuid"/>
+    </resultMap>
+
+    <insert id="registerContent" parameterType="com.example.managerservice.dto.FacilityContentDto">
+        INSERT INTO facility_content (
+            facility_content_num,
+            facility_content_title,
+            facility_content_text,
+            facility_content_img,
+            facility_content_date,
+            facility_content_look,
+            facility_content_type,
+            facility_no,
+            user_uuid
+        )
+        values (
+                #{facilityContentNum},
+                #{facilityContentTitle},
+                #{facilityContentText},
+                #{facilityContentImg},
+                #{facilityContentDate},
+                #{facilityContentLook},
+                #{facilityContentType},
+                #{facilityNo},
+                #{userUuid}
+
+               )
+    </insert>
+
+    <select id="contentDetailView" resultMap="facilityContentInfo">
+        SELECT *
+        FROM facility_content
+        WHERE facility_content_num = #{facilityContentNum}
+    </select>
+
+    <select id="findValidFacilityContentNum" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM facility_content
+        WHERE facility_content_num = #{facilityContentNum}
+    </select>
+
+    <select id="facilityInUserValid"  resultMap="facilityContentInfo">
+        select *
+        from facility_content
+        where facility_content_num = #{facilityContentNum} AND user_uuid = #{userUuid}
+    </select>
+</mapper>

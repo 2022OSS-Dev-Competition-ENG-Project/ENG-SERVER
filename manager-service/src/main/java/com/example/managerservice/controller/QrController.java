@@ -32,8 +32,7 @@ public class QrController {
         this.facilityService = facilityService;
     }
 
-    @GetMapping(value = "/QR/getUrl",
-            produces= MediaType.IMAGE_PNG_VALUE)
+    @GetMapping(value = "/QR/getUrl", produces= MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<byte[]> getQRImage(@RequestBody FacilityDto fd){
 
         FileInputStream fis = null;
@@ -44,7 +43,6 @@ public class QrController {
         String fileDir = facilityService.nameAndAddressToDto(fd).getFacilityQrCode();
 
 
-        out.toLowerCase(Locale.ROOT);
         try{
             fis = new FileInputStream(fileDir);
         } catch(FileNotFoundException e){

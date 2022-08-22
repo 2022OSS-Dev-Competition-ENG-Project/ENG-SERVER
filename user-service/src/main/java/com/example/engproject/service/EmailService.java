@@ -1,10 +1,11 @@
-package com.example.userservice.service;
+package com.example.engproject.service;
 
-import com.example.userserver.constant.SignUpConstant;
+import com.example.engproject.constant.SignUpConstant;
+import org.apache.logging.log4j.message.SimpleMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
@@ -18,6 +19,7 @@ public class EmailService {
     }
     private JavaMailSender javaMailSender;
     private RedisService redisService;
+
 
     /* 이메일 인증 코드 발송 */
     public void sendMail(String userEmail){

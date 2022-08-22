@@ -1,4 +1,4 @@
-package com.example.userservice.service;
+package com.example.engproject.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
@@ -24,7 +24,7 @@ public class SecurityService {
 
     private  static String SECRET_KEY;
     //로그인 서비스 던질때 같
-    public String createToken(String ResponseId , long expTime, int phoneNum, String UserName){
+    public String createToken(String ResponseId , long expTime, String phoneNum, String UserName){
         if(expTime <= 0){
             throw new RuntimeException("만료시간이 0보다 커야합니다.");
         }
@@ -46,7 +46,7 @@ public class SecurityService {
     }
 
     //토큰검증하는 메서드를 boolean~~
-    public boolean getSubject(String token, int phoneNum){
+    public boolean getSubject(String token, String phoneNum){
         String userPhoneNum = String.valueOf(phoneNum);
         SECRET_KEY = "dkawmasrsdghfsehbsrgnbf" + userPhoneNum + "dasdawezxvbzsdfqefqwrasdfadgfmd";
         Claims claims = Jwts.parserBuilder()

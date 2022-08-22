@@ -1,7 +1,9 @@
 package com.example.engproject.controller;
 
+
 import com.example.engproject.dto.UserDto;
 import com.example.engproject.service.EmailService;
+import com.example.engproject.service.RedisService;
 import com.example.engproject.service.SecurityService;
 import com.example.engproject.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -9,58 +11,99 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
 @CrossOrigin
 @Slf4j
+@RestController
 @RequestMapping(value = "/api")
 public class UserController {
 
     @Autowired
-    public UserController(UserService userService, PasswordEncoder passwordEncoder, SecurityService securityService, EmailService emailService){
+    public UserController(UserService userService, PasswordEncoder passwordEncoder, SecurityService securityService, EmailService emailService
+            , RedisService redisService){
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.securityService = securityService;
         this.emailService = emailService;
+        this.redisService = redisService;
     }
     private UserService userService;
     private PasswordEncoder passwordEncoder;
     private SecurityService securityService;
     private EmailService emailService;
+    private RedisService redisService;
     String token;
 
     @PostMapping("/user-service/signup")
     public ResponseEntity<String> retrieveAllUser(@RequestBody UserDto userDto) {
+        String ResponseEmail = userDto.getUserEmail();
+
         log.info("Signup : 시도");
-//        String LoginKeyCheck = userService.findEmail(userDto).getUserLoginKey();
-//        if ( LoginKeyCheck == "1" ) {
+        String LoginKeyCheck = userService.findEmail(userDto).getUserLoginKey();
+        String AccessType = userService.findEmail(userDto).getUserAccessType();
+        if ( LoginKeyCheck == "1" && AccessType == "1") {
+        log.info(userDto.toString());
             userService.SignupUser(userDto);
             log.info("Signup : 완료");
             return ResponseEntity.status(HttpStatus.CREATED).body("회원가입 완료");
-//        } else {
-//            log.info("Signup : 실패");
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("이메일 인증을 진행해주세요.");
-//        }
-    }
-
-    @GetMapping("/user-service/check/email/{email}")
-    public ResponseEntity<String> EmailConform(@PathVariable("email")String email) throws NullPointerException {
-        UserDto userDto = userService.EmailConform(email);
-        if (userDto == null) {
-            emailService.sendMail(email);
-            return ResponseEntity.status(HttpStatus.OK).body("사용가능한 Email입니다. \n 인증코드가 발송 되었습니다.");
+        } else if (LoginKeyCheck != "1" && AccessType != "1") {
+            log.info("SignUp : 닉네임 중복 체크, 이메일 인증 안함");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("이메일 인증과 닉네임 중복 체크를 해주세요");
+        } else if ( AccessType != "1" ) {
+            log.info("SignUp : 닉네임 중복 안함");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("닉네임 중복 체크를 진행해주세요.");
+        } else if ( LoginKeyCheck != "1") {
+            log.info("Signup : 이메일 인증 안함");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("이메일 인증을 진행해주세요.");
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("사용불가능한 Email입니다.");
+            return null;
         }
     }
-//    @GetMapping("/user/certification/conform/{email}")
-//    public String conform(@PathVariable("email")String email) {
-//        userService.conform(email);
-//        log.info("Certification : 이메일 인증");
-//        return "인증되었습니다.";
-//    }
+
+    @GetMapping("/register/check/email/{email}")
+    public ResponseEntity registerEmailCheck(
+            @PathVariable("email")String email) throws NullPointerException{
+        UserDto userDto = userService.registerEmailCheck(email);
+        if (userDto == null){
+            String LoginKey = "1";
+            emailService.sendMail(email);
+            userService.EmailConform(email,LoginKey);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body("사용 가능한 이메일입니다.\n 인증코드가 발송 되었습니다.");
+
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("사용중인 이메일입니다.");
+        }
+    }
+
+    @GetMapping("/register/check/email/{email}/{code}")
+    public ResponseEntity emailCheck(@PathVariable("email") String email,
+                                     @PathVariable("code") String code){
+        String valueKey = redisService.getData(email);
+        if (valueKey == null) return ResponseEntity.status(HttpStatus.OK)
+                .body("인증코드 유효기간이 만료 되었습니다.");
+        log.info(valueKey);
+        if (Integer.parseInt(valueKey) == Integer.parseInt(code)){
+            redisService.deleteData(email);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body("이메일 인증이 완료 되었습니다.");
+        }else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("잘못된 인증 코드 입니다.");
+        }
+    }
+
+    @GetMapping("/register/check/nickname/{nickname}")
+    public ResponseEntity registerNicknameCheck(
+            @PathVariable("nickname")String nickname){
+        UserDto userDto = userService.registerNickNameCheck(nickname);
+        if (userDto == null){
+            return ResponseEntity.status(HttpStatus.OK).body("사용 가능한 닉네임입니다.");
+        }else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("사용중인 닉네임입니다.");
+        }
+    }
 
     @PostMapping("/user-service/login")
     public ResponseEntity<String> retrieveAllUsers(@RequestBody UserDto userDto) {

@@ -7,7 +7,11 @@ public interface UserMapper {
 
     void SignupUser(UserDto userDto);
 
-    UserDto EmailConform(String email);
+    UserDto EmailConform(String email, String LoginKey);
 
     UserDto findEmail(UserDto userDto);
+
+    UserDto registerEmailCheck(String email);
+
+    UserDto registerNickNameCheck(String nickName);
 }

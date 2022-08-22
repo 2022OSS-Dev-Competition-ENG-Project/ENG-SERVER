@@ -1,4 +1,4 @@
-package com.example.userservice.dto;
+package com.example.engproject.dto;
 
 import lombok.Data;
 
@@ -12,7 +12,7 @@ public class UserDto {
     String UserVerifyPassword;
     String UserName;
     String UserNickname;
-    int UserPhoneNum;
+    String UserPhoneNum;
     Date UserBirth;
     String UserType;
     String UserLoginKey;

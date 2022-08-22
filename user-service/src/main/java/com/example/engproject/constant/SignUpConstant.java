@@ -1,4 +1,4 @@
-package com.example.userservice.constant;
+package com.example.engproject.constant;
 
 public class SignUpConstant {
     public static final String SIGNUP_SEND_MAIL_URL = "url : http://203.250.32.29:8080/api/user/certification/conform/";

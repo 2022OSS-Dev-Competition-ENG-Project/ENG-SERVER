@@ -1,7 +1,7 @@
-package com.example.userservice.service;
+package com.example.engproject.service;
 
-import com.example.userservice.dto.UserDto;
-import com.example.userservice.mapper.UserMapper;
+import com.example.engproject.dto.UserDto;
+import com.example.engproject.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

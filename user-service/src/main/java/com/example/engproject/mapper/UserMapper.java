@@ -1,6 +1,5 @@
-package com.example.userservice.mapper;
-
-import com.example.userservice.dto.UserDto;
+package com.example.engproject.mapper;
+import com.example.engproject.dto.UserDto;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.userservice.mapper.FacilityMapper">
+
+    <resultMap type="com.example.userservice.dto.FacilityJoinMyDto" id="userfacilityinfo">
+        <result property="user_uuid" column="userId"></result>
+        <result property="user_facility" column="facilityNo"/>
+    </resultMap>
+
+    <insert id="facilityJoinMy" parameterType="com.example.userservice.dto.FacilityJoinMyDto">
+        insert into user_use_facility(
+            user_uuid,
+            user_facility
+        )values(
+                   #(userId),
+                   #(facilityNo)
+               )
+    </insert>
+
+    <select id="findFacility" resultMap="userfacilityinfo">
+        select user_facility
+        from user_use_facility
+        where user_facility = #{facilityNo} AND user_uuid = #{userId}
+    </select>
+
+</mapper>

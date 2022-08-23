@@ -1,6 +1,5 @@
 package com.example.managerservice.service;
 
-import com.example.managerservice.dto.FacilityDto;
 import com.example.managerservice.mapper.FacilityMapper;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
@@ -26,14 +25,6 @@ import static com.example.managerservice.constant.QRCodeConstant.*;
 @Service
 public class QrService {
 
-    private FacilityMapper facilityMapper;
-
-    @Autowired
-    public QrService(FacilityMapper facilityMapper) {
-        this.facilityMapper = facilityMapper;
-    }
-
-
     public String generateQRCodeImage(String id,String name,String address) throws WriterException, IOException {
 
         String savePath = SAVE_PATH;
@@ -49,7 +40,7 @@ public class QrService {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = qrCodeWriter.encode(codeUrl, BarcodeFormat.QR_CODE, QRCODE_HEIGHT, QRCODE_WIDTH);
 
-        MatrixToImageConfig matrixToImageConfig = new MatrixToImageConfig(QRCODE_COLOR,QRCODE_BACKGROUND_COLOR);
+        MatrixToImageConfig matrixToImageConfig = new MatrixToImageConfig(0xFF2e4e96,0xFFFFFFFF);
         BufferedImage bufferedImage = MatrixToImageWriter.toBufferedImage(bitMatrix,matrixToImageConfig);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");

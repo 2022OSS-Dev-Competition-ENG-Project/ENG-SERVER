@@ -1,5 +1,9 @@
 package com.example.userservice.service;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 848e550e8be41ae0c081d4641e74caca9ba9c911
 import com.example.userservice.constant.SignUpConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -7,6 +11,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
+
+import static com.example.userservice.constant.SignUpConstant.SIGNUP_SEND_MAIL_TITLE;
 
 @Service
 public class EmailService {
@@ -25,7 +31,7 @@ public class EmailService {
         SimpleMailMessage message = new SimpleMailMessage();
         String key = createKey();
         message.setTo(userEmail);
-        message.setSubject(SignUpConstant.SIGNUP_SEND_MAIL_TITLE);
+        message.setSubject(SIGNUP_SEND_MAIL_TITLE);
         message.setText(SignUpConstant.SIGNUP_SEND_MAIL_CONTENT.replaceAll("\\$key", key));
         javaMailSender.send(message);
         redisService.setDataExpire(userEmail,key,60 * 3L);

@@ -22,11 +22,31 @@
         where user_email = #{userEmail}
     </update>
 
+<mapper namespace="com.example.userservice.mapper.UserMapper">
+
+    <insert id="SignupUser" parameterType="com.example.userservice.dto.UserDto">
+        INSERT INTO user (email,
+                          password,
+                          name,
+                          nickname,
+                          phonenum,
+                          birth
+        )
+        values (
+                   #{email},
+                   #{password},
+                   #{name},
+                   #{nickname},
+                   #{phonenum}
+               )
+    </insert>
+
     <update id="NickNameCheck" parameterType="com.example.engproject.dto.UserDto">
         update user
         set user_access_type = #{AccessType}, user_nickname = #{nickName}
         where user_email = #{userEmail}
     </update>
+
 
     <insert id="EmailConform" parameterType="com.example.engproject.dto.UserDto">
         insert into user(user_uuid,
@@ -58,4 +78,21 @@
         SET user_login_key = #{LoginKey}
         where user_email = #{userEmail}
     </insert>
+
+    <insert id="facilityJoinMy" parameterType="com.example.userservice.dto.FacilityJoinMyDto">
+        insert into user_use_facility(
+                                      user_uuid,
+                                      user_facility
+                                      )values(
+                                              #(userId),
+                                              #(facilityNo)
+                                                     )
+    </insert>
+    
+    <select id="findFacility" resultMap="userFacility">
+        select user_facility
+        from user_use_facility
+        where user_facility = #{facilityNo} AND user_uuid = #{userId}
+    </select>
+
 </mapper>

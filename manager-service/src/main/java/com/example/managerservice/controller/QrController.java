@@ -14,6 +14,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Locale;
+
+import static com.example.managerservice.constant.FacilityConstant.FACILITY_NOT_FOUND;
 
 @Slf4j
 @RestController
@@ -29,16 +32,19 @@ public class QrController {
         this.facilityService = facilityService;
     }
 
-    @GetMapping(value = "/QR/getUrl",
-            produces= MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity<byte[]> getQRImage(@RequestBody FacilityDto fd){
+    @GetMapping(value = "/QR/getUrl", produces= MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity getQRImage(@RequestBody FacilityDto fd){
 
         FileInputStream fis = null;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        log.info("입력 데이터 : " + fd.getFacilityName() +", " + fd.getFacilityAddress());
-        log.info("데이터 검색 시작");
-        String fileDir = facilityService.nameAndAddressToDto(fd).getFacilityQrCode();
 
+        String fileDir;
+        try{
+            facilityService.nameAndAddressToDto(fd).getFacilityQrCode();
+        }catch (NullPointerException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(FACILITY_NOT_FOUND);
+        }
+        fileDir = facilityService.nameAndAddressToDto(fd).getFacilityQrCode();
 
         try{
             fis = new FileInputStream(fileDir);

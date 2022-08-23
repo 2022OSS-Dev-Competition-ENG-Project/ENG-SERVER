@@ -40,7 +40,7 @@ public class QrService {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = qrCodeWriter.encode(codeUrl, BarcodeFormat.QR_CODE, QRCODE_HEIGHT, QRCODE_WIDTH);
 
-        MatrixToImageConfig matrixToImageConfig = new MatrixToImageConfig(QRCODE_COLOR,QRCODE_BACKGROUND_COLOR);
+        MatrixToImageConfig matrixToImageConfig = new MatrixToImageConfig(0xFF2e4e96,0xFFFFFFFF);
         BufferedImage bufferedImage = MatrixToImageWriter.toBufferedImage(bitMatrix,matrixToImageConfig);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");

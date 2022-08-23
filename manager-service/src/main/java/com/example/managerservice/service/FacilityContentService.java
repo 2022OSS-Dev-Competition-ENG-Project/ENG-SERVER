@@ -62,10 +62,10 @@ public class FacilityContentService {
         return FACILITY_CONTENT_DELETE_VALID_COMPLETE;
     }
 
-    /* 공지 리스트 불러오기 */
-    public List<FacilityContentDto> getMyFacilityList(String facilityNo){
-
-    }
+//    /* 공지 리스트 불러오기 */
+//    public List<FacilityContentDto> getMyFacilityList(String facilityNo){
+//
+//    }
 
 
 }

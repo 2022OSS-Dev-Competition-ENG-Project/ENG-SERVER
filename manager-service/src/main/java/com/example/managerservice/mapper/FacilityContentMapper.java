@@ -23,4 +23,6 @@ public interface FacilityContentMapper {
 
     /* 사용자 게시물 보기전 시설물 소속 조회 */
     FacilityContentDto facilityInUserValid(String userUuid, Integer facilityContentNum);
+
+    /* 공지 게시물 전부 불러*/
 }

@@ -5,10 +5,7 @@ import com.example.userservice.service.FacilityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.example.userservice.constant.FacilityConstant.FACILITY_MY_JOIN_FAIL;
 import static com.example.userservice.constant.FacilityConstant.FACILITY_MY_JOIN_SUCCESS;
@@ -40,5 +37,10 @@ public class FacilityController {
             e.printStackTrace();
         }
         return ResponseEntity.status(HttpStatus.OK).body(FACILITY_MY_JOIN_SUCCESS);
+    }
+    /* 내가 사용하는 시설물 불러오기 */
+    @GetMapping("/facility/{uuid}/list")
+    public ResponseEntity myFacilityList(@PathVariable("uuid")String uuid){
+        
     }
 }

@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import static com.example.managerservice.constant.FacilityContentConstant.*;
 
 
@@ -58,6 +60,11 @@ public class FacilityContentService {
         }
         fcm.deleteContent(uuid,contentId);
         return FACILITY_CONTENT_DELETE_VALID_COMPLETE;
+    }
+
+    /* 공지 리스트 불러오기 */
+    public List<FacilityContentDto> getMyFacilityList(String facilityNo){
+
     }
 
 

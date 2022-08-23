@@ -24,6 +24,11 @@ public class FacilityContentController {
         return ResponseEntity.status(HttpStatus.OK).body(fcs.registerContent(facilityContentDto));
     }
 
+    @GetMapping("/facility/{facilityNo}/content/notice/list")
+    public ResponseEntity getFacilityNoticeList(@PathVariable("facilityNo")String facilityNo){
+        return null;
+    }
+
     /*게시물 상세 보가*/
     @GetMapping("/facility/content/{uuid}/{contentId}")
     public ResponseEntity contentDetailView(@PathVariable("uuid") String uuid,

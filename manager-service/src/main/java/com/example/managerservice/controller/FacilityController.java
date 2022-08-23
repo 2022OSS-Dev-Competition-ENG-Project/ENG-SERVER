@@ -1,6 +1,7 @@
 package com.example.managerservice.controller;
 
 import com.example.managerservice.dto.FacilityDto;
+import com.example.managerservice.dto.FacilityJoinDto;
 import com.example.managerservice.service.FacilityService;
 import com.example.managerservice.service.QrService;
 import com.google.zxing.WriterException;
@@ -8,14 +9,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.UUID;
 
+import static com.example.managerservice.constant.FacilityConstant.FACILITY_LIST_NOT_FOUND;
+import static com.example.managerservice.constant.FacilityConstant.FACILITY_NOT_FOUND;
+import static com.example.managerservice.constant.FacilityContentConstant.FACILITY_MY_JOIN_FAIL;
 import static com.example.managerservice.constant.RegisterConstant.REGISTER_CONFLICT;
 
 @Slf4j
@@ -36,24 +37,59 @@ public class FacilityController {
     @PostMapping("/registerFacility")
     public ResponseEntity<String> registerFacility(@RequestBody FacilityDto facilityDto) throws IOException, WriterException {
 
-        String address = new String();
         facilityDto.setFacilityNo(UUID.randomUUID().toString());
         try{
-            address = facilityService.findDetailFacility(facilityDto.getFacilityAddress());
-            if(facilityDto.getFacilityAddress() != null){
-                throw new Exception(REGISTER_CONFLICT);
+            /* 주소 중복 검사 */
+            String address =facilityService.findDetailFacilityAd(facilityDto.getFacilityAddress());
+            if (address != null){
+                throw new Exception();
             }
+            /* 사용 가능한 데이터라면 그냥 넘어가기 */
         }catch (NullPointerException e){
-            facilityDto.setFacilityQrCode(qrService.generateQRCodeImage(
-                    facilityDto.getFacilityNo(),
-                    facilityDto.getFacilityName(),
-                    facilityDto.getFacilityAddress())
-            );
-            return ResponseEntity.status(HttpStatus.CREATED).body(facilityService.registerFacility(facilityDto));
+            log.info("사용 가능한 데이터");
+
+            /* 등록할 주소가 이미 있을 경우 예외 처리*/
         } catch (Exception e) {
             e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(REGISTER_CONFLICT);
         }
-        return ResponseEntity.status(HttpStatus.OK).body("");
+        facilityDto.setFacilityQrCode(qrService.generateQRCodeImage(
+                facilityDto.getFacilityNo(),
+                facilityDto.getFacilityName(),
+                facilityDto.getFacilityAddress()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(facilityService.registerFacility(facilityDto));
+    }
+
+    /* 내가 사용할 시설물 등록 */
+    @PostMapping("/facility/join")
+    public ResponseEntity myFacilityJoin(@RequestBody FacilityJoinDto fjd) {
+
+        /* 시설물 존재 여부 확인 예외처리 */
+        FacilityDto fd = facilityService.findDetailFacilityFn(fjd.getUserFacility());
+        if (fd == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(FACILITY_NOT_FOUND);
+        }
+
+        /* 사용자가 이미 등록한 시설물인지 검사 */
+        if(facilityService.findDerailFacilityId(fjd.getUserUuid(),fjd.getUserFacility()) == 1){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(FACILITY_MY_JOIN_FAIL);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(facilityService.facilityUserJoin(
+                fjd.getUserUuid(),
+                fjd.getUserFacility()));
+    }
+
+    /* 내가 등록한 시설물 불러오기 */
+    @GetMapping("/facility/{userUuid}/list")
+    public ResponseEntity myFacilityList(
+            @PathVariable("userUuid")String userUuid){
+        try {
+            facilityService.getMyFacilityList(userUuid);
+        }catch (NullPointerException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(FACILITY_LIST_NOT_FOUND);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(facilityService.getMyFacilityList(userUuid));
     }
 }
 

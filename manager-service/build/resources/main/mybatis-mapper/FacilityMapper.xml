@@ -7,10 +7,23 @@
 
     <resultMap type="com.example.managerservice.dto.FacilityDto" id="facilityInfo" >
         <result property="facility_no" column="facilityNo"/>
-        <result property="userId" column="mg_user_uuid"/>
+        <result property="mg_user_uuid" column="userId"/>
         <result property="facility_name" column="facilityName"/>
         <result property="facility_address" column="facilityAddress"/>
         <result property="facility_qr_code" column="facilityQrCode"/>
+    </resultMap>
+
+    <resultMap type="com.example.managerservice.dto.FacilityJoinDto" id="facilityJoinUser">
+        <result property="user_uuid" column="userUuid"/>
+        <result property="user_facility" column="userFacility"/>
+    </resultMap>
+
+    <resultMap type="com.example.managerservice.vo.GetMyFacilityList" id="facilityList">
+        <result property="user_uuid" column="userUuid"/>
+        <result property="facility_address" column="facilityAddress"/>
+        <result property="user_facility" column="userFacility"/>
+        <result property="facility_name" column="facilityName"/>
+
     </resultMap>
 
     <insert id="registerFacility" parameterType="com.example.managerservice.dto.FacilityDto">
@@ -30,10 +43,16 @@
                )
     </insert>
 
-    <select id="findDetailFacility" resultMap="facilityInfo">
+    <select id="findDetailFacilityAd" resultMap="facilityInfo">
         SELECT *
         FROM facility
         WHERE facility_address = #{facilityAddress}
+    </select>
+
+    <select id="findDetailFacilityFn" resultMap="facilityInfo">
+        SELECT *
+        FROM facility
+        WHERE facility_no = #{facilityNo}
     </select>
 
     <select id="nameAndAddressToDto" resultMap="facilityInfo">
@@ -43,4 +62,36 @@
         WHERE facility_name = #{facilityName} AND facility_address = #{facilityAddress}
         ]]>
     </select>
+
+    <insert id="facilityUserJoin" parameterType="com.example.managerservice.dto.FacilityJoinDto">
+        INSERT INTO user_use_facility(
+            user_uuid,
+            user_facility
+        )VALUES (
+                   #{userUuid},
+                   #{userFacility}
+               )
+    </insert>
+
+    <select id="findDetailFacilityId" resultType="java.lang.Integer">
+        select if(count(*) = 1, 1, 0)
+        from user_use_facility
+        where user_facility = #{userFacility} AND user_uuid = #{userUuid}
+    </select>
+
+    <select id="getMyFacilityList" resultMap="facilityList">
+        select uuf.user_uuid,
+               uuf.user_facility,
+               f.facility_name ,
+               f.facility_address
+        From(
+            select * from user_use_facility
+            where user_uuid = #{userUuid}
+            ) as uuf
+            INNER JOIN
+                facility f
+            ON
+            uuf.user_facility  = f.facility_no ;
+    </select>
+
 </mapper>

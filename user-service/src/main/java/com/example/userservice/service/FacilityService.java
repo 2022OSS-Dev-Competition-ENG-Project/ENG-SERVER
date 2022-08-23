@@ -5,6 +5,8 @@ import com.example.userservice.mapper.FacilityMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class FacilityService {
 
@@ -21,5 +23,9 @@ public class FacilityService {
 
     public FacilityJoinMyDto facilityJoinMy(FacilityJoinMyDto facilityJoinMyDto){
         return facilityMapper.facilityJoinMy(facilityJoinMyDto);
+    }
+
+    public List<> getMyFacilityList(String uuid){
+
     }
 }

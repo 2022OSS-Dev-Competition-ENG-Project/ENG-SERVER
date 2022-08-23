@@ -26,8 +26,6 @@ public class QrController {
     private QrService qrService;
     private FacilityService facilityService;
 
-    String out;
-
     @Autowired
     public QrController(QrService qrService, FacilityService facilityService) {
         this.qrService = qrService;

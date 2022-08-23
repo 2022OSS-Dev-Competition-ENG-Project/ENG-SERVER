@@ -43,6 +43,12 @@
                )
     </insert>
 
+    <delete id="deleteContent" parameterType="com.example.managerservice.dto.FacilityContentDto">
+        DELETE FROM facility_content
+        WHERE facility_content_num = #{facilityContentNum}
+          AND user_uuid = #{userUuid}
+    </delete>
+
     <select id="contentDetailView" resultMap="facilityContentInfo">
         SELECT *
         FROM facility_content
@@ -60,4 +66,25 @@
         from facility_content
         where facility_content_num = #{facilityContentNum} AND user_uuid = #{userUuid}
     </select>
+
+    <select id="getMyFacilityNoticeLt" resultMap="facilityContentInfo">
+        <![CDATA[
+        SELECT *
+        FROM facility_content
+        WHERE facility_content_type = 1 AND facility_no = #{facilityNo}
+        ORDER BY facility_content_date DESC LIMIT ${count}
+        ;
+        ]]>
+    </select>
+
+    <select id="getMyFacilityLt" resultMap="facilityContentInfo">
+        <![CDATA[
+        SELECT *
+        FROM facility_content
+        WHERE facility_content_type = 0 AND facility_no = #{facilityNo}
+        ORDER BY facility_content_date DESC LIMIT ${count}
+        ;
+        ]]>
+    </select>
+
 </mapper>

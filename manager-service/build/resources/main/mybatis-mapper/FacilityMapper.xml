@@ -43,6 +43,7 @@
                )
     </insert>
 
+
     <select id="findDetailFacilityAd" resultMap="facilityInfo">
         SELECT *
         FROM facility
@@ -93,5 +94,7 @@
             ON
             uuf.user_facility  = f.facility_no ;
     </select>
+
+
 
 </mapper>

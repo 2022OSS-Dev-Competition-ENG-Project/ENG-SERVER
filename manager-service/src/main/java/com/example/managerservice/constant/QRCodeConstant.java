@@ -2,7 +2,7 @@ package com.example.managerservice.constant;
 
 public class QRCodeConstant {
 
-    public static final String SAVE_PATH = "/Users/jeonghun/qr/";
+    public static final String SAVE_PATH = "/home/icslab/qrImages/";
     public static final String QRCODE_GENERATE_URL = "$id/$name/$address";
     public static final int QRCODE_WIDTH = 200;
     public static final int QRCODE_HEIGHT = 200;

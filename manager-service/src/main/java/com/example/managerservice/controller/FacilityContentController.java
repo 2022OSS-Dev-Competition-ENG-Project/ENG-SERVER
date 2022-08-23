@@ -24,11 +24,6 @@ public class FacilityContentController {
         return ResponseEntity.status(HttpStatus.OK).body(fcs.registerContent(facilityContentDto));
     }
 
-    @GetMapping("/facility/{facilityNo}/content/notice/list")
-    public ResponseEntity getFacilityNoticeList(@PathVariable("facilityNo")String facilityNo){
-        return null;
-    }
-
     /*게시물 상세 보가*/
     @GetMapping("/facility/content/{uuid}/{contentId}")
     public ResponseEntity contentDetailView(@PathVariable("uuid") String uuid,
@@ -42,4 +37,17 @@ public class FacilityContentController {
                                         @PathVariable("contentId") String contentId){
         return ResponseEntity.status(HttpStatus.OK).body(fcs.deleteContent(uuid, contentId));
     }
+
+    /* 메인 배너에 보일 공지 게시물 불러오기 */
+    @GetMapping("/facility/{facilityNo}/content/notice/main")
+    public ResponseEntity getMyFacilityNoticeLt(@PathVariable("facilityNo") String facilityNo){
+        return ResponseEntity.status(HttpStatus.OK).body(fcs.getMyFacilityNoticeLt(facilityNo));
+    }
+
+    /* 메인 배너에 보일 일반 게시물 불러오기 */
+    @GetMapping("/facility/{facilityNo}/content/main")
+    public ResponseEntity getMyFacilityLt(@PathVariable("facilityNo") String facilityNo){
+        return ResponseEntity.status(HttpStatus.OK).body(fcs.getMyFacilityLt(facilityNo));
+    }
+
 }

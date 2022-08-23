@@ -11,4 +11,10 @@ public class FacilityContentConstant {
     public static final String FACILITY_CONTENT_VIEW_COMPLETE = "해당 게시물의 조회를 성공하였습니다.";
     public static final String FACILITY_MY_JOIN_FAIL = "이미 등록된 시설물입니다.";
     public static final String FACILITY_MY_JOIN_SUCCESS = "시설물이 정상적으로 등록 되었습니다.";
+
+    /* 메인 배네어 보일 공지 게시물 갯수 */
+    public static final Integer NOTICE_TAKE = 5;
+    /* 메인 배네어 보일 게시물 갯수 */
+    public static final Integer TAKE = 5;
+
 }

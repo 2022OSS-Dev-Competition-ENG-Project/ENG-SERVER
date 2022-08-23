@@ -25,7 +25,4 @@ public class FacilityService {
         return facilityMapper.facilityJoinMy(facilityJoinMyDto);
     }
 
-    public List<> getMyFacilityList(String uuid){
-
-    }
 }

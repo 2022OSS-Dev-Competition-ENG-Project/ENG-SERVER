@@ -38,9 +38,4 @@ public class FacilityController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(FACILITY_MY_JOIN_SUCCESS);
     }
-    /* 내가 사용하는 시설물 불러오기 */
-    @GetMapping("/facility/{uuid}/list")
-    public ResponseEntity myFacilityList(@PathVariable("uuid")String uuid){
-        
-    }
 }

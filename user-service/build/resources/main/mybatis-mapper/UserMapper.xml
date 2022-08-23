@@ -5,43 +5,57 @@
 
 <mapper namespace="com.example.userservice.mapper.UserMapper">
 
-    <insert id="SignupUser" parameterType="com.example.userservice.dto.UserDto">
-        INSERT INTO user (email,
-                          password,
-                          name,
-                          nickname,
-                          phonenum,
-                          birth
-        )
-        values (
-                   #{email},
-                   #{password},
-                   #{name},
-                   #{nickname},
-                   #{phonenum}
-               )
-    </insert>
+    <resultMap type="com.example.userservice.dto.UserDto" id="userInfo" >
+        <result property="user_uuid" column="userUuid"/>
+        <result property="user_email" column="userEmail"/>
+        <result property="user_password" column="userPassword"/>
+        <result property="user_name" column="userName"/>
+        <result property="user_phone_number" column="userPhoneNum"/>
+        <result property="user_birth" column="userBirth"/>
+        <result property="user_type" column="userType"/>
+    </resultMap>
 
-    <update id="conform">
-        update user
-        set login_key = 1
-        where email = #{email}
+    <update id="SignupUser" parameterType="com.example.userservice.dto.UserDto">
+        UPDATE user
+        SET user_uuid = #{userUuid}, user_password = #{userPassword}, user_name = #{userName}, user_nickname = #{userNickname},
+            user_phone_number = #{userPhoneNum}, user_birth = #{userBirth}
+        where user_email = #{userEmail}
     </update>
 
-    <insert id="facilityJoinMy" parameterType="com.example.userservice.dto.FacilityJoinMyDto">
-        insert into user_use_facility(
-                                      user_uuid,
-                                      user_facility
-                                      )values(
-                                              #(userId),
-                                              #(facilityNo)
-                                                     )
+    <update id="NickNameCheck" parameterType="com.example.userservice.dto.UserDto">
+        update user
+        set user_access_type = #{AccessType}, user_nickname = #{nickName}
+        where user_email = #{userEmail}
+    </update>
+
+    <insert id="EmailConform" parameterType="com.example.userservice.dto.UserDto">
+        insert into user(user_uuid,
+                         user_email)
+        values(#{temporaryUuid},
+               #{userEmail})
     </insert>
-    
-    <select id="findFacility" resultMap="userFacility">
-        select user_facility
-        from user_use_facility
-        where user_facility = #{facilityNo} AND user_uuid = #{userId}
+
+    <select id="registerNickNameCheck" resultMap="userInfo">
+        select *
+        from user
+        where user_nickname = #{userNickName}
     </select>
-    
+
+    <select id="registerEmailCheck" resultType="com.example.userservice.dto.UserDto">
+        select *
+        from user
+        where user_email = #{userEmail}
+    </select>
+
+    <select id="findEmail" resultType="com.example.userservice.dto.UserDto">
+        select *
+        from user
+        where user_email = #{userEmail}
+    </select>
+
+    <insert id="EmailCode" parameterType="com.example.userservice.dto.UserDto">
+        UPDATE user
+        SET user_login_key = #{LoginKey}
+        where user_email = #{userEmail}
+    </insert>
 </mapper>

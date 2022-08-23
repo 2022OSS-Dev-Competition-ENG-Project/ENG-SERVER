@@ -3,9 +3,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.engproject.mapper.UserMapper">
+<mapper namespace="com.example.userservice.mapper.UserMapper">
 
-    <resultMap type="com.example.engproject.dto.UserDto" id="userInfo" >
+    <resultMap type="com.example.userservice.dto.UserDto" id="userInfo" >
         <result property="user_uuid" column="userUuid"/>
         <result property="user_email" column="userEmail"/>
         <result property="user_password" column="userPassword"/>
@@ -15,40 +15,20 @@
         <result property="user_type" column="userType"/>
     </resultMap>
 
-    <update id="SignupUser" parameterType="com.example.engproject.dto.UserDto">
+    <update id="SignupUser" parameterType="com.example.userservice.dto.UserDto">
         UPDATE user
         SET user_uuid = #{userUuid}, user_password = #{userPassword}, user_name = #{userName}, user_nickname = #{userNickname},
             user_phone_number = #{userPhoneNum}, user_birth = #{userBirth}
         where user_email = #{userEmail}
     </update>
 
-<mapper namespace="com.example.userservice.mapper.UserMapper">
-
-    <insert id="SignupUser" parameterType="com.example.userservice.dto.UserDto">
-        INSERT INTO user (email,
-                          password,
-                          name,
-                          nickname,
-                          phonenum,
-                          birth
-        )
-        values (
-                   #{email},
-                   #{password},
-                   #{name},
-                   #{nickname},
-                   #{phonenum}
-               )
-    </insert>
-
-    <update id="NickNameCheck" parameterType="com.example.engproject.dto.UserDto">
+    <update id="NickNameCheck" parameterType="com.example.userservice.dto.UserDto">
         update user
         set user_access_type = #{AccessType}, user_nickname = #{nickName}
         where user_email = #{userEmail}
     </update>
 
-
-    <insert id="EmailConform" parameterType="com.example.engproject.dto.UserDto">
+    <insert id="EmailConform" parameterType="com.example.userservice.dto.UserDto">
         insert into user(user_uuid,
                          user_email)
         values(#{temporaryUuid},
@@ -61,38 +41,21 @@
         where user_nickname = #{userNickName}
     </select>
 
-    <select id="registerEmailCheck" resultType="com.example.engproject.dto.UserDto">
+    <select id="registerEmailCheck" resultType="com.example.userservice.dto.UserDto">
         select *
         from user
         where user_email = #{userEmail}
     </select>
 
-    <select id="findEmail" resultType="com.example.engproject.dto.UserDto">
+    <select id="findEmail" resultType="com.example.userservice.dto.UserDto">
         select *
         from user
         where user_email = #{userEmail}
     </select>
 
-    <insert id="EmailCode" parameterType="com.example.engproject.dto.UserDto">
+    <insert id="EmailCode" parameterType="com.example.userservice.dto.UserDto">
         UPDATE user
         SET user_login_key = #{LoginKey}
         where user_email = #{userEmail}
     </insert>
-
-    <insert id="facilityJoinMy" parameterType="com.example.userservice.dto.FacilityJoinMyDto">
-        insert into user_use_facility(
-                                      user_uuid,
-                                      user_facility
-                                      )values(
-                                              #(userId),
-                                              #(facilityNo)
-                                                     )
-    </insert>
-    
-    <select id="findFacility" resultMap="userFacility">
-        select user_facility
-        from user_use_facility
-        where user_facility = #{facilityNo} AND user_uuid = #{userId}
-    </select>
-
 </mapper>

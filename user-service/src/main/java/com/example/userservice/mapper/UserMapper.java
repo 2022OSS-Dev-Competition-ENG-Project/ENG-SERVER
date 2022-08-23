@@ -1,9 +1,4 @@
 package com.example.userservice.mapper;
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 848e550e8be41ae0c081d4641e74caca9ba9c911
 import com.example.userservice.dto.UserDto;
 import org.apache.ibatis.annotations.Mapper;
 

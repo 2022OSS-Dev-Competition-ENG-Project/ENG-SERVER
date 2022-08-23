@@ -1,6 +1,6 @@
 package com.example.userservice.service;
 
-import com.example.userserver.constant.SignUpConstant;
+import com.example.userservice.constant.SignUpConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -18,6 +18,7 @@ public class EmailService {
     }
     private JavaMailSender javaMailSender;
     private RedisService redisService;
+
 
     /* 이메일 인증 코드 발송 */
     public void sendMail(String userEmail){

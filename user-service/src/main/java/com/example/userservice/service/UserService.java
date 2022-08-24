@@ -2,8 +2,11 @@ package com.example.userservice.service;
 
 import com.example.userservice.dto.UserDto;
 import com.example.userservice.mapper.UserMapper;
+import com.example.userservice.vo.FindIdVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -43,19 +46,35 @@ public class UserService {
         return userMapper.registerNickNameCheck(nickname);
     }
 
-    public void NickNameCheck(String nickName, Integer AccessType, String userEmail){
-        userMapper.NickNameCheck(nickName, AccessType, userEmail);
+    public UserDto registerPhoneNumberCheck(String ResponsePhoneNum){
+        return userMapper.registerPhoneNumberCheck(ResponsePhoneNum);
+    }
+
+    public void NickNameCheck(String userNickname, Integer AccessType, String userEmail){
+        userMapper.NickNameCheck(userNickname, AccessType, userEmail);
     }
 
     public UserDto findEmail(UserDto userDto) {
         return userMapper.findEmail(userDto);
     }
 
+    public UserDto findName(FindIdVo findIdVo) {
+        return userMapper.findName(findIdVo);
+    }
+
+    public UserDto findPhoneNum(UserDto userDto) {
+        return userMapper.findPhoneNum(userDto);
+    }
+
+    public UserDto findNickName(String userNickname) {
+        return userMapper.findNickName(userNickname);
+    }
+
     public void EmailCode(String userEmail,Integer LoginKey) {
         userMapper.EmailCode(userEmail, LoginKey);
     }
 
-    public String RandomUuid () {
+    public String RandomObject () {
         Random rnd = new Random();
         StringBuffer buf = new StringBuffer();
 
@@ -68,4 +87,16 @@ public class UserService {
         }
         return buf.toString();
     }
+    public void changeRandomPassword (UserDto userDto) {
+        //랜덤 비밀번호 해싱
+        String encodePassword = passwordEncoder.encode(userDto.getUserPassword());
+        userDto.setUserPassword(encodePassword);
+
+        userMapper.changeRandomPassword(userDto);
+    }
+
+    public String findId(FindIdVo findIdVo){
+        return userMapper.findId(findIdVo);
+    }
 }
+

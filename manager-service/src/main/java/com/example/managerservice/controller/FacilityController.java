@@ -91,5 +91,6 @@ public class FacilityController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(facilityService.getMyFacilityList(userUuid));
     }
+    
 }
 

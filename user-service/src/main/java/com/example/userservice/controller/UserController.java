@@ -119,10 +119,10 @@ public class UserController {
     public ResponseEntity<String> retrieveAllUsers(@RequestBody UserDto userDto) {
         String ResponsePw = userDto.getUserPassword();
         String encodePassword;
-        String ResponseId = userDto.getUserEmail();
-        String UserName;
+        String ResponseEmail = userDto.getUserEmail();
+        String UserId;
         try {
-            UserName = userService.findEmail(userDto).getUserEmail();
+            UserId = userService.findEmail(userDto).getUserEmail();
         }
         catch (NullPointerException e){
             log.info("Login : 아이디 틀림");
@@ -143,7 +143,7 @@ public class UserController {
             log.info("Login : 이메일 인증 안함");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("이메일 인증을 진행해주세요.");
         } else if (passwordEncoder.matches(ResponsePw,encodePassword) && userLoginKey == 1) {
-            token = securityService.createToken(ResponseId,(30*60*1000),phoneNum,UserName);
+            token = securityService.createToken(ResponseEmail,(30*60*1000),phoneNum,UserId);
             log.info("Login : 로그인 성공, 토큰 발급");
             return ResponseEntity.status(HttpStatus.OK).body("환영합니다!" + token);
         } else {

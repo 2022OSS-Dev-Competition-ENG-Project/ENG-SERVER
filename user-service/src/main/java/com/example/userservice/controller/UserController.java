@@ -6,6 +6,7 @@ import com.example.userservice.service.EmailService;
 import com.example.userservice.service.RedisService;
 import com.example.userservice.service.SecurityService;
 import com.example.userservice.service.UserService;
+import com.example.userservice.vo.FindIdVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -73,7 +74,7 @@ public class UserController {
         UserDto userDto = userService.registerEmailCheck(userEmail);
         if (userDto == null){
 //            emailService.sendMail(email);
-            String temporaryUuid = userService.RandomUuid();
+            String temporaryUuid = userService.RandomObject();
             userService.EmailConform(userEmail,temporaryUuid);
             return ResponseEntity.status(HttpStatus.OK)
                     .body("사용 가능한 이메일입니다.\n 인증코드가 발송 되었습니다.");
@@ -96,6 +97,21 @@ public class UserController {
         }
     }
 
+//    @PostMapping("/user-service/register/check/nickname")
+//    public ResponseEntity<String> registerNicknameCheck(@RequestBody UserDto userDto) {
+//        Integer AccessType = 1;
+//        String userEmail = userDto.getUserEmail();
+//        String userNickname = userDto.getUserNickname();
+//        try {
+//            userService.findNickName(userNickname);
+//            log.info(userService.findNickName(userNickname).getUserNickname());
+//        } catch (NullPointerException e) {
+//            userService.registerNickNameCheck(userNickname,AccessType,userEmail);
+//            return ResponseEntity.status(HttpStatus.OK).body("사용 가능한 닉네임입니다.");
+//        }
+//        return ResponseEntity.status(HttpStatus.CONFLICT).body("사용중인 닉네임입니다.");
+//    }
+
     @GetMapping("/user-service/register/check/email/{email}/{code}")
     public ResponseEntity emailCheck(@PathVariable("email") String email,
                                      @PathVariable("code") String code){
@@ -114,6 +130,16 @@ public class UserController {
         }
     }
 
+    @PostMapping (value = "/user-service/FindUserid")
+    public ResponseEntity FindUserId (@RequestBody FindIdVo findIdVo){
+        /* 이름 전화 번호가 한컬럼 안에서 다를 때 */
+        try{
+            log.info(userService.findId(findIdVo));
+        }catch (NullPointerException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("입력하신 정보가 없습니다.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(userService.findId(findIdVo));
+    }
 
     @PostMapping("/user-service/login")
     public ResponseEntity<String> retrieveAllUsers(@RequestBody UserDto userDto) {
@@ -143,13 +169,51 @@ public class UserController {
             log.info("Login : 이메일 인증 안함");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("이메일 인증을 진행해주세요.");
         } else if (passwordEncoder.matches(ResponsePw,encodePassword) && userLoginKey == 1) {
-            token = securityService.createToken(ResponseEmail,(30*60*1000),phoneNum,UserId);
+            //token = securityService.createToken(ResponseEmail,(30*60*1000),phoneNum,UserId);
+            String DBUuid = userService.findEmail(userDto).getUserUuid();
             log.info("Login : 로그인 성공, 토큰 발급");
-            return ResponseEntity.status(HttpStatus.OK).body("환영합니다!" + token);
+            return ResponseEntity.status(HttpStatus.OK).body(DBUuid);
         } else {
             log.info("Login : 비밀번호가 틀렸습니다.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 틀렸습니다.");
         }
+    }
+
+
+
+    @PostMapping(value = "/user-service/UserPasswordReset")
+    public ResponseEntity<String> FindUserPassword (@RequestBody UserDto userDto) {
+        String ResponseEmail = userDto.getUserEmail(); // 입력 받은 Email
+        String DBEmail;
+        String DBName;
+        String ChgUserPassword = userService.RandomObject();
+        log.info("findUserPassword : 비밀번호 재 설정 시도");
+        try {
+            DBEmail = userService.findEmail(userDto).getUserEmail();
+        } catch (java.lang.NullPointerException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("이메일을 다시 확인해주세요.");
+        }
+
+        try {
+            DBName = userService.findEmail(userDto).getUserName();
+        } catch (java.lang.NullPointerException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("이름을 다시 확인해주세요.");
+        }
+        if (DBEmail != null && DBName != null) {
+//            SimpleMailMessage simpleMessage = new SimpleMailMessage();
+//            simpleMessage.setSubject("비밀번호 초기화");
+//            simpleMessage.setText("비밀번호가 초기화 되었습니다. 초기화 된 비밀번호는 ["
+//                    + ChgUserPassword + "] 입니다.");
+//            simpleMessage.setTo(ResponseEmail);
+//            javaMailSender.send(simpleMessage);
+//            userDto.setPassword(ChgUserPassword);
+//            userDto.setId(DBId);
+            userService.changeRandomPassword(userDto);
+//            log.info("findUserPassword : 비밀번호 재 설정 완료");
+
+            return ResponseEntity.status(HttpStatus.OK).body(ChgUserPassword);
+        }
+        return null;
     }
 
     @GetMapping("/user/{id}")

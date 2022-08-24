@@ -21,6 +21,7 @@ import static com.example.managerservice.constant.RegisterConstant.REGISTER_CONF
 @Slf4j
 @RestController
 @RequestMapping("/api")
+@CrossOrigin("*")
 public class FacilityController {
 
     private FacilityService facilityService;

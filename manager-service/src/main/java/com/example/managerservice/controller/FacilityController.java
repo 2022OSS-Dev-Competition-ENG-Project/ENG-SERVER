@@ -105,7 +105,7 @@ public class FacilityController {
             @PathVariable("facilityNo") String facilityNo){
 
         /*좋아요 여부 확인*/
-        if(facilityService.myFacilityLikeBool(userUuid, facilityNo) == 1){
+        if(facilityService.myFacilityLikeBool(userUuid, facilityNo) == 0){
             facilityService.myFacilityLike(userUuid, facilityNo, 1);
             return ResponseEntity.status(HttpStatus.OK).body(FACILITY_LIKE_COMPLETE);
         }else{

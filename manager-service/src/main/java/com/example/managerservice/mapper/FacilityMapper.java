@@ -36,7 +36,9 @@ public interface FacilityMapper {
     void deleteMyFacility(String userUuid, String userFacility);
 
     /* 내가 등록한 시설물 좋아요 */
-    void myFacilityLike(String userUuid, String facilityNo, @Param("value")Integer value);
+    void myFacilityLike(@Param("userUuid") String userUuid,
+                        @Param("userFacility") String userFacility,
+                        @Param("value")Integer value);
 
     /* 내가 등록한 시설물 좋아요 여부 */
     Integer myFacilityLikeBool(String userUuid, String userFacility);

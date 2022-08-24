@@ -106,9 +106,11 @@
 
     <!-- 좋이요 -->
     <update id="myFacilityLike">
-        update liked_bool
-        from user_use_facility
+        <![CDATA[
+        update user_use_facility
         set liked_bool = ${value}
+        where user_uuid = #{userUuid} AND user_facility =#{userFacility}
+        ]]>
     </update>
 
     <select id="myFacilityLikeBool" resultType="java.lang.Integer">

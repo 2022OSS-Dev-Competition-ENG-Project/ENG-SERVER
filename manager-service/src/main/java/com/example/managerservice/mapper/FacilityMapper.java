@@ -4,6 +4,7 @@ import com.example.managerservice.dto.FacilityDto;
 import com.example.managerservice.dto.FacilityJoinDto;
 import com.example.managerservice.dto.FacilityListDto;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -30,4 +31,13 @@ public interface FacilityMapper {
 
     /* 내가 등록한 시설물 리스트 불러오기 */
     List<FacilityDto> getMyFacilityList(String userUuid);
+
+    /* 내가 등록한 시설물 삭제 */
+    void deleteMyFacility(String userUuid, String userFacility);
+
+    /* 내가 등록한 시설물 좋아요 */
+    void myFacilityLike(String userUuid, String facilityNo, @Param("value")Integer value);
+
+    /* 내가 등록한 시설물 좋아요 여부 */
+    Integer myFacilityLikeBool(String userUuid, String userFacility);
 }

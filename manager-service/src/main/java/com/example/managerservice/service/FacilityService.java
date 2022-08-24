@@ -5,6 +5,7 @@ import com.example.managerservice.dto.FacilityDto;
 import com.example.managerservice.dto.FacilityJoinDto;
 import com.example.managerservice.mapper.FacilityMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.example.managerservice.constant.FacilityConstant.FACILITY_FOUND;
-import static com.example.managerservice.constant.FacilityConstant.FACILITY_NOT_FOUND;
+import static com.example.managerservice.constant.FacilityConstant.*;
 import static com.example.managerservice.constant.FacilityContentConstant.FACILITY_MY_JOIN_SUCCESS;
 
 @Slf4j
@@ -73,6 +73,27 @@ public class FacilityService {
     public List<FacilityDto> getMyFacilityList(String userUuid){
         List list = facilityMapper.getMyFacilityList(userUuid);
         return list;
+    }
+
+    /* 내가 등록한 시설 삭제 */
+    public ResponseEntity deleteMyFacility(String uuid, String facilityNo){
+        try{
+            facilityMapper.deleteMyFacility(uuid,facilityNo);
+        }catch (NullPointerException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MY_FACILITY_NOT_DELETE);
+        }
+        facilityMapper.deleteMyFacility(uuid,facilityNo);
+        return ResponseEntity.status(HttpStatus.OK).body(MY_FACILITY_DELETE);
+    }
+
+    /* 내가 등록한 시설 좋아요 */
+    public void myFacilityLike(String userUuid, String facilityNo, Integer value ){
+        facilityMapper.myFacilityLike(userUuid, facilityNo, value);
+    }
+
+    /* 내가 등록한 시설 좋아요 여부 */
+    public Integer myFacilityLikeBool(String userUuid, String facilityNo){
+        return facilityMapper.myFacilityLikeBool(userUuid, facilityNo);
     }
 
 }

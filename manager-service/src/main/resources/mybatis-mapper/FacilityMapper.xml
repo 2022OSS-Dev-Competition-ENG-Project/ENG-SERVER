@@ -74,12 +74,14 @@
                )
     </insert>
 
+    <!-- 시설 아이디로 시설 등록 중복 검증 -->
     <select id="findDetailFacilityId" resultType="java.lang.Integer">
         select if(count(*) = 1, 1, 0)
         from user_use_facility
         where user_facility = #{userFacility} AND user_uuid = #{userUuid}
     </select>
 
+    <!-- 내가 등록한 시설물 불러오기 -->
     <select id="getMyFacilityList" resultMap="facilityList">
         select uuf.user_uuid,
                uuf.user_facility,
@@ -93,6 +95,26 @@
                 facility f
             ON
             uuf.user_facility  = f.facility_no ;
+    </select>
+
+    <!-- 내가 등록한 시설물 삭제 -->
+    <delete id="deleteMyFacility">
+        delete
+        from user_use_facility
+        where user_uuid = #{userUuid} AND user_facility = #{userFacility};
+    </delete>
+
+    <!-- 좋이요 -->
+    <update id="myFacilityLike">
+        update liked_bool
+        from user_use_facility
+        set liked_bool = ${value}
+    </update>
+
+    <select id="myFacilityLikeBool" resultType="java.lang.Integer">
+        select if(liked_bool >= 1, 1, 0)
+        from user_use_facility
+        where user_uuid = #{userUuid} AND user_facility = #{userFacility}
     </select>
 
 

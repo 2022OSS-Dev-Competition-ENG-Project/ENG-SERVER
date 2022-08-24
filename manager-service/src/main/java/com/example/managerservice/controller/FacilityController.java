@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.UUID;
 
-import static com.example.managerservice.constant.FacilityConstant.FACILITY_LIST_NOT_FOUND;
-import static com.example.managerservice.constant.FacilityConstant.FACILITY_NOT_FOUND;
+import static com.example.managerservice.constant.FacilityConstant.*;
 import static com.example.managerservice.constant.FacilityContentConstant.FACILITY_MY_JOIN_FAIL;
 import static com.example.managerservice.constant.RegisterConstant.REGISTER_CONFLICT;
 
@@ -91,6 +90,28 @@ public class FacilityController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(facilityService.getMyFacilityList(userUuid));
     }
-    
+
+    /* 내가 등록할 시설 삭제 하기 */
+    @GetMapping("/facility/my/delete/{userUuid}/{facilityNo}")
+    public ResponseEntity deleteMyFacility(@PathVariable("userUuid")String userUuid,
+                                           @PathVariable("facilityNo")String facilityNo){
+        return ResponseEntity.status(HttpStatus.OK).body(facilityService.deleteMyFacility(userUuid,facilityNo));
+    }
+
+    /* 내가 등록한 시설물 좋아요 누르기 */
+    @GetMapping("/facility/like/{userUuid}/{facilityNo}")
+    public ResponseEntity myfacilityLike(
+            @PathVariable("userUuid") String userUuid,
+            @PathVariable("facilityNo") String facilityNo){
+
+        /*좋아요 여부 확인*/
+        if(facilityService.myFacilityLikeBool(userUuid, facilityNo) == 1){
+            facilityService.myFacilityLike(userUuid, facilityNo, 1);
+            return ResponseEntity.status(HttpStatus.OK).body(FACILITY_LIKE_COMPLETE);
+        }else{
+            facilityService.myFacilityLike(userUuid, facilityNo, 0);
+            return ResponseEntity.status(HttpStatus.OK).body(FACILITY_LIKE_CANCEL_COMPLETE);
+        }
+    }
 }
 

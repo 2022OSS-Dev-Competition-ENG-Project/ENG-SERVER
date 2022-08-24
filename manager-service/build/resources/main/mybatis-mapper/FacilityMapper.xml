@@ -23,6 +23,7 @@
         <result property="facility_address" column="facilityAddress"/>
         <result property="user_facility" column="userFacility"/>
         <result property="facility_name" column="facilityName"/>
+        <result property="is_liked" column="isLiked"/>
 
     </resultMap>
 
@@ -85,6 +86,7 @@
     <select id="getMyFacilityList" resultMap="facilityList">
         select uuf.user_uuid,
                uuf.user_facility,
+               uuf.is_liked,
                f.facility_name ,
                f.facility_address
         From(
@@ -94,7 +96,7 @@
             INNER JOIN
                 facility f
             ON
-            uuf.user_facility  = f.facility_no ;
+            uuf.user_facility  = f.facility_no;
     </select>
 
     <!-- 내가 등록한 시설물 삭제 -->
@@ -108,13 +110,13 @@
     <update id="myFacilityLike">
         <![CDATA[
         update user_use_facility
-        set liked_bool = ${value}
+        set is_liked = ${value}
         where user_uuid = #{userUuid} AND user_facility =#{userFacility}
         ]]>
     </update>
 
     <select id="myFacilityLikeBool" resultType="java.lang.Integer">
-        select if(liked_bool >= 1, 1, 0)
+        select if(is_liked >= 1, 1, 0)
         from user_use_facility
         where user_uuid = #{userUuid} AND user_facility = #{userFacility}
     </select>

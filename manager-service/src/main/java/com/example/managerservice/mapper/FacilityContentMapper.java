@@ -1,6 +1,7 @@
 package com.example.managerservice.mapper;
 
 import com.example.managerservice.dto.FacilityContentDto;
+import com.example.managerservice.dto.FacilityContentLikeDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -31,4 +32,16 @@ public interface FacilityContentMapper {
 
     /* 일반 게시물 전부 불러오기*/
     List<FacilityContentDto> getMyFacilityLt(String facilityNo, Integer count);
+
+    /* 게시물 좋아요 */
+    void facilityContentLike(FacilityContentLikeDto facilityContentLikeDto);
+
+    /* 게시물 좋아요 개수 불러오기 */
+    Integer getLikeCount(Integer contentNum);
+
+    /* 게시물 좋아요 취소 */
+    void deleteContentLike(String userUuid, Integer contentNum);
+
+    /* 게시물 좋아요 여부*/
+    Integer contentLikeBool(String userUuid, Integer contentNum);
 }

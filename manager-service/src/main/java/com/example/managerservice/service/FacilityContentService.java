@@ -1,6 +1,7 @@
 package com.example.managerservice.service;
 
 import com.example.managerservice.dto.FacilityContentDto;
+import com.example.managerservice.dto.FacilityContentLikeDto;
 import com.example.managerservice.mapper.FacilityContentMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,8 @@ public class FacilityContentService {
     }
 
     /* 게시물 등록 */
-    public ResponseEntity registerContent(FacilityContentDto fcd) throws NullPointerException{
+    public ResponseEntity registerContent(FacilityContentDto fcd){
+
         try{
             Integer valid = fcm.findValidFacilityContentNum(fcd.getFacilityContentNum());
             /* Content ID 중복 검사 */
@@ -70,6 +72,28 @@ public class FacilityContentService {
     /* 게시물 리스트 불러오기 */
     public List<FacilityContentDto> getMyFacilityLt(String facilityNo){
         return fcm.getMyFacilityLt(facilityNo,  TAKE);
+    }
+
+    /* 게시물 좋아요 여부 확인 */
+    public Integer ContentLikeBool(String uuid,Integer contentNum){
+        return fcm.contentLikeBool(uuid,contentNum);
+    }
+
+    /* 게시물 좋아요 */
+    public ResponseEntity facilityContentLike(FacilityContentLikeDto facilityContentLikeDto){
+        fcm.facilityContentLike(facilityContentLikeDto);
+        return ResponseEntity.status(HttpStatus.OK).body("좋아요");
+    }
+
+    /* 게시물 좋아요 취소*/
+    public ResponseEntity deleteContentLike(String userUuid, Integer contentNum){
+        fcm.deleteContentLike(userUuid,contentNum);
+        return ResponseEntity.status(HttpStatus.OK).body("좋아요 취소");
+    }
+
+    /* 게시물 좋아요 개수 불러오기 */
+    public Integer getLikeCount(Integer contentNum){
+        return fcm.getLikeCount(contentNum);
     }
 
 

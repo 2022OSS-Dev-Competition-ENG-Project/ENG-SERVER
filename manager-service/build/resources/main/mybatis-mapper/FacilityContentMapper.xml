@@ -17,6 +17,11 @@
         <result property="user_uuid" column="userUuid"/>
     </resultMap>
 
+    <resultMap type="com.example.managerservice.dto.FacilityContentLikeDto" id="contentLikeInfo" >
+        <result property="user_uuid" column="userUuid"/>
+        <result property="content_num" column="contentNum"/>
+    </resultMap>
+
     <insert id="registerContent" parameterType="com.example.managerservice.dto.FacilityContentDto">
         INSERT INTO facility_content (
             facility_content_num,
@@ -67,6 +72,38 @@
         where facility_content_num = #{facilityContentNum} AND user_uuid = #{userUuid}
     </select>
 
+
+    <!-- 게시물 좋아요 -->
+    <insert id="facilityContentLike" parameterType="com.example.managerservice.dto.FacilityContentLikeDto">
+        INSERT INTO user_like_content (
+            user_uuid,
+            content_num
+        )
+        values (
+                   #{userUuid},
+                   #{contentNum}
+               )
+    </insert>
+
+    <select id="getLikeCount"  resultType="java.lang.Integer">
+        select count(*)
+        from user_like_content
+        where content_num = #{contentNum}
+    </select>
+
+    <select id="contentLikeBool"  resultType="java.lang.Integer">
+        select if(count(*) >= 1, 1, 0)
+        from user_like_content
+        where content_num = #{contentNum} AND user_uuid = #{userUuid}
+    </select>
+
+    <delete id="deleteContentLike" parameterType="com.example.managerservice.dto.FacilityContentLikeDto">
+        delete from user_like_content
+        where content_num = #{contentNum}
+          AND user_uuid = #{userUuid}
+    </delete>
+
+    <!-- 메인 페이지에 보일 게시물 -->
     <select id="getMyFacilityNoticeLt" resultMap="facilityContentInfo">
         <![CDATA[
         SELECT *

@@ -28,5 +28,6 @@ public interface FacilityMapper {
     /* 시설물 번호로 시설물 찾기*/
     FacilityDto findDetailFacilityFn(String facilityNo);
 
+    /* 내가 등록한 시설물 리스트 불러오기 */
     List<FacilityDto> getMyFacilityList(String userUuid);
 }

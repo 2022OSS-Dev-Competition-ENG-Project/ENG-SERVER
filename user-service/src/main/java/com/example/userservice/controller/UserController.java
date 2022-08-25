@@ -52,7 +52,7 @@ public class UserController {
 //            log.info("Signup : 이미 가입한 유저");
 //            return ResponseEntity.status(HttpStatus.CONFLICT).body("회원님의 이름과 전화번호로 가입한 아이디가 있습니다.");
 //        } else
-            if ( LoginKeyCheck == 1 && AccessType == 1) {
+        if ( LoginKeyCheck == 1 && AccessType == 1) {
             userService.SignupUser(userDto);
             log.info("Signup : 완료");
             return ResponseEntity.status(HttpStatus.CREATED).body("회원가입 완료");
@@ -139,7 +139,7 @@ public class UserController {
         }catch (NullPointerException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("입력하신 정보가 없습니다.");
         }
-
+        
         if (userService.findId(findIdVo) == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("입력하신 정보가 없습니다.");
         }
@@ -223,9 +223,8 @@ public class UserController {
         return null;
     }
 
-//    @GetMapping("/user/{id}")
-//    public ResponseEntity<String> test(@PathVariable("id")String id) {
-//        return ResponseEntity.status(HttpStatus.OK).body("id = "+id);
-//    }
+    @GetMapping("/user/{id}")
+    public ResponseEntity<String> test(@PathVariable("id")String id) {
+        return ResponseEntity.status(HttpStatus.OK).body("id = "+id);
+    }
 }
-

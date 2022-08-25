@@ -4,6 +4,7 @@ import com.example.managerservice.constant.RegisterConstant;
 import com.example.managerservice.dto.FacilityDto;
 import com.example.managerservice.dto.FacilityJoinDto;
 import com.example.managerservice.mapper.FacilityMapper;
+import com.example.managerservice.vo.GetMyFacilityList;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +71,7 @@ public class FacilityService {
     }
 
     /* 내가 등록한 시설 불러오기 */
-    public List<FacilityDto> getMyFacilityList(String userUuid){
+    public List<GetMyFacilityList> getMyFacilityList(String userUuid){
         List list = facilityMapper.getMyFacilityList(userUuid);
         return list;
     }

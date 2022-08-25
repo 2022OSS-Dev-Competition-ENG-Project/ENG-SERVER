@@ -8,4 +8,5 @@ public class GetMyFacilityList {
     private String facilityAddress;
     private String userFacility;
     private String facilityName;
+    private int isLiked;
 }

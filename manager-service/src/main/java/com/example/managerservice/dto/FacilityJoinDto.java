@@ -7,5 +7,6 @@ public class FacilityJoinDto {
 
     private String userUuid;
     private String userFacility;
+    private String isLiked;
 
 }

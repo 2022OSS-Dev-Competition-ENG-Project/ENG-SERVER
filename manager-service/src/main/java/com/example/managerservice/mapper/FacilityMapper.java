@@ -3,6 +3,7 @@ package com.example.managerservice.mapper;
 import com.example.managerservice.dto.FacilityDto;
 import com.example.managerservice.dto.FacilityJoinDto;
 import com.example.managerservice.dto.FacilityListDto;
+import com.example.managerservice.vo.GetMyFacilityList;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -30,7 +31,7 @@ public interface FacilityMapper {
     FacilityDto findDetailFacilityFn(String facilityNo);
 
     /* 내가 등록한 시설물 리스트 불러오기 */
-    List<FacilityDto> getMyFacilityList(String userUuid);
+    List<GetMyFacilityList> getMyFacilityList(String userUuid);
 
     /* 내가 등록한 시설물 삭제 */
     void deleteMyFacility(String userUuid, String userFacility);

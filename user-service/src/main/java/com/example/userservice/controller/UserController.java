@@ -139,7 +139,7 @@ public class UserController {
         }catch (NullPointerException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("입력하신 정보가 없습니다.");
         }
-        
+
         if (userService.findId(findIdVo) == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("입력하신 정보가 없습니다.");
         }
@@ -223,8 +223,8 @@ public class UserController {
         return null;
     }
 
-    @GetMapping("/user/{id}")
-    public ResponseEntity<String> test(@PathVariable("id")String id) {
-        return ResponseEntity.status(HttpStatus.OK).body("id = "+id);
-    }
+//    @GetMapping("/user/{id}")
+//    public ResponseEntity<String> test(@PathVariable("id")String id) {
+//        return ResponseEntity.status(HttpStatus.OK).body("id = "+id);
+//    }
 }

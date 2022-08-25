@@ -28,9 +28,9 @@
         where user_email = #{userEmail}
     </update>
 
-    <update id="registerNickNameCheck" parameterType="com.example.userservice.dto.UserDto">
+    <update id="NickNameCheck" parameterType="com.example.userservice.dto.UserDto">
         update user
-        set user_access_type = #{AccessType}, user_nickname = #{userNickname}
+        set user_access_type = #{AccessType}, user_nickname = #{nickName}
         where user_email = #{userEmail}
     </update>
 
@@ -41,11 +41,11 @@
                #{userEmail})
     </insert>
 
-<!--    <select id="registerNickNameCheck" resultMap="userInfo">-->
-<!--        select *-->
-<!--        from user-->
-<!--        where user_nickname = #{userNickName}-->
-<!--    </select>-->
+    <select id="registerNickNameCheck" resultMap="userInfo">
+        select *
+        from user
+        where user_nickname = #{userNickName}
+    </select>
 
     <select id="registerEmailCheck" resultType="com.example.userservice.dto.UserDto">
         select *
@@ -91,7 +91,7 @@
 
     <update id="changeRandomPassword">
         update user
-        set password = #{password}
+        set user_password = #{userPassword}
         where user_email = #{userEmail}
           and user_name = #{userName}
     </update>

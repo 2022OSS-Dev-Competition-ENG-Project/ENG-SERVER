@@ -223,8 +223,8 @@ public class UserController {
         return null;
     }
 
-//    @GetMapping("/user/{id}")
-//    public ResponseEntity<String> test(@PathVariable("id")String id) {
-//        return ResponseEntity.status(HttpStatus.OK).body("id = "+id);
-//    }
+    @GetMapping("/user/{id}")
+    public ResponseEntity<String> test(@PathVariable("id")String id) {
+        return ResponseEntity.status(HttpStatus.OK).body("id = "+id);
+    }
 }

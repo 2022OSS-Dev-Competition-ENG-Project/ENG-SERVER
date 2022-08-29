@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.managerservice.mapper.FacilityContentCommentMapper">
+
+    <resultMap type="com.example.managerservice.vo.ContentCommentVo" id="commentInfo" >
+        <result property="comment_num" column="facilityContentNum"/>
+        <result property="comment_text" column="facilityContentTitle"/>
+        <result property="comment_like" column="facilityContentText"/>
+        <result property="comment_dislike" column="facilityContentImg"/>
+        <result property="comment_date" column="facilityContentDate"/>
+        <result property="content_num" column="facilityContentType"/>
+        <result property="facility_no" column="facilityNo"/>
+        <result property="user_uuid" column="userUuid"/>
+    </resultMap>
+
+    <insert id="registerComment" parameterType="com.example.managerservice.dto.FacilityContentCommentDto">
+        insert into facility_content_comment(content_comment_text,
+                                             content_comment_date,
+                                             content_comment_facility,
+                                             content_comment_user,
+                                             facility_content_num)
+        values (#{contentCommentText},
+                #{contentCommentDate},
+                #{contentCommentFacility},
+                #{contentCommentUser},
+                #{facilityContentNum})
+    </insert>
+
+    <update id="updateComment" parameterType="com.example.managerservice.dto.FacilityContentCommentDto">
+        update facility_content_comment
+        set content_comment_text = #{contentCommentText}
+        where content_comment_num = #{contentCommentNum} AND content_comment_user = #{contentCommentUser}
+    </update>
+
+    <delete id="deleteComment">
+
+        delete
+        from facility_content_comment
+        where content_comment_num = ${commentNum} AND content_comment_user = ${userUuid}
+
+    </delete>
+
+
+
+</mapper>

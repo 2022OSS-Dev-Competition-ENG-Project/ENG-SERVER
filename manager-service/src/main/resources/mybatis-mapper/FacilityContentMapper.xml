@@ -5,14 +5,14 @@
 
 <mapper namespace="com.example.managerservice.mapper.FacilityContentMapper">
 
-    <resultMap type="com.example.managerservice.dto.FacilityContentDto" id="facilityContentInfo" >
-        <result property="facility_content_num" column="facilityContentNum"/>
-        <result property="facility_content_title" column="facilityContentTitle"/>
-        <result property="facility_content_text" column="facilityContentText"/>
-        <result property="facility_content_img" column="facilityContentImg"/>
-        <result property="facility_content_date" column="facilityContentDate"/>
-        <result property="facility_content_look" column="facilityContentLook"/>
-        <result property="facility_content_type" column="facilityContentType"/>
+    <resultMap type="com.example.managerservice.vo.ContentCommentVo" id="facilityContentInfo" >
+        <result property="content_num" column="facilityContentNum"/>
+        <result property="content_title" column="facilityContentTitle"/>
+        <result property="content_text" column="facilityContentText"/>
+        <result property="content_img" column="facilityContentImg"/>
+        <result property="content_date" column="facilityContentDate"/>
+        <result property="content_look" column="facilityContentLook"/>
+        <result property="content_type" column="facilityContentType"/>
         <result property="facility_no" column="facilityNo"/>
         <result property="user_uuid" column="userUuid"/>
     </resultMap>

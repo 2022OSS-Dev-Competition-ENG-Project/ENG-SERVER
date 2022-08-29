@@ -7,10 +7,10 @@
 
     <resultMap type="com.example.managerservice.dto.FacilityDto" id="facilityInfo" >
         <result property="facility_no" column="facilityNo"/>
-        <result property="mg_user_uuid" column="userId"/>
         <result property="facility_name" column="facilityName"/>
         <result property="facility_address" column="facilityAddress"/>
-        <result property="facility_qr_code" column="facilityQrCode"/>
+        <result property="facility_qr_location" column="facilityQrCode"/>
+        <result property="facility_owner" column="userId"/>
     </resultMap>
 
     <resultMap type="com.example.managerservice.dto.FacilityJoinDto" id="facilityJoinUser">
@@ -30,23 +30,23 @@
     <insert id="registerFacility" parameterType="com.example.managerservice.dto.FacilityDto">
         INSERT INTO facility (
             facility_no,
-            mg_user_uuid,
             facility_name,
             facility_address,
-            facility_qr_code
+            facility_qr_code,
+            facility_owner
         )
         values (
                     #{facilityNo},
-                    #{userId},
                     #{facilityName},
                     #{facilityAddress},
-                    #{facilityQrCode}
+                    #{facilityQrCode},
+                    #{userId}
                )
     </insert>
 
 
-    <select id="findDetailFacilityAd" resultMap="facilityInfo">
-        SELECT *
+    <select id="findDetailFacilityAd" resultMap="facilityInfo" resultType="java.lang.String">
+        SELECT facility_address
         FROM facility
         WHERE facility_address = #{facilityAddress}
     </select>
@@ -111,7 +111,7 @@
         <![CDATA[
         update user_use_facility
         set is_liked = ${value}
-        where user_uuid = #{userUuid} AND user_facility =#{userFacility}
+        where user_uuid = #{userUuid} AND user_facility = #{userFacility}
         ]]>
     </update>
 

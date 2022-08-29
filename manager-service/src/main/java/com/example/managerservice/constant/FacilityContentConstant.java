@@ -17,4 +17,10 @@ public class FacilityContentConstant {
     /* 메인 배네어 보일 게시물 갯수 */
     public static final Integer TAKE = 5;
 
+
+    /* 댓글 */
+    public static final String COMMENT_REGISTER_COMPLETE = "게시물에 정상적으로 댓글이 등록 되었습니다.";
+    public static final String COMMENT_REGISTER_UPDATE = "게시물에 댓글이 수정되었습니다.";
+    public static final String COMMENT_REGISTER_UPDATE_FAIL = "수정 할수 없는 댓글입니다.";
+
 }

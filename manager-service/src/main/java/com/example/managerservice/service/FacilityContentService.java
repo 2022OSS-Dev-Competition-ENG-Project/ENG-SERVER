@@ -26,6 +26,7 @@ public class FacilityContentService {
 
     /* 게시물 등록 */
     public ResponseEntity registerContent(FacilityContentDto fcd){
+        log.info(fcd.toString());
 
         try{
             Integer valid = fcm.findValidFacilityContentNum(fcd.getFacilityContentNum());

@@ -34,11 +34,10 @@ public class FacilityService {
         return RegisterConstant.REGISTER_SUCCESS;
     }
 
-    /* 주소로 시서물 상제 정보 찾기 */
+    /* 시설물 등록 - 주소로 시서물 상제 정보 찾기 */
     public String findDetailFacilityAd(String facilityAddress) {
-        FacilityDto facilityDto;
-        facilityDto = facilityMapper.findDetailFacilityAd(facilityAddress);
-        return facilityDto.getFacilityAddress();
+        return facilityMapper.findDetailFacilityAd(facilityAddress);
+
     }
 
     /* 이름, 주소로 정보 찾기 */

@@ -13,7 +13,7 @@ import java.util.List;
 public interface FacilityMapper {
 
     /* 주소로 시설물 상세 정보 불러오기 */
-    FacilityDto findDetailFacilityAd(String facilityAddress);
+    String findDetailFacilityAd(String facilityAddress);
 
     /* 시설물 등록 */
     void registerFacility(FacilityDto facilityDto);

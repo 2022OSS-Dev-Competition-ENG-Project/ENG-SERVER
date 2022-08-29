@@ -37,10 +37,13 @@ public class FacilityController {
     @PostMapping("/registerFacility")
     public ResponseEntity<String> registerFacility(@RequestBody FacilityDto facilityDto) throws IOException, WriterException {
 
+
         facilityDto.setFacilityNo(UUID.randomUUID().toString());
+        log.info(facilityDto.toString());
         try{
             /* 주소 중복 검사 */
             String address =facilityService.findDetailFacilityAd(facilityDto.getFacilityAddress());
+
             if (address != null){
                 throw new Exception();
             }

@@ -1,14 +1,10 @@
 package com.example.userservice.controller;
 
-
 import com.example.userservice.dto.UserDto;
 import com.example.userservice.service.EmailService;
 import com.example.userservice.service.RedisService;
 import com.example.userservice.service.SecurityService;
 import com.example.userservice.service.UserService;
-import com.example.userservice.vo.FindIdVo;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,15 +12,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-
 @Slf4j
 @RestController
 @RequestMapping(value = "/api")
 @CrossOrigin("*")
-public class UserController {
-
+public class ManagerController {
     @Autowired
-    public UserController(UserService userService, PasswordEncoder passwordEncoder, SecurityService securityService, EmailService emailService
+    public ManagerController(UserService userService, PasswordEncoder passwordEncoder, SecurityService securityService, EmailService emailService
             , RedisService redisService){
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
@@ -39,15 +33,16 @@ public class UserController {
     private RedisService redisService;
     String token;
 
-    @PostMapping("/user-service/signup")
-    public ResponseEntity<String> retrieveAllUser(@RequestBody UserDto userDto) {
+    /* 매니저 회원가입 */
+    @PostMapping("/manager-service/signup")
+    public ResponseEntity<String> Manager(@RequestBody UserDto userDto) {
         String ResponseEmail = userDto.getUserEmail();
         String ResponseName = userDto.getUserName();
         String ResponsePhoneNum = userDto.getUserPhoneNum();
 //        String DBName = userService.registerEmailCheck(ResponseEmail).getUserName();
 //        String DBPhoneNum = userService.registerEmailCheck(ResponseEmail).getUserPhoneNum();
         //try catch 로 예외처리 (이미 회원가입된 사람)
-        log.info("UserSignup : 시도");
+        log.info("ManagerSignup : 시도");
         log.info(userDto.toString());
         Integer LoginKeyCheck = userService.registerEmailCheck(ResponseEmail).getUserLoginKey();
         Integer AccessType = userService.registerEmailCheck(ResponseEmail).getUserAccessType();
@@ -56,23 +51,23 @@ public class UserController {
 //            return ResponseEntity.status(HttpStatus.CONFLICT).body("회원님의 이름과 전화번호로 가입한 아이디가 있습니다.");
 //        } else
         if ( LoginKeyCheck == 1 && AccessType == 1) {
-            userService.SignupUser(userDto);
-            log.info("UserSignup : 완료");
+            userService.SignupManager(userDto);
+            log.info("ManagerSignup : 완료");
             return ResponseEntity.status(HttpStatus.CREATED).body("회원가입 완료");
         } else if ( LoginKeyCheck != 1 && AccessType == 1) {
-            log.info("UserSignup : 이메일 인증 안함");
+            log.info("ManagerSignup : 이메일 인증 안함");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("이메일 인증을 진행해주세요.");
         } else if ( AccessType != 1 && LoginKeyCheck == 1) {
-            log.info("UserSignup : 닉네임 중복 안함");
+            log.info("ManagerSignup : 닉네임 중복 안함");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("닉네임 중복 체크를 진행해주세요.");
         } else {
-            log.info("UserSignup : 회원가입 오류");
+            log.info("ManagerSignup : 회원가입 오류");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("회원가입 시도중 오류가 발생했습니다. 다시 진행해주세요.");
         }
     }
 
-    // 이메일 중복 확인 , 코드 발송
-    @GetMapping("/user-service/register/check/email/{userEmail}")
+    /* 이메일 중복 확인 , 코드 발송 */
+    @GetMapping("/manager-service/register/check/email/{userEmail}")
     public ResponseEntity registerEmailCheck(
             @PathVariable("userEmail")String userEmail) throws NullPointerException{
         UserDto userDto = userService.registerEmailCheck(userEmail);
@@ -86,8 +81,8 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("사용중인 이메일입니다.");
         }
     }
-    // 닉네임 중복 확인
-    @GetMapping("/user-service/register/check/nickname/{nickname}/{email}")
+    /* 닉네임 중복 체크 */
+    @GetMapping("/manager-service/register/check/nickname/{nickname}/{email}")
     public ResponseEntity registerNicknameCheck(
             @PathVariable("nickname")String nickname,
             @PathVariable("email")String email){
@@ -101,9 +96,8 @@ public class UserController {
         }
     }
 
-
-    // 이메일 코드 확인
-    @GetMapping("/user-service/register/check/email/{email}/{code}")
+    /* 이메일 코드 확인 */
+    @GetMapping("/manager-service/register/check/email/{email}/{code}")
     public ResponseEntity emailCheck(@PathVariable("email") String email,
                                      @PathVariable("code") String code){
         String temporaryKey = "11111";
@@ -121,9 +115,9 @@ public class UserController {
         }
     }
 
-    /* 유저 로그인 */
-    @PostMapping("/user-service/login")
-    public ResponseEntity<String> retrieveAllUsers(@RequestBody UserDto userDto) {
+    /* 매니저 로그인 */
+    @PostMapping("/manager-service/login")
+    public ResponseEntity<String> retrieveAllManagers(@RequestBody UserDto userDto) {
         String ResponsePw = userDto.getUserPassword();
         String encodePassword;
         String ResponseEmail = userDto.getUserEmail();
@@ -136,7 +130,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("아이디가 틀렸습니다.");
         }
         String phoneNum = userService.findEmail(userDto).getUserPhoneNum();
-        Integer userLoginKey = userService.findEmail(userDto).getUserLoginKey();
+        Integer userAccessType = userService.findEmail(userDto).getUserAccessType();
         try {
             encodePassword = (userService.findEmail(userDto)).getUserPassword();
         }
@@ -146,103 +140,18 @@ public class UserController {
 
         log.info("Login : 로그인 시도");
 
-        if (passwordEncoder.matches(ResponsePw,encodePassword) && userLoginKey != 1) {
+        if (passwordEncoder.matches(ResponsePw,encodePassword) && userAccessType != 1) {
             log.info("Login : 이메일 인증 안함");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("이메일 인증을 진행해주세요.");
-        } else if (passwordEncoder.matches(ResponsePw,encodePassword) && userLoginKey == 1) {
-            //token = securityService.createToken(ResponseEmail,(30*60*1000),phoneNum,UserId);
+        } else if (passwordEncoder.matches(ResponsePw,encodePassword) && userAccessType == 1) {
+            token = securityService.createToken(ResponseEmail,(30*60*1000),phoneNum,UserId);
             String DBUuid = userService.findEmail(userDto).getUserUuid();
             log.info("Login : 로그인 성공, 토큰 발급");
-            return ResponseEntity.status(HttpStatus.OK).body(DBUuid);
+            return ResponseEntity.status(HttpStatus.OK).body(token);
         } else {
             log.info("Login : 비밀번호가 틀렸습니다.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 틀렸습니다.");
         }
     }
 
-    /* 아이디 찾기 */
-    @PostMapping (value = "/user-service/FindUserid")
-    public ResponseEntity FindUserId (@RequestBody FindIdVo findIdVo){
-        /* 이름 전화 번호가 한컬럼 안에서 다를 때 */
-        try{
-            log.info(userService.findId(findIdVo));
-        }catch (NullPointerException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("입력하신 정보가 없습니다.");
-        }
-
-        if (userService.findId(findIdVo) == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("입력하신 정보가 없습니다.");
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(userService.findId(findIdVo));
-    }
-
-
-    /* 비밀번호 찾기 */
-    @PostMapping(value = "/user-service/UserPasswordReset")
-    public ResponseEntity<String> FindUserPassword (@RequestBody UserDto userDto) {
-        String ResponseEmail = userDto.getUserEmail(); // 입력 받은 Email
-        String DBEmail;
-        String DBName;
-        //String ChgUserPassword = userService.RandomObject();
-        String ChgUserPassword = "aaaaa";
-        log.info("findUserPassword : 비밀번호 재 설정 시도");
-        try {
-            DBEmail = userService.findEmail(userDto).getUserEmail();
-        } catch (java.lang.NullPointerException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("이메일을 다시 확인해주세요.");
-        }
-
-        try {
-            DBName = userService.findEmail(userDto).getUserName();
-        } catch (java.lang.NullPointerException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("이름을 다시 확인해주세요.");
-        }
-        if (DBEmail != null && DBName != null) {
-//            SimpleMailMessage simpleMessage = new SimpleMailMessage();
-//            simpleMessage.setSubject("비밀번호 초기화");
-//            simpleMessage.setText("비밀번호가 초기화 되었습니다. 초기화 된 비밀번호는 ["
-//                    + ChgUserPassword + "] 입니다.");
-//            simpleMessage.setTo(ResponseEmail);
-//            javaMailSender.send(simpleMessage);
-//            userDto.setPassword(ChgUserPassword);
-//            userDto.setId(DBId);
-            userDto.setUserPassword(ChgUserPassword);
-            userService.changeRandomPassword(userDto);
-//            log.info("findUserPassword : 비밀번호 재 설정 완료");
-
-            return ResponseEntity.status(HttpStatus.OK).body(ChgUserPassword);
-        }
-        return null;
-    }
-
-    /* 마이페이지(비밀번호 재설정) */
-    @GetMapping("/user-service/myPage/changePW/{uuid}")
-    public ResponseEntity MyPage(@PathVariable("uuid") String uuid,
-                                 @RequestBody UserDto userDto) {
-        userDto.setUserUuid(uuid);
-        /* 토큰 구현시 다시 */
-//        String UserEmail = userService.findUserUuid(userDto).getUserEmail();
-
-//        try {
-//            securityService.getSubject(token, UserEmail);
-//        } catch (SignatureException e) {
-//            log.info("MyPage : 정보 수정할때 Email을 수정, 잘못된 토큰");
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("재 로그인 후 진행해주세요.");
-//        } catch (IllegalArgumentException e) {
-//            log.info("MyPage : 로그인 안함");
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 후 진행해주세요.");
-//        } catch (ExpiredJwtException e) {
-//            log.info("MyPage : 토큰유효기간 지남");
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("토큰유효기간이 지났습니다. 재 로그인 후 진행해주세요.");
-//        }
-        userService.changePW(userDto);
-        log.info("MyPage : 개인 정보 수정 완료");
-        String userName = userService.findUserUuid(userDto).getUserName();
-        return ResponseEntity.status(HttpStatus.OK).body(userName + "님의 비밀번호가 변경되었습니다. 변경된 아이디 = " + userName);
-    }
-
-    @GetMapping("/user/{id}")
-    public ResponseEntity<String> test(@PathVariable("id")String id) {
-        return ResponseEntity.status(HttpStatus.OK).body("id = "+id);
-    }
 }

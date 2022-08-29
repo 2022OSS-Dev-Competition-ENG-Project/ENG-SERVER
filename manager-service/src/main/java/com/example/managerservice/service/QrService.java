@@ -1,6 +1,7 @@
 package com.example.managerservice.service;
 
-import com.example.managerservice.mapper.FacilityMapper;
+import com.example.managerservice.mapper.QrMapper;
+import com.example.managerservice.vo.GetQRUrlVo;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageConfig;
@@ -24,6 +25,13 @@ import static com.example.managerservice.constant.QRCodeConstant.*;
 @Slf4j
 @Service
 public class QrService {
+
+    private QrMapper qrMapper;
+
+    @Autowired
+    public QrService(QrMapper qrMapper) {
+        this.qrMapper = qrMapper;
+    }
 
     public String generateQRCodeImage(String id,String name,String address) throws WriterException, IOException {
 
@@ -51,5 +59,13 @@ public class QrService {
         String saveDBUrl = savePath + fileName + name + address +".png";
         return saveDBUrl;
     }
+
+    /* 사용자 여부 진단 */
+    /* 데이터가 있으면 QR Location 없다면 Null */
+    public String getQRCode(GetQRUrlVo getQRUrlVo){
+        return qrMapper.getQRCode(getQRUrlVo);
+    }
+
+
 
 }

@@ -1,8 +1,10 @@
 package com.example.managerservice.controller;
 
+import com.example.managerservice.constant.QRCodeConstant;
 import com.example.managerservice.dto.FacilityDto;
 import com.example.managerservice.service.FacilityService;
 import com.example.managerservice.service.QrService;
+import com.example.managerservice.vo.GetQRUrlVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +16,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Locale;
 
 import static com.example.managerservice.constant.FacilityConstant.FACILITY_NOT_FOUND;
 
@@ -33,21 +34,16 @@ public class QrController {
     }
 
     @GetMapping(value = "/QR/getUrl", produces= MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity getQRImage(@RequestBody FacilityDto fd){
+    public ResponseEntity getQRImage(@RequestBody GetQRUrlVo qv){
 
         FileInputStream fis = null;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        String fileDir;
+        String fileDir = qrService.getQRCode(qv);
 
-        // 내가 불러올 QR의 정보를 확인
-        FacilityDto facilityDto = new FacilityDto();
-
-        try{
-            facilityService.nameAndAddressToDto(fd).getFacilityQrCode();
-        }catch (NullPointerException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(FACILITY_NOT_FOUND);
+        // facilityName, facilityAddress 가 존재하는지 여부
+        if(fileDir == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(QRCodeConstant.QRCODE_NOT_FOUND);
         }
-        fileDir = facilityService.nameAndAddressToDto(fd).getFacilityQrCode();
 
         try{
             fis = new FileInputStream(fileDir);

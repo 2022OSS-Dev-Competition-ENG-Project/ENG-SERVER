@@ -52,7 +52,7 @@ public class UserController {
 //            log.info("Signup : 이미 가입한 유저");
 //            return ResponseEntity.status(HttpStatus.CONFLICT).body("회원님의 이름과 전화번호로 가입한 아이디가 있습니다.");
 //        } else
-            if ( LoginKeyCheck == 1 && AccessType == 1) {
+        if ( LoginKeyCheck == 1 && AccessType == 1) {
             userService.SignupUser(userDto);
             log.info("Signup : 완료");
             return ResponseEntity.status(HttpStatus.CREATED).body("회원가입 완료");
@@ -67,7 +67,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("회원가입 시도중 오류가 발생했습니다. 다시 진행해주세요.");
         }
     }
-
+    // 이메일 중복 확인 , 코드 발송
     @GetMapping("/user-service/register/check/email/{userEmail}")
     public ResponseEntity registerEmailCheck(
             @PathVariable("userEmail")String userEmail) throws NullPointerException{
@@ -82,7 +82,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("사용중인 이메일입니다.");
         }
     }
-
+    // 닉네임 중복 확인
     @GetMapping("/user-service/register/check/nickname/{nickname}/{email}")
     public ResponseEntity registerNicknameCheck(
             @PathVariable("nickname")String nickname,
@@ -112,6 +112,7 @@ public class UserController {
 //        return ResponseEntity.status(HttpStatus.CONFLICT).body("사용중인 닉네임입니다.");
 //    }
 
+    // 이메일 코드 확인
     @GetMapping("/user-service/register/check/email/{email}/{code}")
     public ResponseEntity emailCheck(@PathVariable("email") String email,
                                      @PathVariable("code") String code){
@@ -136,6 +137,10 @@ public class UserController {
         try{
             log.info(userService.findId(findIdVo));
         }catch (NullPointerException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("입력하신 정보가 없습니다.");
+        }
+
+        if (userService.findId(findIdVo) == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("입력하신 정보가 없습니다.");
         }
         return ResponseEntity.status(HttpStatus.OK).body(userService.findId(findIdVo));
@@ -186,7 +191,8 @@ public class UserController {
         String ResponseEmail = userDto.getUserEmail(); // 입력 받은 Email
         String DBEmail;
         String DBName;
-        String ChgUserPassword = userService.RandomObject();
+        //String ChgUserPassword = userService.RandomObject();
+        String ChgUserPassword = "aaaaa";
         log.info("findUserPassword : 비밀번호 재 설정 시도");
         try {
             DBEmail = userService.findEmail(userDto).getUserEmail();
@@ -208,6 +214,7 @@ public class UserController {
 //            javaMailSender.send(simpleMessage);
 //            userDto.setPassword(ChgUserPassword);
 //            userDto.setId(DBId);
+            userDto.setUserPassword(ChgUserPassword);
             userService.changeRandomPassword(userDto);
 //            log.info("findUserPassword : 비밀번호 재 설정 완료");
 
@@ -221,4 +228,3 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body("id = "+id);
     }
 }
-

@@ -91,7 +91,7 @@
 
     <update id="changeRandomPassword">
         update user
-        set password = #{password}
+        set user_password = #{userPassword}
         where user_email = #{userEmail}
           and user_name = #{userName}
     </update>

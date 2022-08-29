@@ -11,13 +11,8 @@
         <result property="facility_qr_location" column="facilityQRUrl"/>
     </resultMap>
 
-    <select id="getQRUrl" resultMap="getQRUrl">
-        select *
-        from facility
-        where facility_name = #{facilityName}
-    </select>
 
-    <select id="boolNameAddress" resultMap="getQRUrl" resultType="java.lang.Integer">
+    <select id="getQRCode" resultMap="getQRUrl" resultType="java.lang.Integer">
         select facility_qr_location
         from facility
         where facility_name = #{facilityName} AND facility_address = #{facilityAddress}

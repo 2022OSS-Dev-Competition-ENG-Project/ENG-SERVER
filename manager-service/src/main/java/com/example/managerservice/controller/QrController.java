@@ -37,8 +37,11 @@ public class QrController {
 
         FileInputStream fis = null;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
         String fileDir;
+
+        // 내가 불러올 QR의 정보를 확인
+        FacilityDto facilityDto = new FacilityDto();
+
         try{
             facilityService.nameAndAddressToDto(fd).getFacilityQrCode();
         }catch (NullPointerException e){

@@ -32,7 +32,7 @@
             facility_no,
             facility_name,
             facility_address,
-            facility_qr_code,
+            facility_qr_location,
             facility_owner
         )
         values (

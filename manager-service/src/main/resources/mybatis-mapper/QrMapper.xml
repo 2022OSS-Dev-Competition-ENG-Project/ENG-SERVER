@@ -7,10 +7,10 @@
 
     <resultMap type="com.example.managerservice.dto.FacilityDto" id="facilityInfo" >
         <result property="facility_no" column="facilityId"/>
-        <result property="userId" column="mg_user_uuid"/>
         <result property="facility_name" column="facilityName"/>
         <result property="facility_address" column="facilityAddress"/>
-        <result property="facility_qr_code" column="facilityQRCodeUrl"/>
+        <result property="facility_qr_location" column="facilityQrCode"/>
+        <result property="facility_owner" column="user_id"/>
     </resultMap>
 
     <select id="getQRUrl" resultMap="facilityInfo">

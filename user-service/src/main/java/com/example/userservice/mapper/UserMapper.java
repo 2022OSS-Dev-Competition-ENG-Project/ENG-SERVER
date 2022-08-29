@@ -8,6 +8,8 @@ public interface UserMapper {
 
     void SignupUser(UserDto userDto);
 
+    void SignupManager(UserDto userDto);
+
     void EmailConform(String userEmail,String temporaryUuid);
 
     UserDto findEmail(UserDto userDto);
@@ -29,6 +31,10 @@ public interface UserMapper {
     void EmailCode(String userEmail, Integer LoginKey);
 
     void changeRandomPassword(UserDto userDto);
+
+    UserDto findUserUuid(UserDto userDto);
+
+    void changePW(UserDto userDto);
 
     /* 추후 변경 */
     String findId(FindIdVo findIdVo);

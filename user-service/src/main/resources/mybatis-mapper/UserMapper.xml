@@ -12,7 +12,9 @@
         <result property="user_name" column="userName"/>
         <result property="user_phone_number" column="userPhoneNum"/>
         <result property="user_birth" column="userBirth"/>
-        <result property="user_type" column="userType"/>
+        <result property="user_nickname" column="userNickname"/>
+        <result property="user_access_type" column="userAccessType"/>
+        <result property="user_login_key" column="userLoginKey"/>
     </resultMap>
     <resultMap  type="com.example.userservice.vo.FindIdVo" id="findIdVo">
         <result property="user_email" column="userId"/>
@@ -22,6 +24,13 @@
     </resultMap>
 
     <update id="SignupUser" parameterType="com.example.userservice.dto.UserDto">
+        UPDATE user
+        SET user_uuid = #{userUuid}, user_password = #{userPassword}, user_name = #{userName}, user_nickname = #{userNickname},
+            user_phone_number = #{userPhoneNum}, user_birth = #{userBirth}
+        where user_email = #{userEmail}
+    </update>
+
+    <update id="SignupManager" parameterType="com.example.userservice.dto.UserDto">
         UPDATE user
         SET user_uuid = #{userUuid}, user_password = #{userPassword}, user_name = #{userName}, user_nickname = #{userNickname},
             user_phone_number = #{userPhoneNum}, user_birth = #{userBirth}
@@ -102,4 +111,15 @@
         where user_phone_number = #{userPhoneNumber} AND user_name = #{userName}
     </select>
 
+    <select id="findUserUuid" resultType="com.example.userservice.dto.UserDto">
+        select *
+        from user
+        where user_uuid = #{userUuid}
+    </select>
+
+    <update id="changePW">
+        update user
+        set user_password = #{userPassword}
+        where user_uuid = #{userUuid}
+    </update>
 </mapper>

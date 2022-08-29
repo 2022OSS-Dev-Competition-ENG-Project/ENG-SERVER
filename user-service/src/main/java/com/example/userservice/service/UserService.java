@@ -34,6 +34,18 @@ public class UserService {
 
         userMapper.SignupUser(userDto);
     }
+
+    public void SignupManager(UserDto userDto) {
+
+        log.info(userDto.toString());
+        userDto.setUserUuid(UUID.randomUUID().toString());
+        // 해싱
+        String encodePassword = passwordEncoder.encode(userDto.getUserPassword());
+        userDto.setUserPassword(encodePassword);
+
+        userMapper.SignupManager(userDto);
+    }
+
     public UserDto registerEmailCheck(String email){
         return userMapper.registerEmailCheck(email);
     }
@@ -98,5 +110,15 @@ public class UserService {
     public String findId(FindIdVo findIdVo){
         return userMapper.findId(findIdVo);
     }
-}
 
+    public UserDto findUserUuid(UserDto userDto) {
+        return userMapper.findUserUuid(userDto);
+    }
+
+    public void changePW(UserDto userDto) {
+        //변경할 비밀번호 해싱
+        String ChgPassword = passwordEncoder.encode(userDto.getUserPassword());
+        userDto.setUserPassword(ChgPassword);
+        userMapper.changePW(userDto);
+    }
+}

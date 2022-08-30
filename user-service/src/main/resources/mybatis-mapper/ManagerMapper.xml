@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.userservice.mapper.ManagerMapper">
+
+    <resultMap type="com.example.userservice.dto.ManagerDto" id="managerInfo" >
+        <result property="manager_uuid" column="managerUuid"/>
+        <result property="manager_email" column="managerEmail"/>
+        <result property="manager_password" column="managerPassword"/>
+        <result property="manager_name" column="managerName"/>
+        <result property="manager_phone_number" column="managerPhoneNum"/>
+        <result property="manager_join_date" column="managerJoinDate"/>
+        <result property="manager_nickname" column="managerNickname"/>
+        <result property="manager_access_type" column="managerAccessType"/>
+        <result property="manager_login_key" column="managerLoginKey"/>
+        <result property="facility_no" column="facilityNo"/>
+        <result property="facility_grade" column="facilityGrade"/>
+    </resultMap>
+<!--    <resultMap  type="com.example.userservice.vo.FindIdVo" id="findIdVo">-->
+<!--        <result property="user_email" column="userId"/>-->
+<!--        <result property="user_name" column="userName"/>-->
+<!--        <result property="user_phone_number" column="userPhoneNumber"/>-->
+<!--    </resultMap>-->
+    <update id="SignupManager" parameterType="com.example.userservice.dto.ManagerDto">
+        UPDATE manager
+        SET manager_uuid = #{managerUuid}, manager_password = #{managerPassword}, manager_name = #{managerName}, manager_nickname = #{managerNickname},
+            manager_phone_number = #{managerPhoneNum}, manager_join_date = #{managerJoinDate}
+        where manager_email = #{managerEmail}
+    </update>
+
+    <select id="ManagerEmailCheck" resultType="com.example.userservice.dto.ManagerDto">
+        select *
+        from manager
+        where manager_email = #{managerEmail}
+    </select>
+
+
+    <update id="ManagerEmailCode" parameterType="com.example.userservice.dto.ManagerDto">
+        UPDATE manager
+        SET manager_login_key = #{LoginKey}
+        where manager_email = #{managerEmail}
+    </update>
+
+    <insert id="ManagerEmailConform" parameterType="com.example.userservice.dto.ManagerDto">
+        insert into manager(manager_uuid,
+                         manager_email)
+        values(#{temporaryUuid},
+               #{managerEmail})
+    </insert>
+
+    <select id="ManagerNickNameCheck" resultMap="managerInfo">
+        select *
+        from manager
+        where manager_nickname = #{managerNickName}
+    </select>
+
+    <update id="NickNameCheckAccess" parameterType="com.example.userservice.dto.ManagerDto">
+        update manager
+        set manager_access_type = #{AccessType}, manager_nickname = #{nickName}
+        where manager_email = #{managerEmail}
+    </update>
+
+    <select id="findManagerEmail" resultType="com.example.userservice.dto.ManagerDto">
+        select *
+        from manager
+        where manager_email = #{managerEmail}
+    </select>
+</mapper>

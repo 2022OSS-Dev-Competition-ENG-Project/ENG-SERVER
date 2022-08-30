@@ -10,6 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 
@@ -25,25 +28,16 @@ public class UserService {
     PasswordEncoder passwordEncoder;
 
     public void SignupUser(UserDto userDto) {
+        LocalDate localDate = LocalDate.now();
 
         log.info(userDto.toString());
         userDto.setUserUuid(UUID.randomUUID().toString());
+        userDto.setUserJoinDate(localDate);
         // 해싱
         String encodePassword = passwordEncoder.encode(userDto.getUserPassword());
         userDto.setUserPassword(encodePassword);
 
         userMapper.SignupUser(userDto);
-    }
-
-    public void SignupManager(UserDto userDto) {
-
-        log.info(userDto.toString());
-        userDto.setUserUuid(UUID.randomUUID().toString());
-        // 해싱
-        String encodePassword = passwordEncoder.encode(userDto.getUserPassword());
-        userDto.setUserPassword(encodePassword);
-
-        userMapper.SignupManager(userDto);
     }
 
     public UserDto registerEmailCheck(String email){
@@ -78,8 +72,8 @@ public class UserService {
         return userMapper.findPhoneNum(userDto);
     }
 
-    public UserDto findNickName(String userNickname) {
-        return userMapper.findNickName(userNickname);
+    public UserDto findUuid(String uuid) {
+        return userMapper.findUuid(uuid);
     }
 
     public void EmailCode(String userEmail,Integer LoginKey) {

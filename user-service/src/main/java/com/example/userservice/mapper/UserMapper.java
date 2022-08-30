@@ -8,8 +8,6 @@ public interface UserMapper {
 
     void SignupUser(UserDto userDto);
 
-    void SignupManager(UserDto userDto);
-
     void EmailConform(String userEmail,String temporaryUuid);
 
     UserDto findEmail(UserDto userDto);
@@ -18,7 +16,7 @@ public interface UserMapper {
 
     UserDto findPhoneNum(UserDto userDto);
 
-    UserDto findNickName(String userNickname);
+    UserDto findUuid(String uuid);
 
     UserDto registerEmailCheck(String email);
 

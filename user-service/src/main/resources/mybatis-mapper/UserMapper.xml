@@ -11,7 +11,7 @@
         <result property="user_password" column="userPassword"/>
         <result property="user_name" column="userName"/>
         <result property="user_phone_number" column="userPhoneNum"/>
-        <result property="user_birth" column="userBirth"/>
+        <result property="user_join_date" column="userJoinDate"/>
         <result property="user_nickname" column="userNickname"/>
         <result property="user_access_type" column="userAccessType"/>
         <result property="user_login_key" column="userLoginKey"/>
@@ -26,14 +26,7 @@
     <update id="SignupUser" parameterType="com.example.userservice.dto.UserDto">
         UPDATE user
         SET user_uuid = #{userUuid}, user_password = #{userPassword}, user_name = #{userName}, user_nickname = #{userNickname},
-            user_phone_number = #{userPhoneNum}, user_birth = #{userBirth}
-        where user_email = #{userEmail}
-    </update>
-
-    <update id="SignupManager" parameterType="com.example.userservice.dto.UserDto">
-        UPDATE user
-        SET user_uuid = #{userUuid}, user_password = #{userPassword}, user_name = #{userName}, user_nickname = #{userNickname},
-            user_phone_number = #{userPhoneNum}, user_birth = #{userBirth}
+            user_phone_number = #{userPhoneNum}, user_join_date = #{userJoinDate}
         where user_email = #{userEmail}
     </update>
 
@@ -74,17 +67,17 @@
         where user_email = #{userEmail}
     </select>
 
-    <select id="findNickName" resultType="com.example.userservice.dto.UserDto">
+    <select id="findUuid" resultType="com.example.userservice.dto.UserDto">
         select *
         from user
-        where user_nickname = #{userNickname}
+        where user_uuid = #{userUuid}
     </select>
 
-    <insert id="EmailCode" parameterType="com.example.userservice.dto.UserDto">
+    <update id="EmailCode" parameterType="com.example.userservice.dto.UserDto">
         UPDATE user
         SET user_login_key = #{LoginKey}
         where user_email = #{userEmail}
-    </insert>
+    </update>
 
     <select id="findName" resultType="com.example.userservice.dto.UserDto">
         select *

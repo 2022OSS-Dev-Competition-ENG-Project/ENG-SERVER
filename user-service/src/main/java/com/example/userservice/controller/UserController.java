@@ -7,14 +7,13 @@ import com.example.userservice.service.RedisService;
 import com.example.userservice.service.SecurityService;
 import com.example.userservice.service.UserService;
 import com.example.userservice.vo.FindIdVo;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import java.time.LocalDate;
 
 
 @Slf4j
@@ -39,6 +38,7 @@ public class UserController {
     private RedisService redisService;
     String token;
 
+    /* 유저 회원가입 */
     @PostMapping("/user-service/signup")
     public ResponseEntity<String> retrieveAllUser(@RequestBody UserDto userDto) {
         String ResponseEmail = userDto.getUserEmail();
@@ -71,7 +71,7 @@ public class UserController {
         }
     }
 
-    // 이메일 중복 확인 , 코드 발송
+    /* 이메일 중복 확인 , 코드 발송 */
     @GetMapping("/user-service/register/check/email/{userEmail}")
     public ResponseEntity registerEmailCheck(
             @PathVariable("userEmail")String userEmail) throws NullPointerException{
@@ -86,7 +86,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("사용중인 이메일입니다.");
         }
     }
-    // 닉네임 중복 확인
+    /* 닉네임 중복 확인 */
     @GetMapping("/user-service/register/check/nickname/{nickname}/{email}")
     public ResponseEntity registerNicknameCheck(
             @PathVariable("nickname")String nickname,
@@ -102,7 +102,7 @@ public class UserController {
     }
 
 
-    // 이메일 코드 확인
+    /* 이메일 코드 확인 */
     @GetMapping("/user-service/register/check/email/{email}/{code}")
     public ResponseEntity emailCheck(@PathVariable("email") String email,
                                      @PathVariable("code") String code){
@@ -215,9 +215,20 @@ public class UserController {
         return null;
     }
 
+    /* 마이페이지 */
+    @GetMapping("/user-service/myPage/{uuid}")
+    public ResponseEntity<String> myPage(@PathVariable("uuid") String uuid) {
+        UserDto userDto = userService.findUuid(uuid);
+        String DBEmail = userService.findUserUuid(userDto).getUserEmail();
+        String DBNickname = userService.findUserUuid(userDto).getUserNickname();
+        LocalDate DBJoinDate = userService.findUserUuid(userDto).getUserJoinDate();
+        return ResponseEntity.status(HttpStatus.OK).body(DBEmail +" / "+ DBNickname + " / "+ DBJoinDate);
+    }
+
     /* 마이페이지(비밀번호 재설정) */
     @GetMapping("/user-service/myPage/changePW/{uuid}")
-    public ResponseEntity MyPage(@PathVariable("uuid") String uuid,
+
+    public ResponseEntity ChangePW(@PathVariable("uuid") String uuid,
                                  @RequestBody UserDto userDto) {
         userDto.setUserUuid(uuid);
         /* 토큰 구현시 다시 */

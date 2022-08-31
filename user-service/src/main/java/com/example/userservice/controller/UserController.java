@@ -1,12 +1,14 @@
 package com.example.userservice.controller;
 
 
+import com.example.userservice.dto.UserDataDto;
 import com.example.userservice.dto.UserDto;
 import com.example.userservice.service.EmailService;
 import com.example.userservice.service.RedisService;
 import com.example.userservice.service.SecurityService;
 import com.example.userservice.service.UserService;
 import com.example.userservice.vo.FindIdVo;
+import com.example.userservice.vo.UserDataVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
 
 @Slf4j
@@ -24,7 +28,7 @@ public class UserController {
 
     @Autowired
     public UserController(UserService userService, PasswordEncoder passwordEncoder, SecurityService securityService, EmailService emailService
-            , RedisService redisService){
+            , RedisService redisService ){
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.securityService = securityService;
@@ -217,12 +221,12 @@ public class UserController {
 
     /* 마이페이지 */
     @GetMapping("/user-service/myPage/{uuid}")
-    public ResponseEntity<String> myPage(@PathVariable("uuid") String uuid) {
-        UserDto userDto = userService.findUuid(uuid);
-        String DBEmail = userService.findUserUuid(userDto).getUserEmail();
-        String DBNickname = userService.findUserUuid(userDto).getUserNickname();
-        LocalDate DBJoinDate = userService.findUserUuid(userDto).getUserJoinDate();
-        return ResponseEntity.status(HttpStatus.OK).body(DBEmail +" / "+ DBNickname + " / "+ DBJoinDate);
+    public Object myPage(@PathVariable("uuid") String uuid) {
+        UserDataDto userDataDto = new UserDataDto();
+        userDataDto.setUserEmail(userService.findUuid(uuid).getUserEmail());
+        userDataDto.setUserNickname(userService.findUuid(uuid).getUserNickname());
+        userDataDto.setUserJoinDate(userService.findUuid(uuid).getUserJoinDate());
+        return userDataDto;
     }
 
     /* 마이페이지(비밀번호 재설정) */
@@ -248,7 +252,7 @@ public class UserController {
 //        }
         userService.changePW(userDto);
         log.info("MyPage : 개인 정보 수정 완료");
-        String userName = userService.findUserUuid(userDto).getUserName();
+        String userName = userService.findUuid(uuid).getUserName();
         return ResponseEntity.status(HttpStatus.OK).body(userName + "님의 비밀번호가 변경되었습니다. 변경된 아이디 = " + userName);
     }
 

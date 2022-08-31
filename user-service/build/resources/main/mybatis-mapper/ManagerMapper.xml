@@ -18,11 +18,11 @@
         <result property="facility_no" column="facilityNo"/>
         <result property="facility_grade" column="facilityGrade"/>
     </resultMap>
-<!--    <resultMap  type="com.example.userservice.vo.FindIdVo" id="findIdVo">-->
-<!--        <result property="user_email" column="userId"/>-->
-<!--        <result property="user_name" column="userName"/>-->
-<!--        <result property="user_phone_number" column="userPhoneNumber"/>-->
-<!--    </resultMap>-->
+    <resultMap  type="com.example.userservice.vo.FindManagerIdVo" id="findMangerIdVo">
+        <result property="manager_email" column="userId"/>
+        <result property="manager_name" column="managerName"/>
+        <result property="manager_phone_number" column="managerPhoneNum"/>
+    </resultMap>
     <update id="SignupManager" parameterType="com.example.userservice.dto.ManagerDto">
         UPDATE manager
         SET manager_uuid = #{managerUuid}, manager_password = #{managerPassword}, manager_name = #{managerName}, manager_nickname = #{managerNickname},
@@ -67,4 +67,29 @@
         from manager
         where manager_email = #{managerEmail}
     </select>
+
+    <select id="findManagerId" resultType="java.lang.String">
+        select manager_email
+        from manager
+        where manager_phone_number = #{managerPhoneNumber} AND manager_name = #{managerName}
+    </select>
+
+    <update id="changeManagerPW">
+        update manager
+        set manager_password = #{managerPassword}
+        where manager_uuid = #{managerUuid}
+    </update>
+
+    <select id="findManagerUuid" resultType="com.example.userservice.dto.ManagerDto">
+        select *
+        from manager
+        where manager_uuid = #{managerUuid}
+    </select>
+
+    <update id="resetPassword">
+        update manager
+        set manager_password = #{managerPassword}
+        where manager_email = #{managerEmail}
+          and manager_name = #{managerName}
+    </update>
 </mapper>

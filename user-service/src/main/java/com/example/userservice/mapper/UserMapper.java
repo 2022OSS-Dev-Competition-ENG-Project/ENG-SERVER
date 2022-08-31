@@ -30,7 +30,7 @@ public interface UserMapper {
 
     void changeRandomPassword(UserDto userDto);
 
-    UserDto findUserUuid(UserDto userDto);
+//    UserDto findUserUuid(UserDto userDto);
 
     void changePW(UserDto userDto);
 

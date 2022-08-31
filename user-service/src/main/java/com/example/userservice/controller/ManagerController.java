@@ -3,6 +3,8 @@ package com.example.userservice.controller;
 import com.example.userservice.dto.ManagerDto;
 import com.example.userservice.dto.UserDto;
 import com.example.userservice.service.*;
+import com.example.userservice.vo.FindIdVo;
+import com.example.userservice.vo.FindManagerIdVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -154,5 +156,85 @@ public class ManagerController {
         }
     }
 
-    
+    /* 매니저 아이디 찾기 */
+    @PostMapping (value = "/manager-service/FindManagerId")
+    public ResponseEntity FindManagerId (@RequestBody FindManagerIdVo findManagerIdVo){
+        /* 이름 전화 번호가 한컬럼 안에서 다를 때 */
+        try{
+            log.info(managerService.findManagerId(findManagerIdVo));
+        }catch (NullPointerException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("입력하신 정보가 없습니다.");
+        }
+
+        if (managerService.findManagerId(findManagerIdVo) == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("입력하신 정보가 없습니다.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(managerService.findManagerId(findManagerIdVo));
+    }
+
+    /* 매니저 비밀번호 초기화(랜덤) */
+    @PostMapping(value = "/manager-service/ManagerPasswordReset")
+    public ResponseEntity<String> FindManagerPassword (@RequestBody ManagerDto managerDto) {
+        String ResponseEmail = managerDto.getManagerEmail(); // 입력 받은 Email
+        String DBEmail;
+        String DBName;
+        //String ChgUserPassword = userService.RandomObject();
+        String ChgManagerPassword = "aaaaa";
+        log.info("findUserPassword : 비밀번호 재 설정 시도");
+        try {
+            DBEmail = managerService.findManagerEmail(managerDto).getManagerEmail();
+        } catch (java.lang.NullPointerException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("이메일을 다시 확인해주세요.");
+        }
+
+        try {
+            DBName = managerService.findManagerEmail(managerDto).getManagerName();
+        } catch (java.lang.NullPointerException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("이름을 다시 확인해주세요.");
+        }
+        if (DBEmail != null && DBName != null) {
+//            SimpleMailMessage simpleMessage = new SimpleMailMessage();
+//            simpleMessage.setSubject("비밀번호 초기화");
+//            simpleMessage.setText("비밀번호가 초기화 되었습니다. 초기화 된 비밀번호는 ["
+//                    + ChgUserPassword + "] 입니다.");
+//            simpleMessage.setTo(ResponseEmail);
+//            javaMailSender.send(simpleMessage);
+//            userDto.setPassword(ChgUserPassword);
+//            userDto.setId(DBId);
+            managerDto.setManagerPassword(ChgManagerPassword);
+            managerService.resetPassword(managerDto);
+//            log.info("findUserPassword : 비밀번호 재 설정 완료");
+
+            return ResponseEntity.status(HttpStatus.OK).body(ChgManagerPassword);
+        }
+        return null;
+    }
+
+    /* 매니저 마이페이지 (비밀번호 재 설정) */
+    @GetMapping("/manager-service/myPage/changePW/{uuid}")
+    public ResponseEntity ChangePW(@PathVariable("uuid") String uuid,
+                                   @RequestBody ManagerDto managerDto) {
+        managerDto.setManagerUuid(uuid);
+        /* 토큰 구현시 다시 */
+//        String UserEmail = userService.findUserUuid(userDto).getUserEmail();
+
+//        try {
+//            securityService.getSubject(token, UserEmail);
+//        } catch (SignatureException e) {
+//            log.info("MyPage : 정보 수정할때 Email을 수정, 잘못된 토큰");
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("재 로그인 후 진행해주세요.");
+//        } catch (IllegalArgumentException e) {
+//            log.info("MyPage : 로그인 안함");
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 후 진행해주세요.");
+//        } catch (ExpiredJwtException e) {
+//            log.info("MyPage : 토큰유효기간 지남");
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("토큰유효기간이 지났습니다. 재 로그인 후 진행해주세요.");
+//        }
+        managerService.changeManagerPW(managerDto);
+        log.info("MyPage : 개인 정보 수정 완료");
+        String userName = managerService.findManagerUuid(uuid).getManagerName();
+        return ResponseEntity.status(HttpStatus.OK).body(userName + "님의 비밀번호가 변경되었습니다. 변경된 아이디 = " + userName);
+    }
+
+
 }

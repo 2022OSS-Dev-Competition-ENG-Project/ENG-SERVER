@@ -4,6 +4,8 @@ import com.example.userservice.dto.ManagerDto;
 import com.example.userservice.dto.UserDto;
 import com.example.userservice.mapper.ManagerMapper;
 import com.example.userservice.mapper.UserMapper;
+import com.example.userservice.vo.FindIdVo;
+import com.example.userservice.vo.FindManagerIdVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -53,5 +55,28 @@ public class ManagerService {
 
     public ManagerDto findManagerEmail(ManagerDto managerDto) {
         return managerMapper.findManagerEmail(managerDto);
+    }
+
+    public String findManagerId(FindManagerIdVo findManagerIdVo){
+        return managerMapper.findManagerId(findManagerIdVo);
+    }
+
+    public void changeManagerPW(ManagerDto managerDto) {
+        //변경할 비밀번호 해싱
+        String ChgPassword = passwordEncoder.encode(managerDto.getManagerPassword());
+        managerDto.setManagerPassword(ChgPassword);
+        managerMapper.changeManagerPW(managerDto);
+    }
+
+    public ManagerDto findManagerUuid(String uuid) {
+        return managerMapper.findManagerUuid(uuid);
+    }
+
+    public void resetPassword (ManagerDto managerDto) {
+        //랜덤 비밀번호 해싱
+        String encodePassword = passwordEncoder.encode(managerDto.getManagerPassword());
+        managerDto.setManagerPassword(encodePassword);
+
+        managerMapper.resetPassword(managerDto);
     }
 }

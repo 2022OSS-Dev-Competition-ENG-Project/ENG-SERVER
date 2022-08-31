@@ -105,9 +105,9 @@ public class UserService {
         return userMapper.findId(findIdVo);
     }
 
-    public UserDto findUserUuid(UserDto userDto) {
-        return userMapper.findUserUuid(userDto);
-    }
+//    public UserDto findUserUuid(UserDto userDto) {
+//        return userMapper.findUserUuid(userDto);
+//    }
 
     public void changePW(UserDto userDto) {
         //변경할 비밀번호 해싱

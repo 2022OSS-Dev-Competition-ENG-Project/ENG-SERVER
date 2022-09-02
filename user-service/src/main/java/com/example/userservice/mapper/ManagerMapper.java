@@ -22,6 +22,8 @@ public interface ManagerMapper {
 
     ManagerDto findManagerEmail(ManagerDto managerDto);
 
+    ManagerDto findManagerName(ManagerDto managerDto);
+
     String findManagerId(FindManagerIdVo findManagerIdVo);
 
     void changeManagerPW(ManagerDto managerDto);
@@ -29,4 +31,6 @@ public interface ManagerMapper {
     ManagerDto findManagerUuid(String uuid);
 
     void resetPassword(ManagerDto managerDto);
+
+    ManagerDto findManagerID(String managerEmail);
 }

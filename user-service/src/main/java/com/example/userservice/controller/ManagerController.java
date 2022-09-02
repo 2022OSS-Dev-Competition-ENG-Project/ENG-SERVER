@@ -1,9 +1,8 @@
 package com.example.userservice.controller;
 
+import com.example.userservice.dto.ManagerDataDto;
 import com.example.userservice.dto.ManagerDto;
-import com.example.userservice.dto.UserDto;
 import com.example.userservice.service.*;
-import com.example.userservice.vo.FindIdVo;
 import com.example.userservice.vo.FindManagerIdVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,10 +118,13 @@ public class ManagerController {
 
     /* 매니저 로그인 */
     @PostMapping("/manager-service/login")
-    public ResponseEntity<String> AllManagers(@RequestBody ManagerDto managerDto) {
+    public Object AllManagers(@RequestBody ManagerDto managerDto) {
         String ResponsePw = managerDto.getManagerPassword();
+        String managerEmail = managerDto.getManagerEmail();
         String encodePassword;
-        String ResponseEmail = managerDto.getManagerEmail();
+        ManagerDataDto managerDataDto = new ManagerDataDto();
+        managerDataDto.setManagerName(managerService.findManagerID(managerEmail).getManagerName());
+        managerDataDto.setManagerUuid(managerService.findManagerID(managerEmail).getManagerUuid());
         String UserId;
         try {
             UserId = managerService.findManagerEmail(managerDto).getManagerEmail();
@@ -146,10 +148,10 @@ public class ManagerController {
             log.info("ManagerLogin : 이메일 인증 안함");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("이메일 인증을 진행해주세요.");
         } else if (passwordEncoder.matches(ResponsePw,encodePassword) && managerAccessType == 1) {
-            token = securityService.createToken(ResponseEmail,(30*60*1000),phoneNum,UserId);
+            //token = securityService.createToken(ResponseEmail,(30*60*1000),phoneNum,UserId);
             String DBManagerUuid = managerService.findManagerEmail(managerDto).getManagerUuid();
             log.info("ManagerLogin : 로그인 성공, 토큰 발급");
-            return ResponseEntity.status(HttpStatus.OK).body(DBManagerUuid);
+            return managerDataDto;
         } else {
             log.info("ManagerLogin : 비밀번호가 틀렸습니다.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 틀렸습니다.");
@@ -188,7 +190,7 @@ public class ManagerController {
         }
 
         try {
-            DBName = managerService.findManagerEmail(managerDto).getManagerName();
+            DBName = managerService.findManagerName(managerDto).getManagerName();
         } catch (java.lang.NullPointerException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("이름을 다시 확인해주세요.");
         }
@@ -233,7 +235,8 @@ public class ManagerController {
         managerService.changeManagerPW(managerDto);
         log.info("MyPage : 개인 정보 수정 완료");
         String userName = managerService.findManagerUuid(uuid).getManagerName();
-        return ResponseEntity.status(HttpStatus.OK).body(userName + "님의 비밀번호가 변경되었습니다. 변경된 아이디 = " + userName);
+        String userEmail = managerService.findManagerUuid(uuid).getManagerEmail();
+        return ResponseEntity.status(HttpStatus.OK).body(userName + "님의 비밀번호가 변경되었습니다. 변경된 아이디 = " + userEmail);
     }
 
 

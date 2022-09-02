@@ -68,6 +68,12 @@
         where manager_email = #{managerEmail}
     </select>
 
+    <select id="findManagerName" resultType="com.example.userservice.dto.ManagerDto">
+        select *
+        from manager
+        where manager_name = #{managerName}
+    </select>
+
     <select id="findManagerId" resultType="java.lang.String">
         select manager_email
         from manager
@@ -92,4 +98,10 @@
         where manager_email = #{managerEmail}
           and manager_name = #{managerName}
     </update>
+
+    <select id="findManagerID" resultType="com.example.userservice.dto.ManagerDto">
+        select *
+        from manager
+        where manager_email = #{managerEmail}
+    </select>
 </mapper>

@@ -9,4 +9,5 @@ public class SignUpConstant {
     public static final String SIGNUP_SUCCESS = "Signup : 완료";
     public static final String SIGNUP_FAIL = "Signup : 실패";
     public static final String SIGNUP_FAIL_CONTENT = "회원가입 형식을 확인해주세요.";
+    public static final String SAVE_PATH = "/home/icslab/images/";
 }

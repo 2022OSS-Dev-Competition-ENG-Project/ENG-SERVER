@@ -57,6 +57,10 @@ public class ManagerService {
         return managerMapper.findManagerEmail(managerDto);
     }
 
+    public ManagerDto findManagerName(ManagerDto managerDto) {
+        return managerMapper.findManagerName(managerDto);
+    }
+
     public String findManagerId(FindManagerIdVo findManagerIdVo){
         return managerMapper.findManagerId(findManagerIdVo);
     }
@@ -72,6 +76,10 @@ public class ManagerService {
         return managerMapper.findManagerUuid(uuid);
     }
 
+    public ManagerDto findManagerID(String managerEmail) {
+        return managerMapper.findManagerID(managerEmail);
+    }
+
     public void resetPassword (ManagerDto managerDto) {
         //랜덤 비밀번호 해싱
         String encodePassword = passwordEncoder.encode(managerDto.getManagerPassword());
@@ -79,4 +87,5 @@ public class ManagerService {
 
         managerMapper.resetPassword(managerDto);
     }
+
 }

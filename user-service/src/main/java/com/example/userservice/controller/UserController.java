@@ -3,10 +3,7 @@ package com.example.userservice.controller;
 
 import com.example.userservice.dto.UserDataDto;
 import com.example.userservice.dto.UserDto;
-import com.example.userservice.service.EmailService;
-import com.example.userservice.service.RedisService;
-import com.example.userservice.service.SecurityService;
-import com.example.userservice.service.UserService;
+import com.example.userservice.service.*;
 import com.example.userservice.vo.FindIdVo;
 import com.example.userservice.vo.UserDataVo;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -254,6 +254,22 @@ public class UserController {
         log.info("MyPage : 개인 정보 수정 완료");
         String userName = userService.findUuid(uuid).getUserName();
         return ResponseEntity.status(HttpStatus.OK).body(userName + "님의 비밀번호가 변경되었습니다. 변경된 아이디 = " + userName);
+    }
+
+    @PostMapping("/user-service/ProfileImages/{uuid}")
+    public ResponseEntity<String> upload(@RequestParam("images") MultipartFile multipartFile,
+                                         @PathVariable("uuid")String uuid) throws IOException {
+        log.info("ProfileImages : 이미지 저장 시도");
+//        String UserEmail = (userService.findEmailJWT(id)).getEmail();
+//        try {
+//            securityService.getSubject(token, UserEmail);
+//        } catch (IllegalArgumentException e) {
+//            log.info("ProfileImages : 토큰 없음");
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 후 진행해주세요.");
+//        }
+        String userNickName = userService.findUuid(uuid).getUserNickname();
+        ImageUploader.upload(multipartFile,userNickName);
+        return ResponseEntity.status(HttpStatus.OK).body("설정 되었습니다.");
     }
 
     @GetMapping("/user/{id}")

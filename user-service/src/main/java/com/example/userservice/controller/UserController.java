@@ -227,6 +227,7 @@ public class UserController {
         userDataDto.setUserEmail(userService.findUuid(uuid).getUserEmail());
         userDataDto.setUserNickname(userService.findUuid(uuid).getUserNickname());
         userDataDto.setUserJoinDate(userService.findUuid(uuid).getUserJoinDate());
+        userDataDto.setUserImg(userService.findUuid(uuid).getUserImg());
         return userDataDto;
     }
 
@@ -260,15 +261,16 @@ public class UserController {
     /* 프로필 이미지 저장 */
     @PostMapping("/user-service/SaveProfileImage/{uuid}")
     public ResponseEntity upload(@RequestParam("images") MultipartFile multipartFile,
-                                         @PathVariable("uuid")String uuid) throws IOException {
+                                         @PathVariable("uuid")String userUuid) throws IOException {
         log.info("ProfileImages : 이미지 저장 시도");
-        ImageUploader.upload(multipartFile,uuid);
+        String userImg = "http://203.250.32.29:2201/api/user-service/ProfileImage/" + userUuid;
+        ImageUploader.upload(multipartFile,userImg,userUuid);
         return ResponseEntity.status(HttpStatus.OK).body("저장되었습니다.");
     }
 
     /* 프로필 이미지 가져오기 */
     @GetMapping(value = "/user-service/ProfileImage/{uuid}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<byte[]> getImage(@PathVariable("uuid")String uuid) throws IOException {
+    public ResponseEntity<String> getImage(@PathVariable("uuid")String uuid) throws IOException {
         String savePath = SAVE_PATH;
         InputStream in = null;
         String userImage = savePath + "/" + uuid;
@@ -294,7 +296,8 @@ public class UserController {
         } catch(IOException e){
             throw new RuntimeException("File Error");
         }
-        return ResponseEntity.status(HttpStatus.OK).body(fileArray);
+//        return ResponseEntity.status(HttpStatus.OK).body(fileArray);
+        return ResponseEntity.status(HttpStatus.OK).body(userImage);
     }
 
 

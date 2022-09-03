@@ -1,9 +1,9 @@
 package com.example.userservice.mapper;
 
-import com.example.userservice.vo.GetProfileImageVo;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.web.multipart.MultipartFile;
 
 @Mapper
 public interface ImageMapper {
-    String getImageFile(GetProfileImageVo getProfileImageVo);
+    String upload(MultipartFile multipartFile, String userImg, String userUuid);
 }

@@ -16,4 +16,5 @@ public class UserDto {
     private LocalDate userJoinDate;
     private Integer userLoginKey;
     private Integer userAccessType;
+    private String userImg;
 }

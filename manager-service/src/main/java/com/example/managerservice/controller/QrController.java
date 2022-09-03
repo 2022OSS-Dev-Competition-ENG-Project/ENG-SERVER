@@ -1,7 +1,6 @@
 package com.example.managerservice.controller;
 
 import com.example.managerservice.constant.QRCodeConstant;
-import com.example.managerservice.dto.FacilityDto;
 import com.example.managerservice.service.FacilityService;
 import com.example.managerservice.service.QrService;
 import com.example.managerservice.vo.GetQRUrlVo;
@@ -10,14 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
-import static com.example.managerservice.constant.FacilityConstant.FACILITY_NOT_FOUND;
 
 @Slf4j
 @RestController
@@ -39,6 +39,8 @@ public class QrController {
         FileInputStream fis = null;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         String fileDir = qrService.getQRCode(qv);
+
+        log.info(fileDir);
 
         // facilityName, facilityAddress 가 존재하는지 여부
         if(fileDir == null){

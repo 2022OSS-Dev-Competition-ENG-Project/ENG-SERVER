@@ -24,7 +24,6 @@
         <result property="user_facility" column="userFacility"/>
         <result property="facility_name" column="facilityName"/>
         <result property="is_liked" column="isLiked"/>
-
     </resultMap>
 
     <insert id="registerFacility" parameterType="com.example.managerservice.dto.FacilityDto">

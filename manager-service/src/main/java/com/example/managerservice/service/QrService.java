@@ -63,6 +63,7 @@ public class QrService {
     /* 사용자 여부 진단 */
     /* 데이터가 있으면 QR Location 없다면 Null */
     public String getQRCode(GetQRUrlVo getQRUrlVo){
+        log.info(getQRUrlVo.toString());
         return qrMapper.getQRCode(getQRUrlVo);
     }
 

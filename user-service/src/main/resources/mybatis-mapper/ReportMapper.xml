@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.userservice.mapper.ReportMapper">
+
+    <resultMap id="reportInfo" type="com.example.userservice.dto.ReportDto">
+        <result property="report_num" column="reportNum"/>
+        <result property="report_title" column="reportTitle"/>
+        <result property="report_date" column="reportDate"/>
+        <result property="report_img" column="reportImg"/>
+        <result property="report_status" column="reportStatus"/>
+        <result property="user_uuid" column="userUuid"/>
+        <result property="facility_no" column="facilityNo"/>
+    </resultMap>
+
+    <insert id="reportRegister" parameterType="com.example.userservice.dto.ReportDto">
+        insert into facility_report(
+                                    report_title,
+                                    report_text,
+                                    report_date,
+                                    report_img,
+                                    report_status,
+                                    user_uuid,
+                                    facility_no
+                                    )
+        values (
+                #{reportTitle},
+                #{reportText},
+                #{reportDate},
+                #{reportImg},
+                #{reportStatus},
+                #{userUuid},
+                #{facilityNo}
+                )
+    </insert>
+
+    <select id="getReportNum" resultType="java.lang.Integer">
+        select report_num
+        from facility_report
+        where report_text = #{reportText} AND report_date = #{reportDate}
+    </select>
+    
+    <update id="reportImgUpdate">
+        update facility_report
+        SET report_img = #{reportImg}
+        WHERE report_num = #{reportNum};
+    </update>
+
+
+
+</mapper>

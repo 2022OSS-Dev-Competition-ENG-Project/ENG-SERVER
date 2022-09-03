@@ -1,6 +1,7 @@
 package com.example.userservice.controller;
 
 
+import com.example.userservice.constant.ImageConstant;
 import com.example.userservice.dto.UserDataDto;
 import com.example.userservice.dto.UserDto;
 import com.example.userservice.service.*;
@@ -15,8 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 
 @Slf4j
@@ -27,18 +27,20 @@ public class UserController {
 
     @Autowired
     public UserController(UserService userService, PasswordEncoder passwordEncoder, SecurityService securityService, EmailService emailService
-            , RedisService redisService ){
+            , RedisService redisService, ImageUploader imageUploader ){
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.securityService = securityService;
         this.emailService = emailService;
         this.redisService = redisService;
+        this.imageUploader = imageUploader;
     }
     private UserService userService;
     private PasswordEncoder passwordEncoder;
     private SecurityService securityService;
     private EmailService emailService;
     private RedisService redisService;
+    private ImageUploader imageUploader;
     String token;
 
     /* 유저 회원가입 */
@@ -257,26 +259,50 @@ public class UserController {
 
     /* 프로필 이미지 저장 */
     @PostMapping("/user-service/SaveProfileImages/{uuid}")
-    public ResponseEntity<String> upload(@RequestParam("images") MultipartFile multipartFile,
+    public ResponseEntity upload(@RequestParam("images") MultipartFile multipartFile,
                                          @PathVariable("uuid")String uuid) throws IOException {
         log.info("ProfileImages : 이미지 저장 시도");
-//        String UserEmail = (userService.findEmailJWT(id)).getEmail();
-//        try {
-//            securityService.getSubject(token, UserEmail);
-//        } catch (IllegalArgumentException e) {
-//            log.info("ProfileImages : 토큰 없음");
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 후 진행해주세요.");
-//        }
-        String userNickName = userService.findUuid(uuid).getUserNickname();
-        ImageUploader.upload(multipartFile,userNickName,uuid);
-        return ResponseEntity.status(HttpStatus.OK).body(System.getProperty("user.dir") + "/" + uuid);
+//        ImageUploader.upload(multipartFile,uuid);
+//        InputStream in = null;
+//        String userImage = String.valueOf(getClass().getResourceAsStream(System.getProperty("user.dir") + "/" + uuid));
+//        ByteArrayOutputStream out = new ByteArrayOutputStream();
+//        return IOUtils.toByteArray(in);
+        FileInputStream in = null;
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        String userImage = imageUploader.getImageFile();
+        try {
+            userImage = String.valueOf(getClass().getResourceAsStream(System.getProperty("user.dir") + "/" + uuid));
+        }  catch (NullPointerException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ImageConstant.IMAGE_ERROR);
+        }
+
+        try{
+            in = new FileInputStream(userImage);
+        } catch(FileNotFoundException e){
+            e.printStackTrace();
+        }
+        int readCount = 0;
+        byte[] buffer = new byte[1024];
+        byte[] fileArray = null;
+
+        try{
+            while((readCount = in.read(buffer)) != -1){
+                out.write(buffer, 0, readCount);
+            }
+            fileArray = out.toByteArray();
+            in.close();
+            out.close();
+        } catch(IOException e){
+            throw new RuntimeException("File Error");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(fileArray);
     }
 
     /* 프로필 이미지 가져오기 */
     @GetMapping(value = "/user-service/ProfileImage/{uuid}", produces = MediaType.IMAGE_JPEG_VALUE)
     public byte[] getImage(@PathVariable("uuid")String uuid) throws IOException {
-        InputStream in = getClass().getResourceAsStream(System.getProperty("user.dir") + "/" + uuid);
-
+//        InputStream in = getClass().getResourceAsStream(System.getProperty("user.dir") + "/" + uuid);
+        InputStream in = getClass().getResourceAsStream("User/choebohyeon/ENG-SERVER/user-service" + "/" + uuid);
 
         return IOUtils.toByteArray(in);
     }

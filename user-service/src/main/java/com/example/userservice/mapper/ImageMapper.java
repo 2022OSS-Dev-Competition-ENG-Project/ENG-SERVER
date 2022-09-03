@@ -5,5 +5,5 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Mapper
 public interface ImageMapper {
-    String upload(MultipartFile multipartFile, String userImg, String userUuid);
+    void upload(MultipartFile multipartFile, String userImg, String userUuid);
 }

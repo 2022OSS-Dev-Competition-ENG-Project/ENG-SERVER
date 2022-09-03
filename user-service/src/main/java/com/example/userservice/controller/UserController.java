@@ -1,6 +1,7 @@
 package com.example.userservice.controller;
 
 
+import com.example.userservice.constant.ImageConstant;
 import com.example.userservice.dto.UserDataDto;
 import com.example.userservice.dto.UserDto;
 import com.example.userservice.service.*;
@@ -17,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 
 import static com.example.userservice.constant.SignUpConstant.SAVE_PATH;
+import java.time.LocalDate;
+
 
 
 @Slf4j
@@ -233,7 +236,6 @@ public class UserController {
 
     /* 마이페이지(비밀번호 재설정) */
     @GetMapping("/user-service/myPage/changePW/{uuid}")
-
     public ResponseEntity ChangePW(@PathVariable("uuid") String uuid,
                                  @RequestBody UserDto userDto) {
         userDto.setUserUuid(uuid);
@@ -260,46 +262,12 @@ public class UserController {
 
     /* 프로필 이미지 저장 */
     @PostMapping("/user-service/SaveProfileImage/{uuid}")
-    public ResponseEntity upload(@RequestParam("images") MultipartFile multipartFile,
+    public void upload(@RequestParam("images") MultipartFile multipartFile,
                                          @PathVariable("uuid")String userUuid) throws IOException {
         log.info("ProfileImages : 이미지 저장 시도");
         String userImg = "http://203.250.32.29:2201/api/user-service/ProfileImage/" + userUuid;
         ImageUploader.upload(multipartFile,userImg,userUuid);
-        return ResponseEntity.status(HttpStatus.OK).body("저장되었습니다.");
     }
-
-    /* 프로필 이미지 가져오기 */
-    @GetMapping(value = "/user-service/ProfileImage/{uuid}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<String> getImage(@PathVariable("uuid")String uuid) throws IOException {
-        String savePath = SAVE_PATH;
-        InputStream in = null;
-        String userImage = savePath + "/" + uuid;
-
-        try {
-            in = new FileInputStream(userImage);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-        int readCount = 0;
-        byte[] buffer = new byte[1024];
-        byte[] fileArray = null;
-
-        try{
-            while((readCount = in.read(buffer)) != -1){
-                out.write(buffer, 0, readCount);
-            }
-            fileArray = out.toByteArray();
-            in.close();
-            out.close();
-        } catch(IOException e){
-            throw new RuntimeException("File Error");
-        }
-//        return ResponseEntity.status(HttpStatus.OK).body(fileArray);
-        return ResponseEntity.status(HttpStatus.OK).body(userImage);
-    }
-
 
     @GetMapping("/user/{id}")
     public ResponseEntity<String> test(@PathVariable("id")String id) {

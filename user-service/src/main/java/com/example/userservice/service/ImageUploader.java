@@ -25,13 +25,13 @@ public class ImageUploader {
     }
     private static ImageMapper imageMapper;
 
-    public static String upload(MultipartFile multipartFile, String userImg, String userUuid) throws IOException {
+    public static void upload(MultipartFile multipartFile, String userImg, String userUuid) throws IOException {
         String savaPath = SAVE_PATH;
-        File file = new File(  System.getProperty("user.dir") + "/" + userUuid);
+        File file = new File(  savaPath + userUuid);
         multipartFile.transferTo(file);
         log.info("upload : 로컬서버 이미지 저장");
 
-        return imageMapper.upload(multipartFile, userImg, userUuid);
+        imageMapper.upload(multipartFile, userImg, userUuid);
     }
 
 

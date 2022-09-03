@@ -1,9 +1,8 @@
 package com.example.userservice.dto;
 
 import lombok.Data;
-
 import java.time.LocalDate;
-import java.util.Date;
+
 
 @Data
 public class UserDto {

@@ -18,10 +18,10 @@
         <result property="user_img" column="userImg"/>
     </resultMap>
 
-    <insert id="upload" parameterType="com.example.userservice.dto.UserDto">
-        insert into
-            user (user_img) value (#{userImg})
-            where user_uuid = #{userUuid}
-    </insert>
+    <update id="upload" parameterType="com.example.userservice.dto.UserDto">
+        UPDATE user
+        SET user_img = #{userImg}
+        where user_uuid = #{userUuid}
+    </update>
 
 </mapper>

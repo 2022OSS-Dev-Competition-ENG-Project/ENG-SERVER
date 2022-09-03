@@ -1,13 +1,11 @@
 package com.example.userservice.controller;
 
 
-import com.example.userservice.constant.ImageConstant;
 import com.example.userservice.dto.UserDataDto;
 import com.example.userservice.dto.UserDto;
 import com.example.userservice.service.*;
 import com.example.userservice.vo.FindIdVo;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+
+import static com.example.userservice.constant.SignUpConstant.SAVE_PATH;
 
 
 @Slf4j
@@ -258,29 +258,28 @@ public class UserController {
     }
 
     /* 프로필 이미지 저장 */
-    @PostMapping("/user-service/SaveProfileImages/{uuid}")
+    @PostMapping("/user-service/SaveProfileImage/{uuid}")
     public ResponseEntity upload(@RequestParam("images") MultipartFile multipartFile,
                                          @PathVariable("uuid")String uuid) throws IOException {
         log.info("ProfileImages : 이미지 저장 시도");
-//        ImageUploader.upload(multipartFile,uuid);
-//        InputStream in = null;
-//        String userImage = String.valueOf(getClass().getResourceAsStream(System.getProperty("user.dir") + "/" + uuid));
-//        ByteArrayOutputStream out = new ByteArrayOutputStream();
-//        return IOUtils.toByteArray(in);
-        FileInputStream in = null;
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        String userImage = imageUploader.getImageFile();
-        try {
-            userImage = String.valueOf(getClass().getResourceAsStream(System.getProperty("user.dir") + "/" + uuid));
-        }  catch (NullPointerException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ImageConstant.IMAGE_ERROR);
-        }
+        ImageUploader.upload(multipartFile,uuid);
+        return ResponseEntity.status(HttpStatus.OK).body("저장되었습니다.");
+    }
 
-        try{
+    /* 프로필 이미지 가져오기 */
+    @GetMapping(value = "/user-service/ProfileImage/{uuid}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<byte[]> getImage(@PathVariable("uuid")String uuid) throws IOException {
+        String savePath = SAVE_PATH;
+        InputStream in = null;
+        String userImage = savePath + "/" + uuid;
+
+        try {
             in = new FileInputStream(userImage);
-        } catch(FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
         int readCount = 0;
         byte[] buffer = new byte[1024];
         byte[] fileArray = null;
@@ -296,15 +295,6 @@ public class UserController {
             throw new RuntimeException("File Error");
         }
         return ResponseEntity.status(HttpStatus.OK).body(fileArray);
-    }
-
-    /* 프로필 이미지 가져오기 */
-    @GetMapping(value = "/user-service/ProfileImage/{uuid}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public byte[] getImage(@PathVariable("uuid")String uuid) throws IOException {
-//        InputStream in = getClass().getResourceAsStream(System.getProperty("user.dir") + "/" + uuid);
-        InputStream in = getClass().getResourceAsStream("User/choebohyeon/ENG-SERVER/user-service" + "/" + uuid);
-
-        return IOUtils.toByteArray(in);
     }
 
 

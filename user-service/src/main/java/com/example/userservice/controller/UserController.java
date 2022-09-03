@@ -269,6 +269,37 @@ public class UserController {
         ImageUploader.upload(multipartFile,userImg,userUuid);
     }
 
+    /* 프로필 이미지 가져오기 */
+    @GetMapping(value = "/user-service/ProfileImage/{uuid}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<byte[]> getImage(@PathVariable("uuid")String uuid) throws IOException {
+        String savePath = SAVE_PATH;
+        InputStream in = null;
+        String userImage = savePath + "/" + uuid;
+
+        try {
+            in = new FileInputStream(userImage);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        int readCount = 0;
+        byte[] buffer = new byte[1024];
+        byte[] fileArray = null;
+
+        try{
+            while((readCount = in.read(buffer)) != -1){
+                out.write(buffer, 0, readCount);
+            }
+            fileArray = out.toByteArray();
+            in.close();
+            out.close();
+        } catch(IOException e){
+            throw new RuntimeException("File Error");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(fileArray);
+    }
+
     @GetMapping("/user/{id}")
     public ResponseEntity<String> test(@PathVariable("id")String id) {
         return ResponseEntity.status(HttpStatus.OK).body("id = "+id);

@@ -299,9 +299,4 @@ public class UserController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(fileArray);
     }
-
-    @GetMapping("/user/{id}")
-    public ResponseEntity<String> test(@PathVariable("id")String id) {
-        return ResponseEntity.status(HttpStatus.OK).body("id = "+id);
-    }
 }

@@ -5,14 +5,23 @@
 
 <mapper namespace="com.example.userservice.mapper.ImageMapper">
 
-
-    <resultMap type="com.example.userservice.vo.GetProfileImageVo" id="getImageUrl">
+    <resultMap type="com.example.userservice.dto.UserDto" id="userInfo" >
         <result property="user_uuid" column="userUuid"/>
+        <result property="user_email" column="userEmail"/>
+        <result property="user_password" column="userPassword"/>
+        <result property="user_name" column="userName"/>
+        <result property="user_phone_number" column="userPhoneNum"/>
+        <result property="user_join_date" column="userJoinDate"/>
+        <result property="user_nickname" column="userNickname"/>
+        <result property="user_access_type" column="userAccessType"/>
+        <result property="user_login_key" column="userLoginKey"/>
+        <result property="user_img" column="userImg"/>
     </resultMap>
 
-    <select id="getImageFile" resultMap="getImageUrl">
-        select *
-        from user
+    <update id="upload" parameterType="com.example.userservice.dto.UserDto">
+        UPDATE user
+        SET user_img = #{userImg}
         where user_uuid = #{userUuid}
-    </select>
+    </update>
+
 </mapper>

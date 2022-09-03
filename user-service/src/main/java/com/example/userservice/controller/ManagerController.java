@@ -4,6 +4,9 @@ import com.example.userservice.dto.ManagerDataDto;
 import com.example.userservice.dto.ManagerDto;
 import com.example.userservice.service.*;
 import com.example.userservice.vo.FindManagerIdVo;
+import com.example.userservice.dto.ManagerDto;
+import com.example.userservice.dto.UserDto;
+import com.example.userservice.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -146,7 +149,6 @@ public class ManagerController {
             log.info("ManagerLogin : 이메일 인증 안함");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("이메일 인증을 진행해주세요.");
         } else if (passwordEncoder.matches(ResponsePw,encodePassword) && managerAccessType == 1) {
-            //token = securityService.createToken(ResponseEmail,(30*60*1000),phoneNum,UserId);
             managerDataDto.setManagerName(managerService.findManagerID(managerEmail).getManagerName());
             managerDataDto.setManagerUuid(managerService.findManagerID(managerEmail).getManagerUuid());
             log.info("ManagerLogin : 로그인 성공, 토큰 발급");

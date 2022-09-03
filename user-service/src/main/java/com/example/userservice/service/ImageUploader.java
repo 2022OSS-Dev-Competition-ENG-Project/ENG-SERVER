@@ -16,9 +16,9 @@ import static com.example.userservice.constant.SignUpConstant.SAVE_PATH;
 @Component
 @Service
 public class ImageUploader {
-    public static String upload(MultipartFile multipartFile, String userNickName) throws IOException {
+    public static String upload(MultipartFile multipartFile, String userNickName, String uuid) throws IOException {
         String savaPath = SAVE_PATH;
-        File file = new File(  savaPath +  multipartFile.getOriginalFilename());
+        File file = new File(  System.getProperty("user.dir") + "/" + uuid);
         multipartFile.transferTo(file);
         log.info("upload : 로컬서버 이미지 저장");
 

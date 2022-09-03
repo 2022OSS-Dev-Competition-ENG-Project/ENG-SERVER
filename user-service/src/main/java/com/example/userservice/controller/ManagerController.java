@@ -123,8 +123,6 @@ public class ManagerController {
         String managerEmail = managerDto.getManagerEmail();
         String encodePassword;
         ManagerDataDto managerDataDto = new ManagerDataDto();
-        managerDataDto.setManagerName(managerService.findManagerID(managerEmail).getManagerName());
-        managerDataDto.setManagerUuid(managerService.findManagerID(managerEmail).getManagerUuid());
         String UserId;
         try {
             UserId = managerService.findManagerEmail(managerDto).getManagerEmail();
@@ -149,7 +147,8 @@ public class ManagerController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("이메일 인증을 진행해주세요.");
         } else if (passwordEncoder.matches(ResponsePw,encodePassword) && managerAccessType == 1) {
             //token = securityService.createToken(ResponseEmail,(30*60*1000),phoneNum,UserId);
-            String DBManagerUuid = managerService.findManagerEmail(managerDto).getManagerUuid();
+            managerDataDto.setManagerName(managerService.findManagerID(managerEmail).getManagerName());
+            managerDataDto.setManagerUuid(managerService.findManagerID(managerEmail).getManagerUuid());
             log.info("ManagerLogin : 로그인 성공, 토큰 발급");
             return managerDataDto;
         } else {
@@ -234,9 +233,9 @@ public class ManagerController {
 //        }
         managerService.changeManagerPW(managerDto);
         log.info("MyPage : 개인 정보 수정 완료");
-        String userName = managerService.findManagerUuid(uuid).getManagerName();
-        String userEmail = managerService.findManagerUuid(uuid).getManagerEmail();
-        return ResponseEntity.status(HttpStatus.OK).body(userName + "님의 비밀번호가 변경되었습니다. 변경된 아이디 = " + userEmail);
+        String managerName = managerService.findManagerUuid(uuid).getManagerName();
+        String managerEmail = managerService.findManagerUuid(uuid).getManagerEmail();
+        return ResponseEntity.status(HttpStatus.OK).body(managerName + "님의 비밀번호가 변경되었습니다. 변경된 아이디 = " + managerEmail);
     }
 
 

@@ -23,6 +23,19 @@
         <result property="manager_name" column="managerName"/>
         <result property="manager_phone_number" column="managerPhoneNum"/>
     </resultMap>
+    <resultMap  type="com.example.userservice.vo.AdminVO" id="AdminVO">
+        <result property="manager_uuid" column="managerUuid"/>
+        <result property="manager_name" column="managerName"/>
+        <result property="manager_phone_num" column="userPhoneNumber"/>
+        <result property="facility_grade" column="facilityGrade"/>
+    </resultMap>
+    <resultMap  type="com.example.userservice.dto.FacilityDto" id="FacilityDto">
+        <result property="facility_no" column="facilityNo"/>
+        <result property="facility_name" column="facilityName"/>
+        <result property="facility_address" column="facilityAddress"/>
+        <result property="facility_qr_location" column="facilityQrLocation"/>
+        <result property="facility_owner" column="facilityOwner"/>
+    </resultMap>
     <update id="SignupManager" parameterType="com.example.userservice.dto.ManagerDto">
         UPDATE manager
         SET manager_uuid = #{managerUuid}, manager_password = #{managerPassword}, manager_name = #{managerName}, manager_nickname = #{managerNickname},
@@ -104,4 +117,23 @@
         from manager
         where manager_email = #{managerEmail}
     </select>
+
+    <select id="facilityMasterCheck" resultType="com.example.userservice.dto.FacilityDto">
+        select *
+        from facility
+        where facility_no = #{facilityNo}
+    </select>
+
+    <select id="AdminList" resultMap="AdminVO">
+        select *
+        from manager
+        where facility_no = #{facilityNo}
+    </select>
+
+    <update id="updateGrade" parameterType="com.example.userservice.dto.ManagerDto">
+        update manager
+        set facility_grade = #{facilityGrade} , facility_no = #{facilityNo}
+        where manager_name = #{managerName}
+    </update>
+
 </mapper>

@@ -1,16 +1,16 @@
 package com.example.userservice.service;
 
+import com.example.userservice.dto.FacilityDto;
 import com.example.userservice.dto.ManagerDto;
-import com.example.userservice.dto.UserDto;
 import com.example.userservice.mapper.ManagerMapper;
-import com.example.userservice.mapper.UserMapper;
-import com.example.userservice.vo.FindIdVo;
+import com.example.userservice.vo.AdminVO;
 import com.example.userservice.vo.FindManagerIdVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -88,4 +88,15 @@ public class ManagerService {
         managerMapper.resetPassword(managerDto);
     }
 
+    public FacilityDto facilityMasterCheck(String facilityNo){
+        return managerMapper.facilityMasterCheck(facilityNo);
+    }
+
+    public List<AdminVO> AdminList(String facilityNo) throws Exception {
+        return managerMapper.AdminList(facilityNo);
+    }
+
+    public void updateGrade(Integer facilityGrade,String managerName, String facilityNo){
+        managerMapper.updateGrade(facilityGrade, managerName, facilityNo);
+    }
 }

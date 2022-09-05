@@ -1,9 +1,11 @@
 package com.example.userservice.mapper;
+import com.example.userservice.dto.FacilityDto;
 import com.example.userservice.dto.ManagerDto;
-import com.example.userservice.dto.UserDto;
-import com.example.userservice.vo.FindIdVo;
+import com.example.userservice.vo.AdminVO;
 import com.example.userservice.vo.FindManagerIdVo;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 @Mapper
 public interface ManagerMapper {
@@ -33,4 +35,10 @@ public interface ManagerMapper {
     void resetPassword(ManagerDto managerDto);
 
     ManagerDto findManagerID(String managerEmail);
-}
+
+    FacilityDto facilityMasterCheck(String facilityNo);
+
+    List<AdminVO> AdminList(String facilityNo) throws Exception;
+
+    void updateGrade(Integer facilityGrade, String managerName, String facilityNo);
+    }

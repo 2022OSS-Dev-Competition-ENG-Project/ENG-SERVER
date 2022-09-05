@@ -1,23 +1,25 @@
 package com.example.userservice.controller;
 
-import com.example.userservice.dto.ManagerDataDto;
-import com.example.userservice.dto.ManagerDto;
+import com.example.userservice.dto.*;
 import com.example.userservice.service.*;
+import com.example.userservice.vo.AdminVO;
 import com.example.userservice.vo.FindManagerIdVo;
 import com.example.userservice.dto.ManagerDto;
-import com.example.userservice.dto.UserDto;
-import com.example.userservice.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
 @RequestMapping(value = "/api")
 @CrossOrigin("*")
+@ControllerAdvice
 public class ManagerController {
     @Autowired
     public ManagerController(UserService userService, ManagerService managerService, PasswordEncoder passwordEncoder
@@ -218,21 +220,6 @@ public class ManagerController {
     public ResponseEntity ChangePW(@PathVariable("uuid") String uuid,
                                    @RequestBody ManagerDto managerDto) {
         managerDto.setManagerUuid(uuid);
-        /* 토큰 구현시 다시 */
-//        String UserEmail = userService.findUserUuid(userDto).getUserEmail();
-
-//        try {
-//            securityService.getSubject(token, UserEmail);
-//        } catch (SignatureException e) {
-//            log.info("MyPage : 정보 수정할때 Email을 수정, 잘못된 토큰");
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("재 로그인 후 진행해주세요.");
-//        } catch (IllegalArgumentException e) {
-//            log.info("MyPage : 로그인 안함");
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 후 진행해주세요.");
-//        } catch (ExpiredJwtException e) {
-//            log.info("MyPage : 토큰유효기간 지남");
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("토큰유효기간이 지났습니다. 재 로그인 후 진행해주세요.");
-//        }
         managerService.changeManagerPW(managerDto);
         log.info("MyPage : 개인 정보 수정 완료");
         String managerName = managerService.findManagerUuid(uuid).getManagerName();
@@ -240,5 +227,47 @@ public class ManagerController {
         return ResponseEntity.status(HttpStatus.OK).body(managerName + "님의 비밀번호가 변경되었습니다. 변경된 아이디 = " + managerEmail);
     }
 
+    /* 시설물 관리하는 매니저List */
+    @GetMapping("/manager-service/adminManagement/{facilityNo}")
+    public List<AdminVO> facilityAdminList(Model model
+            , @PathVariable("facilityNo") String facilityNo) throws Exception {
+        List<AdminVO> list = managerService.AdminList(facilityNo);
+        model.addAttribute("list",list);
+        return list;
+    }
+
+    /* 시설물 관리를위한 매니저 등록 */
+    @GetMapping("/manager-service/addAdmin/{facilityNo}/{managerUuid}")
+    public ResponseEntity AddAdmin(@PathVariable("facilityNo")String facilityNo,
+                                   @PathVariable("managerUuid")String managerUuid,
+                                   @RequestBody ManagerDto managerDto) {
+        String ResponseName = managerDto.getManagerName();
+        String ResponseEmail = managerDto.getManagerEmail();
+        String facilityMasterUuid;
+        try {
+            facilityMasterUuid = managerService.facilityMasterCheck(facilityNo).getFacilityOwner();
+        } catch (NullPointerException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("건물등록을 실시 해주세요.");
+        }
+
+        log.info("MasterUuid : " + facilityMasterUuid);
+        log.info("managerUuid : " + managerUuid);
+        if (facilityMasterUuid.equals(managerUuid)) {
+            String DBEmail = managerService.findManagerName(managerDto).getManagerEmail();
+            String managerName = managerService.findManagerID(DBEmail).getManagerName();
+            if (ResponseName.equals(managerName) && ResponseEmail.equals(DBEmail)) {
+                Integer facilityGrade = 1;
+                log.info(facilityNo);
+                managerService.updateGrade(facilityGrade, managerName, facilityNo);
+                return ResponseEntity.status(HttpStatus.OK).body("매니저 등록이 완료되었습니다.");
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("마스터가 아닙니다.");
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("마스터가 아닙니다.");
+    }
+
+    /* 시설물 관리를위한 매니저 삭제 */
+//    @GetMapping
 
 }

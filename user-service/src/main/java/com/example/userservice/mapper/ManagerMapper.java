@@ -40,5 +40,9 @@ public interface ManagerMapper {
 
     List<AdminVO> AdminList(String facilityNo) throws Exception;
 
-    void updateGrade(Integer facilityGrade, String managerName, String facilityNo);
+    void addAdmin(Integer facilityGrade, String managerName, String facilityNo);
+
+    void deleteAdmin(Integer facilityGrade, String managerName, String facilityNo);
+
+    void changeOwner(String managerUuid, String facilityNo);
     }

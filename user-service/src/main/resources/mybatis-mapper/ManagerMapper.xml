@@ -124,16 +124,27 @@
         where facility_no = #{facilityNo}
     </select>
 
-    <select id="AdminList" resultMap="AdminVO">
-        select *
-        from manager
-        where facility_no = #{facilityNo}
-    </select>
+<!--    <select id="AdminList" resultMap="AdminVO">-->
+<!--        select *-->
+<!--        from manager-->
+<!--        where facility_no = #{facilityNo}-->
+<!--    </select>-->
 
-    <update id="updateGrade" parameterType="com.example.userservice.dto.ManagerDto">
-        update manager
+<!--    <update id="addAdmin" parameterType="com.example.userservice.dto.ManagerDto">-->
+<!--        update manager-->
+<!--        set facility_grade = #{facilityGrade} , facility_no = #{facilityNo}-->
+<!--        where manager_name = #{managerName}-->
+<!--    </update>-->
+
+<!--    <update id="deleteAdmin" parameterType="com.example.userservice.dto.ManagerDto">-->
+<!--        update manager-->
+<!--        set facility_grade = #{facilityGrade} , facility_no = #{facilityNo}-->
+<!--        where manager_name = #{managerName}-->
+<!--    </update>-->
+
+    <update id="changeOwner" parameterType="com.example.userservice.dto.FacilityDto">
+        update facility
         set facility_grade = #{facilityGrade} , facility_no = #{facilityNo}
         where manager_name = #{managerName}
     </update>
-
 </mapper>

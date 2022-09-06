@@ -6,6 +6,7 @@ import com.example.userservice.vo.AdminVO;
 import com.example.userservice.vo.FindManagerIdVo;
 import com.example.userservice.dto.ManagerDto;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static ch.qos.logback.core.joran.action.ActionConst.NULL;
 
 @Slf4j
 @RestController
@@ -216,9 +219,9 @@ public class ManagerController {
     }
 
     /* 매니저 마이페이지 (비밀번호 재 설정) */
-    @GetMapping("/manager-service/myPage/changePW/{uuid}")
-    public ResponseEntity ChangePW(@PathVariable("uuid") String uuid,
-                                   @RequestBody ManagerDto managerDto) {
+    @PostMapping("/manager-service/myPage/changePW")
+    public ResponseEntity ChangePW(@RequestBody ManagerDto managerDto) {
+        String uuid = managerDto.getManagerUuid();
         managerDto.setManagerUuid(uuid);
         managerService.changeManagerPW(managerDto);
         log.info("MyPage : 개인 정보 수정 완료");
@@ -227,47 +230,102 @@ public class ManagerController {
         return ResponseEntity.status(HttpStatus.OK).body(managerName + "님의 비밀번호가 변경되었습니다. 변경된 아이디 = " + managerEmail);
     }
 
-    /* 시설물 관리하는 매니저List */
-    @GetMapping("/manager-service/adminManagement/{facilityNo}")
-    public List<AdminVO> facilityAdminList(Model model
-            , @PathVariable("facilityNo") String facilityNo) throws Exception {
-        List<AdminVO> list = managerService.AdminList(facilityNo);
-        model.addAttribute("list",list);
-        return list;
-    }
-
-    /* 시설물 관리를위한 매니저 등록 */
-    @GetMapping("/manager-service/addAdmin/{facilityNo}/{managerUuid}")
-    public ResponseEntity AddAdmin(@PathVariable("facilityNo")String facilityNo,
-                                   @PathVariable("managerUuid")String managerUuid,
-                                   @RequestBody ManagerDto managerDto) {
+//    /* 시설물 관리하는 매니저List */
+//    @GetMapping("/manager-service/adminManagement/{facilityNo}")
+//    public List<AdminVO> facilityAdminList(Model model
+//            , @PathVariable("facilityNo") String facilityNo) throws Exception {
+//        List<AdminVO> list = managerService.AdminList(facilityNo);
+//        model.addAttribute("list",list);
+//        return list;
+//    }
+//
+//    /* 시설물 관리를위한 매니저 등록 */
+//    @GetMapping("/manager-service/addAdmin/{facilityNo}/{managerUuid}")
+//    public ResponseEntity AddAdmin(@PathVariable("facilityNo")String facilityNo,
+//                                   @PathVariable("managerUuid")String managerUuid,
+//                                   @RequestBody ManagerDto managerDto) {
+//        String ResponseName = managerDto.getManagerName();
+//        String ResponseEmail = managerDto.getManagerEmail();
+//        String facilityMasterUuid;
+//        try {
+//            facilityMasterUuid = managerService.facilityMasterCheck(facilityNo).getFacilityOwner();
+//        } catch (NullPointerException e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("마스터만 가능한 서비스입니다.");
+//        }
+//
+//        log.info("MasterUuid : " + facilityMasterUuid);
+//        log.info("managerUuid : " + managerUuid);
+//        if (facilityMasterUuid.equals(managerUuid)) {
+//            String DBEmail = managerService.findManagerName(managerDto).getManagerEmail();
+//            String managerName = managerService.findManagerID(DBEmail).getManagerName();
+//            if (ResponseName.equals(managerName) && ResponseEmail.equals(DBEmail)) {
+//                Integer facilityGrade = 1;
+//                log.info(facilityNo);
+//                managerService.addAdmin(facilityGrade, managerName, facilityNo);
+//                return ResponseEntity.status(HttpStatus.OK).body("매니저 등록이 완료되었습니다.");
+//            }
+//        } else {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("마스터가 아닙니다.");
+//        }
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("마스터가 아닙니다.");
+//    }
+//
+//    /* 시설물 관리를위한 매니저 삭제 */
+//    @GetMapping("/manager-service/deleteAdmin/{facilityNo}/{managerUuid}")
+//    public ResponseEntity DeleteAdmin(@PathVariable("facilityNo")String facilityCheckNo,
+//                                      @PathVariable("managerUuid")String managerUuid,
+//                                      @RequestBody ManagerDto managerDto) {
+//        String ResponseName = managerDto.getManagerName();
+//        String ResponseEmail = managerDto.getManagerEmail();
+//        String facilityMasterUuid;
+//        try {
+//            facilityMasterUuid = managerService.facilityMasterCheck(facilityCheckNo).getFacilityOwner();
+//        } catch (NullPointerException e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("마스터만 가능한 서비스입니다.");
+//        }
+//
+//        if (facilityMasterUuid.equals(managerUuid)) {
+//            String DBEmail = managerService.findManagerName(managerDto).getManagerEmail();
+//            String managerName = managerService.findManagerID(DBEmail).getManagerName();
+//            if (ResponseName.equals(managerName) && ResponseEmail.equals(DBEmail)) {
+//                Integer facilityGrade = 0;
+//                String facilityNo = NULL;
+//                managerService.deleteAdmin(facilityGrade, managerName, facilityNo);
+//                return ResponseEntity.status(HttpStatus.OK).body("매니저 삭제가 완료되었습니다.");
+//            } else {
+//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("마스터가 아닙니다.");
+//            }
+//        }
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("마스터가 아닙니다.");
+//    }
+    /* Master 직급 양도 */
+    @GetMapping("/manager-service/changeOwner/{facilityNo}/{managerUuid}")
+    public ResponseEntity ChangeOwner(@PathVariable("facilityNo")String facilityNo,
+                                      @PathVariable("managerUuid")String managerUuid,
+                                      @RequestBody ManagerDto managerDto) {
         String ResponseName = managerDto.getManagerName();
         String ResponseEmail = managerDto.getManagerEmail();
-        String facilityMasterUuid;
+        String DBUuid;
+        String DBName;
         try {
-            facilityMasterUuid = managerService.facilityMasterCheck(facilityNo).getFacilityOwner();
+            String MasterUuid = managerService.facilityMasterCheck(facilityNo).getFacilityOwner();
         } catch (NullPointerException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("건물등록을 실시 해주세요.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("마스터가 가능한 서비스입니다.");
         }
-
-        log.info("MasterUuid : " + facilityMasterUuid);
-        log.info("managerUuid : " + managerUuid);
-        if (facilityMasterUuid.equals(managerUuid)) {
-            String DBEmail = managerService.findManagerName(managerDto).getManagerEmail();
-            String managerName = managerService.findManagerID(DBEmail).getManagerName();
-            if (ResponseName.equals(managerName) && ResponseEmail.equals(DBEmail)) {
-                Integer facilityGrade = 1;
-                log.info(facilityNo);
-                managerService.updateGrade(facilityGrade, managerName, facilityNo);
-                return ResponseEntity.status(HttpStatus.OK).body("매니저 등록이 완료되었습니다.");
-            }
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("마스터가 아닙니다.");
+        try {
+            DBUuid = managerService.ManagerEmailCheck(ResponseEmail).getManagerUuid();
+        } catch (NullPointerException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("managerEmail를 확인해주세요");
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("마스터가 아닙니다.");
+        try {
+            DBName = managerService.ManagerEmailCheck(ResponseEmail).getManagerName();
+        } catch (NullPointerException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ManagerName을 확인해주세요.");
+        }
+        if (managerUuid == DBUuid && DBName == ResponseName) {
+            managerService.changeOwner(managerUuid, facilityNo);
+            return ResponseEntity.status(HttpStatus.OK).body("마스터가 변경 되었습니다.");
+        }
+        return null;
     }
-
-    /* 시설물 관리를위한 매니저 삭제 */
-//    @GetMapping
-
 }

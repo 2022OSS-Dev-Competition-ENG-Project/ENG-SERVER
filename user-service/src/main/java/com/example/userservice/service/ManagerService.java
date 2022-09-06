@@ -96,7 +96,14 @@ public class ManagerService {
         return managerMapper.AdminList(facilityNo);
     }
 
-    public void updateGrade(Integer facilityGrade,String managerName, String facilityNo){
-        managerMapper.updateGrade(facilityGrade, managerName, facilityNo);
+    public void addAdmin(Integer facilityGrade,String managerName, String facilityNo){
+        managerMapper.addAdmin(facilityGrade, managerName, facilityNo);
+    }
+
+    public void deleteAdmin(Integer facilityGrade, String managerName, String facilityNo){
+        managerMapper.deleteAdmin(facilityGrade, managerName, facilityNo);
+    }
+    public void changeOwner(String managerUuid, String facilityNo){
+        managerMapper.changeOwner(managerUuid, facilityNo);
     }
 }

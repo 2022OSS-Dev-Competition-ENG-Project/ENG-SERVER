@@ -1,6 +1,7 @@
 package com.example.userservice.mapper;
 import com.example.userservice.dto.FacilityDto;
 import com.example.userservice.dto.ManagerDto;
+import com.example.userservice.dto.UserDto;
 import com.example.userservice.vo.AdminVO;
 import com.example.userservice.vo.FindManagerIdVo;
 import org.apache.ibatis.annotations.Mapper;
@@ -9,6 +10,8 @@ import java.util.List;
 
 @Mapper
 public interface ManagerMapper {
+
+    ManagerDto PhoneNumberCheck(String managerPhoneNumber);
 
     void SignupManager(ManagerDto managerDto);
 
@@ -40,9 +43,5 @@ public interface ManagerMapper {
 
     List<AdminVO> AdminList(String facilityNo) throws Exception;
 
-    void addAdmin(Integer facilityGrade, String managerName, String facilityNo);
-
-    void deleteAdmin(Integer facilityGrade, String managerName, String facilityNo);
-
-    void changeOwner(String managerUuid, String facilityNo);
-    }
+    void updateGrade(Integer facilityGrade, String managerName, String facilityNo);
+}

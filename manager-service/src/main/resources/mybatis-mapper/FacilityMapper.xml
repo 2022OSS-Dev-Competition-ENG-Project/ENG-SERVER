@@ -9,24 +9,21 @@
         <result property="facility_no" column="facilityNo"/>
         <result property="facility_name" column="facilityName"/>
         <result property="facility_address" column="facilityAddress"/>
-        <result property="facility_qr_location" column="facilityQrCode"/>
-        <result property="facility_owner" column="userId"/>
+        <result property="facility_qr_location" column="facilityQrLocation"/>
+        <result property="facility_owner" column="facilityOwner"/>
     </resultMap>
 
-    <resultMap type="com.example.managerservice.dto.FacilityJoinDto" id="facilityJoinUser">
-        <result property="user_uuid" column="userUuid"/>
-        <result property="user_facility" column="userFacility"/>
-    </resultMap>
-
-    <resultMap type="com.example.managerservice.vo.GetMyFacilityList" id="facilityList">
-        <result property="user_uuid" column="userUuid"/>
+    <resultMap type="com.example.managerservice.vo.GetMyFacilityListVo" id="facilityList">
+        <result property="uuid" column="uuid"/>
+        <result property="name" column="name"/>
         <result property="facility_address" column="facilityAddress"/>
-        <result property="user_facility" column="userFacility"/>
+        <result property="use_facility" column="useFacility"/>
         <result property="facility_name" column="facilityName"/>
+        <result property="facility_owner" column="facilityOwner"/>
         <result property="is_liked" column="isLiked"/>
-
     </resultMap>
 
+    <!-- 시설물 등록하기 -->
     <insert id="registerFacility" parameterType="com.example.managerservice.dto.FacilityDto">
         INSERT INTO facility (
             facility_no,
@@ -36,91 +33,128 @@
             facility_owner
         )
         values (
-                    #{facilityNo},
-                    #{facilityName},
-                    #{facilityAddress},
-                    #{facilityQrCode},
-                    #{userId}
+                   #{facilityNo},
+                   #{facilityName},
+                   #{facilityAddress},
+                   #{facilityQrLocation},
+                   #{facilityOwner}
                )
     </insert>
 
-
-    <select id="findDetailFacilityAd" resultMap="facilityInfo" resultType="java.lang.String">
-        SELECT facility_address
-        FROM facility
-        WHERE facility_address = #{facilityAddress}
-    </select>
-
-    <select id="findDetailFacilityFn" resultMap="facilityInfo">
-        SELECT *
-        FROM facility
-        WHERE facility_no = #{facilityNo}
-    </select>
-
-    <select id="nameAndAddressToDto" resultMap="facilityInfo">
+    <select id="validManager" resultType="java.lang.Integer">
         <![CDATA[
-        SELECT *
-        FROM facility
-        WHERE facility_name = #{facilityName} AND facility_address = #{facilityAddress}
+        SELECT if(COUNT(*) = 1, 1, 0)
+        FROM manager
+        WHERE manager_uuid = #{managerUuid};
         ]]>
     </select>
 
-    <insert id="facilityUserJoin" parameterType="com.example.managerservice.dto.FacilityJoinDto">
-        INSERT INTO user_use_facility(
-            user_uuid,
-            user_facility
-        )VALUES (
-                   #{userUuid},
-                   #{userFacility}
-               )
+    <select id="validConflictFacility" resultType="java.lang.Integer">
+        <![CDATA[
+        SELECT if(COUNT(*) = 1, 1, 0)
+        FROM facility
+        WHERE facility_address = #{facilityAddress};
+        ]]>
+    </select>
+
+    <select id="getFacilityInfo" resultMap="facilityInfo">
+        SELECT *
+        FROM facility
+        WHERE facility_address = #{facilityAddress};
+    </select>
+
+    <!-- 시설물 가입하기 - USER & MANAGER-->
+    <insert id="joinFacility" parameterType="com.example.managerservice.dto.FacilityJoinDto">
+        INSERT INTO ${table}
+        values (
+                   #{uuid},
+                   #{facilityNo},
+                    0
+               );
     </insert>
 
-    <!-- 시설 아이디로 시설 등록 중복 검증 -->
-    <select id="findDetailFacilityId" resultType="java.lang.Integer">
+    <!-- 시설물 가입 - 시설물 존재 유무 -->
+    <select id="validFacility" resultType="java.lang.Integer">
         select if(count(*) = 1, 1, 0)
-        from user_use_facility
-        where user_facility = #{userFacility} AND user_uuid = #{userUuid}
+        FROM facility
+        WHERE facility_no = #{facilityNo};
     </select>
 
-    <!-- 내가 등록한 시설물 불러오기 -->
+    <!-- 시설물 가입 - 시설물 중복 가입 유무 -->
+    <select id="conflictJoinValidFacility" resultType="java.lang.Integer">
+        select if(count(*) = 1, 1, 0)
+        FROM ${table}
+        WHERE use_facility = #{facilityNo} AND ${userType} = #{userUuid};
+    </select>
+
+    <!-- 시설물 가입 - 사용자 확인 -->
+    <select id="joinValidFacility" resultType="java.lang.Integer">
+        select if(count(*) = 1, 1, 0)
+        FROM ${table}
+        WHERE #{userType} = #{userUuid};
+    </select>
+
+    <update id="registerManager">
+        update manager set facility_no = #{facilityNo}
+        where manager_uuid = #{facilityOwner}
+    </update>
+
+    <!-- 내가 가입한 시설물 불러오기 -->
     <select id="getMyFacilityList" resultMap="facilityList">
-        select uuf.user_uuid,
-               uuf.user_facility,
+        select uuf.${colum} as uuid,
+               u.manager_name as name,
+               uuf.use_facility,
                uuf.is_liked,
                f.facility_name ,
-               f.facility_address
+               f.facility_address,
+               f.facility_owner
         From(
-            select * from user_use_facility
-            where user_uuid = #{userUuid}
+                select * from ${table}
+                where ${colum} = #{uuid}
             ) as uuf
-            INNER JOIN
-                facility f
-            ON
-            uuf.user_facility  = f.facility_no;
+                INNER JOIN facility f ON uuf.use_facility  = f.facility_no
+                LEFT OUTER JOIN manager u ON u.manager_uuid = f.facility_owner
     </select>
 
-    <!-- 내가 등록한 시설물 삭제 -->
+    <!-- 내가 가입한 시설물 삭제하기 -->
     <delete id="deleteMyFacility">
         delete
-        from user_use_facility
-        where user_uuid = #{userUuid} AND user_facility = #{userFacility};
+        from ${table}
+        where ${colum} = #{uuid} AND use_facility = #{facilityNo};
     </delete>
+
+    <!-- 내가 가입한 시설물 삭제 할수 있는지 검증 -->
+    <select id="validJoinFacility" resultType="java.lang.Integer">
+        select if(count(*) = 1, 1,0)
+        from ${table}
+        where ${colum} = #{uuid} AND use_facility = #{facilityNo};
+    </select>
 
     <!-- 좋이요 -->
     <update id="myFacilityLike">
         <![CDATA[
         update user_use_facility
         set is_liked = ${value}
-        where user_uuid = #{userUuid} AND user_facility = #{userFacility}
+        where user_uuid = #{userUuid} AND use_facility = #{useFacility}
         ]]>
     </update>
 
     <select id="myFacilityLikeBool" resultType="java.lang.Integer">
-        select if(is_liked >= 1, 1, 0)
+        select if(is_liked = 0, 0, 1)
         from user_use_facility
-        where user_uuid = #{userUuid} AND user_facility = #{userFacility}
+        where user_uuid = #{userUuid} AND use_facility = #{useFacility}
     </select>
 
+    <select id="deleteValidFacility" resultType="java.lang.Integer">
+        select if(COUNT(*)=0, NULL, 1)
+        from manager
+        where manager_uuid = #{managerUuid} AND facility_no = #{facilityNo};
 
+    </select>
 
+    <delete id="deleteFacility">
+        delete
+        from facility
+        where facility_no = #{facilityNo};
+    </delete>
 </mapper>

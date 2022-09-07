@@ -1,39 +1,39 @@
 package com.example.managerservice.service;
 
-import com.example.managerservice.dto.FacilityContentCommentDto;
-import com.example.managerservice.mapper.FacilityContentCommentMapper;
-import lombok.extern.slf4j.Slf4j;
+import com.example.managerservice.dto.FacilityCommentDto;
+import com.example.managerservice.mapper.FacilityCommentMapper;
+import com.example.managerservice.vo.ContentCommentVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import static com.example.managerservice.constant.FacilityContentConstant.*;
 
-@Slf4j
 @Service
-public class FacilityContentCommentService {
+public class FacilityCommentService {
 
-    private FacilityContentCommentMapper fccm;
-    private LocalDate now = LocalDate.now();
+    private FacilityCommentMapper fccm;
+    LocalDateTime now = LocalDateTime.now();
 
     @Autowired
-    public FacilityContentCommentService(FacilityContentCommentMapper fccm) {
+    public FacilityCommentService(FacilityCommentMapper fccm) {
         this.fccm = fccm;
     }
 
 
     /* 댓글 등록 */
-    public ResponseEntity registerComment(FacilityContentCommentDto fccd){
-        fccd.setContentCommentDate(now);
+    public ResponseEntity registerComment(FacilityCommentDto fccd){
+        fccd.setCommentDate(now);
         fccm.registerComment(fccd);
         return ResponseEntity.status(HttpStatus.OK).body(COMMENT_REGISTER_COMPLETE);
     }
 
     /* 댓글 수정 */
-    public ResponseEntity updateComment(FacilityContentCommentDto fccd){
+    public ResponseEntity updateComment(FacilityCommentDto fccd){
         try{
             fccm.updateComment(fccd);
         }catch (NullPointerException e){
@@ -45,17 +45,15 @@ public class FacilityContentCommentService {
     /* 댓글 삭제 */
     public ResponseEntity deleteComment(Integer commentNum, String commentText){
         fccm.deleteComment(commentNum, commentText);
-        log.info(commentNum.toString(), commentText);
-        return ResponseEntity.status(HttpStatus.OK).body(COMMENT_REGISTER_UPDATE);
+        return ResponseEntity.status(HttpStatus.OK).body(COMMENT_DELETE_COMPLETE);
     }
 
 
     /* 댓글 조회 */
-    public ResponseEntity getComment(Integer commentNum){
-
+    public List<ContentCommentVo> getComment(Integer contentNum){
+        /* 유저인지 사용자인지 확인 하기 위함 */
         /* 사용자가 이 게시물이 속해있는 시설물 소속인가 */
-        return ResponseEntity.status(HttpStatus.OK).body(fccm.getComment(commentNum));
+        return fccm.getComment(contentNum);
     }
-
 
 }

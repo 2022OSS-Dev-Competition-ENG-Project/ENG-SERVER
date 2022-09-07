@@ -5,14 +5,7 @@
 
 <mapper namespace="com.example.managerservice.mapper.QrMapper">
 
-    <resultMap type="com.example.managerservice.vo.GetQRUrlVo" id="getQRUrl" >
-        <result property="facility_name" column="facilityName"/>
-        <result property="facility_address" column="facilityAddress"/>
-        <result property="facility_qr_location" column="facilityQRUrl"/>
-    </resultMap>
-
-
-    <select id="getQRCode" resultMap="getQRUrl" resultType="java.lang.Integer">
+    <select id="getQRCode" resultType="java.lang.String">
         select facility_qr_location
         from facility
         where facility_name = #{facilityName} AND facility_address = #{facilityAddress}

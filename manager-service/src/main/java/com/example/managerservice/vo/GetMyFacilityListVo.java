@@ -3,10 +3,12 @@ package com.example.managerservice.vo;
 import lombok.Data;
 
 @Data
-public class GetMyFacilityList {
-    private String userUuid;
+public class GetMyFacilityListVo {
+    private String uuid;
+    private String name;
     private String facilityAddress;
-    private String userFacility;
+    private String useFacility;
     private String facilityName;
+    private String facilityOwner;
     private int isLiked;
 }

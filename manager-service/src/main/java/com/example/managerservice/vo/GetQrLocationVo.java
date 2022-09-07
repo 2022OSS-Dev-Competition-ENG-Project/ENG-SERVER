@@ -3,7 +3,7 @@ package com.example.managerservice.vo;
 import lombok.Data;
 
 @Data
-public class GetQRUrlVo {
+public class GetQrLocationVo {
     private String facilityName;
     private String facilityAddress;
     private String facilityQRUrl;

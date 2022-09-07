@@ -3,7 +3,7 @@ package com.example.managerservice.controller;
 import com.example.managerservice.dto.FacilityDto;
 import com.example.managerservice.dto.FacilityJoinDto;
 import com.example.managerservice.service.FacilityService;
-import com.example.managerservice.service.QrService;
+import com.example.managerservice.service.QRService;
 import com.google.zxing.WriterException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +15,6 @@ import java.io.IOException;
 import java.util.UUID;
 
 import static com.example.managerservice.constant.FacilityConstant.*;
-import static com.example.managerservice.constant.FacilityContentConstant.FACILITY_MY_JOIN_FAIL;
-import static com.example.managerservice.constant.RegisterConstant.REGISTER_CONFLICT;
 
 @Slf4j
 @RestController
@@ -25,84 +23,148 @@ import static com.example.managerservice.constant.RegisterConstant.REGISTER_CONF
 public class FacilityController {
 
     private FacilityService facilityService;
-    private QrService qrService;
+    private QRService qrService;
+
 
     @Autowired
-    public FacilityController(FacilityService facilityService, QrService qrService) {
+    public FacilityController(FacilityService facilityService, QRService qrService) {
         this.facilityService = facilityService;
         this.qrService = qrService;
     }
 
-    /* 시설물 등록 */
-    @PostMapping("/registerFacility")
-    public ResponseEntity<String> registerFacility(@RequestBody FacilityDto facilityDto) throws IOException, WriterException {
+    /* 시설물 생성 */
+    @PostMapping("/facility/register")
+    public ResponseEntity registerFacility(@RequestBody FacilityDto facilityDto) throws IOException, WriterException {
 
-
+        /* FacilityNo UUID로 부여 */
         facilityDto.setFacilityNo(UUID.randomUUID().toString());
-        log.info(facilityDto.toString());
-        try{
-            /* 주소 중복 검사 */
-            String address =facilityService.findDetailFacilityAd(facilityDto.getFacilityAddress());
 
-            if (address != null){
-                throw new Exception();
-            }
-            /* 사용 가능한 데이터라면 그냥 넘어가기 */
-        }catch (NullPointerException e){
-            log.info("사용 가능한 데이터");
-
-            /* 등록할 주소가 이미 있을 경우 예외 처리*/
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(REGISTER_CONFLICT);
+        /* 매니저 계정인지 검사 */
+        if(facilityService.validManager(facilityDto.getFacilityOwner()) == 0){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(REGISTER_VALID_MANAGER);
         }
-        facilityDto.setFacilityQrCode(qrService.generateQRCodeImage(
+        /* 중복된 시설물인지 검사 하기 */
+        if(facilityService.validConflictFacility(facilityDto.getFacilityAddress()) == 1){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(REGISTER_CONFLICT_FACILITY);
+        }
+        /* QR 코드 생성 */
+        facilityDto.setFacilityQrLocation(qrService.generateQRCodeImage(
                 facilityDto.getFacilityNo(),
                 facilityDto.getFacilityName(),
-                facilityDto.getFacilityAddress()));
-        return ResponseEntity.status(HttpStatus.CREATED).body(facilityService.registerFacility(facilityDto));
+                facilityDto.getFacilityAddress()
+        ));
+        /* 시설물 정보 DB 저장 */
+        facilityService.registerFacility(facilityDto);
+
+        /* 시설물 조회 */
+        FacilityDto fd = new FacilityDto();
+        fd = facilityService.getFacilityInfo(facilityDto.getFacilityAddress());
+
+        /* 시살물 가입 */
+        facilityService.joinFacility(fd.getFacilityOwner(),fd.getFacilityNo(),"manager_use_facility");
+
+        /* 매니저 소유 건물 등록 */
+        facilityService.registerManager(fd.getFacilityOwner(),fd.getFacilityNo());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(REGISTER_COMPLETE);
     }
 
-    /* 내가 사용할 시설물 등록 */
-    @PostMapping("/facility/join")
-    public ResponseEntity myFacilityJoin(@RequestBody FacilityJoinDto fjd) {
+    /* 시설물 삭제*/
+    @GetMapping("/facility/delete/{managerUuid}/{facilityNo}")
+    public ResponseEntity deleteFacility(@PathVariable("managerUuid") String managerUuid,
+                                         @PathVariable("facilityNo") String facilityNo){
+        return ResponseEntity.status(HttpStatus.OK).body(facilityService.deleteFacility(managerUuid, facilityNo));
+    }
 
-        /* 시설물 존재 여부 확인 예외처리 */
-        FacilityDto fd = facilityService.findDetailFacilityFn(fjd.getUserFacility());
-        if (fd == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(FACILITY_NOT_FOUND);
+    /* 유저 혹은 매니저가 시설물 가입하기 */
+    @PostMapping("/facility/join/{type}")
+    public ResponseEntity joinFacility(@RequestBody FacilityJoinDto fd,
+                                       @PathVariable("type")String type){
+        String table;
+        String uuidType;
+        String boolColum;
+
+        if(type.equals("mg")){
+            table = FACILITY_JOIN_MANAGER;
+            uuidType = FACILITY_JOIN_MANAGER_TYPE;
+            boolColum = "manager";
+            if(facilityService.joinValidFacility(fd.getUuid(),uuidType,boolColum) == 1) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(FACILITY_JOIN_USER_NOT_FOUND);
+            }
+        }else {
+            table = FACILITY_JOIN_USER;
+            uuidType = FACILITY_JOIN_USER_TYPE;
+            boolColum = "user";
+            if(facilityService.joinValidFacility(fd.getUuid(),uuidType,boolColum) == 1) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(FACILITY_JOIN_USER_NOT_FOUND);
+            }
         }
 
-        /* 사용자가 이미 등록한 시설물인지 검사 */
-        if(facilityService.findDerailFacilityId(fjd.getUserUuid(),fjd.getUserFacility()) == 1){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(FACILITY_MY_JOIN_FAIL);
+        /* 가입할 시설물이 존재하는지 확인 */
+        if (facilityService.validFacility(fd.getFacilityNo()) == 0){
+              return ResponseEntity.status(HttpStatus.NOT_FOUND).body(FACILITY_JOIN_NOT_FOUND);
+        }
+        /* 가입할 시설이 중복하지 않는지 확인 */
+        if (facilityService.conflictJoinValidFacility(fd.getFacilityNo(), fd.getUuid(),uuidType, table) == 1 ){
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(FACILITY_JOIN_CONFLICT);
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(facilityService.facilityUserJoin(
-                fjd.getUserUuid(),
-                fjd.getUserFacility()));
+        /* 시설물 등록하기 */
+        facilityService.joinFacility(fd.getUuid(),fd.getFacilityNo(),table);
+        return ResponseEntity.status(HttpStatus.OK).body(FACILITY_JOIN_COMPLETE);
     }
 
-    /* 내가 등록한 시설물 불러오기 */
-    @GetMapping("/facility/{userUuid}/list")
-    public ResponseEntity myFacilityList(
-            @PathVariable("userUuid")String userUuid){
-        try {
-            facilityService.getMyFacilityList(userUuid);
-        }catch (NullPointerException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(FACILITY_LIST_NOT_FOUND);
+
+    /* 내가 가입한 시설물 보기 - Manager & User */
+    @GetMapping("/facility/join/{uuid}/{type}/list")
+    public ResponseEntity getMyFacilityList(
+            @PathVariable("uuid")String uuid,
+            @PathVariable("type")String type){
+
+        String table;
+        String colum;
+
+        if (type.equals("mg")){
+            table = FACILITY_LIST_MANAGER_TABLE;
+            colum = FACILITY_LIST_MANAGER_TYPE;
+        }else{
+            table = FACILITY_LIST_USER_TABLE;
+            colum = FACILITY_LIST_USER_TYPE;
         }
-        return ResponseEntity.status(HttpStatus.OK).body(facilityService.getMyFacilityList(userUuid));
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(facilityService.getMyFacilityList(uuid,table, colum));
+
     }
 
-    /* 내가 등록할 시설 삭제 하기 */
-    @GetMapping("/facility/my/delete/{userUuid}/{facilityNo}")
-    public ResponseEntity deleteMyFacility(@PathVariable("userUuid")String userUuid,
-                                           @PathVariable("facilityNo")String facilityNo){
-        return ResponseEntity.status(HttpStatus.OK).body(facilityService.deleteMyFacility(userUuid,facilityNo));
+    /* 내가 가입한 시설물 삭제 - Manager & User */
+    @GetMapping("/facility/my/delete/{type}/{uuid}/{facilityNo}")
+    public ResponseEntity deleteMyFacility(
+            @PathVariable("type")String type,
+            @PathVariable("uuid")String uuid,
+            @PathVariable("facilityNo")String facilityNo){
+
+        String table;
+        String colum;
+
+        if (type.equals("mg")){
+            table = FACILITY_LIST_MANAGER_TABLE;
+            colum = FACILITY_LIST_MANAGER_TYPE;
+        }else{
+            table = FACILITY_LIST_USER_TABLE;
+            colum = FACILITY_LIST_USER_TYPE;
+        }
+
+        if(facilityService.validJoinFacility(uuid,facilityNo,table, colum) == 0){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(FACILITY_MY_DELETE_NOT_FOUND);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(facilityService.deleteMyFacility(uuid,facilityNo,table, colum));
+
     }
 
-    /* 내가 등록한 시설물 좋아요 누르기 */
+    /* 내가 가입한 시설물 좋아요 누르기 */
     @GetMapping("/facility/like/{userUuid}/{facilityNo}")
     public ResponseEntity myfacilityLike(
             @PathVariable("userUuid") String userUuid,
@@ -117,5 +179,6 @@ public class FacilityController {
             return ResponseEntity.status(HttpStatus.OK).body(FACILITY_LIKE_CANCEL_COMPLETE);
         }
     }
+
 }
 

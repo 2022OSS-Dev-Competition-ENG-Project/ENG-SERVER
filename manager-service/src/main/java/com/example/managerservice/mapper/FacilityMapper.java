@@ -1,9 +1,7 @@
 package com.example.managerservice.mapper;
 
 import com.example.managerservice.dto.FacilityDto;
-import com.example.managerservice.dto.FacilityJoinDto;
-import com.example.managerservice.dto.FacilityListDto;
-import com.example.managerservice.vo.GetMyFacilityList;
+import com.example.managerservice.vo.GetMyFacilityListVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -12,35 +10,73 @@ import java.util.List;
 @Mapper
 public interface FacilityMapper {
 
-    /* 주소로 시설물 상세 정보 불러오기 */
-    String findDetailFacilityAd(String facilityAddress);
-
-    /* 시설물 등록 */
+    /* 시설물 등록하기 */
     void registerFacility(FacilityDto facilityDto);
 
-    /* 이름, 주소로 정보 찾기 */
-    FacilityDto nameAndAddressToDto(FacilityDto facilityDto);
+    /* 시설물 등록하기 - 매니저의 계정인지 검사하기 */
+    Integer validManager(@Param("managerUuid") String managerUuid);
 
-    /* 시설 아이디로 시설 등록 중복 검증 */
-    Integer findDetailFacilityId(String userUuid, String userFacility);
+    /* 시설물 등록하기 - 시설물 정보 불러 오기*/
+    FacilityDto getFacilityInfo(@Param("facilityAddress") String facilityAddress);
 
-    /* 시설에 사용자 추가*/
-    void facilityUserJoin(FacilityJoinDto facilityJoinDto);
+    /* 시설물 가입하기 - 가입된 시설물인지 확인 */
+    Integer validConflictFacility(@Param("facilityAddress") String facilityAddress);
 
-    /* 시설물 번호로 시설물 찾기*/
-    FacilityDto findDetailFacilityFn(String facilityNo);
+    /* 시설물 가입하기 - 매니저 & 사용자 */
+    void joinFacility(@Param("uuid") String uuid,
+                      @Param("facilityNo") String facilityNo,
+                      @Param("table") String table
+                      );
 
-    /* 내가 등록한 시설물 리스트 불러오기 */
-    List<GetMyFacilityList> getMyFacilityList(String userUuid);
+    /* 시설물 가입하기 - 존재하는 시설물인지 확인 */
+    Integer validFacility(@Param("facilityNo") String facilityNo);
 
-    /* 내가 등록한 시설물 삭제 */
-    void deleteMyFacility(String userUuid, String userFacility);
+    /* 시설물 가입하기 - 중복된 시설물인지 검사 하기 - Manager & User */
+    Integer conflictJoinValidFacility(@Param("facilityNo") String facilityNo,
+                                       @Param("userUuid") String userUuid,
+                                      @Param("userType") String userType,
+                                       @Param("table") String table
+                                       );
+
+
+    /* 시설물 가입하기 - 사용자 확인 */
+    Integer joinValidFacility(@Param("userUuid") String userUuid,
+                              @Param("userType") String userType,
+                              @Param("table") String table);
+
+    /* 내가 가입한 시설물 불러오기 */
+    List<GetMyFacilityListVo> getMyFacilityList(
+            @Param("uuid") String uuid,
+            @Param("table") String table,
+            @Param("colum") String colum);
+
+
+    void deleteMyFacility(@Param("uuid") String uuid,
+                            @Param("facilityNo") String facilityNo,
+                            @Param("table") String table,
+                            @Param("colum") String colum);
 
     /* 내가 등록한 시설물 좋아요 */
     void myFacilityLike(@Param("userUuid") String userUuid,
-                        @Param("userFacility") String userFacility,
+                        @Param("useFacility") String useFacility,
                         @Param("value")Integer value);
 
     /* 내가 등록한 시설물 좋아요 여부 */
-    Integer myFacilityLikeBool(String userUuid, String userFacility);
+    Integer myFacilityLikeBool(@Param("userUuid") String userUuid,@Param("useFacility") String useFacility);
+
+    int validJoinFacility(@Param("uuid") String uuid,
+                          @Param("facilityNo") String facilityNo,
+                          @Param("table") String table,
+                          @Param("colum") String colum);
+
+    /* 시설물 삭제 */
+    void deleteFacility(@Param("facilityNo") String facilityNo);
+
+    /* 시설물 삭제 조건 검사 */
+    Integer deleteValidFacility(@Param("managerUuid") String managerUuid,
+                             @Param("facilityNo")String facilityNo);
+
+    /* 시설물 관리자 지정 */
+    void registerManager(@Param("facilityOwner") String facilityOwner,
+                         @Param("facilityNo") String facilityNo);
 }

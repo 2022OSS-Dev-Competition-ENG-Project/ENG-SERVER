@@ -128,6 +128,11 @@ public class ReportService {
     }
 
     /* 신고 리스트 불러오기 - 매니저 메인페이지에서 5개 */
+    public List<GetMyReportList> getReportFacilityLt(String facilityNo) {
+        return reportMapper.getReportFacilityLt(facilityNo);
+    }
+
+
     public List<GetMyReportList> getReportFacility(String facilityNo) {
         return reportMapper.getReportFacility(facilityNo);
     }

@@ -86,6 +86,12 @@ public class ReportController {
     }
 
     /* 신고 리스트 불러오기 - 매니저 메인페이지에서 5개 */
+    @GetMapping("/report/list/mg/lt/{facilityNo}")
+    public ResponseEntity getReportFacilityLt(@PathVariable("facilityNo") String facilityNo){
+        return ResponseEntity.status(HttpStatus.OK).body(reportService.getReportFacilityLt(facilityNo));
+    }
+
+    /* 신고 리스트 불러오기 */
     @GetMapping("/report/list/mg/{facilityNo}")
     public ResponseEntity getReportFacility(@PathVariable("facilityNo") String facilityNo){
         return ResponseEntity.status(HttpStatus.OK).body(reportService.getReportFacility(facilityNo));

@@ -80,12 +80,20 @@
         ORDER BY report_num DESC LIMIT 5;
     </select>
 
-    <select id="getReportFacility" resultMap="reportListInfo">
+    <select id="getReportFacilityLt" resultMap="reportListInfo">
         select *
         FROM (select * from facility_report
               WHERE facility_no = #{facilityNo} ) as fr
                  INNER JOIN user u ON fr.user_uuid = u.user_uuid
         ORDER BY report_num DESC LIMIT 5;
+    </select>
+
+    <select id="getReportFacility" resultMap="reportListInfo">
+        select *
+        FROM (select * from facility_report
+              WHERE facility_no = #{facilityNo} ) as fr
+                 INNER JOIN user u ON fr.user_uuid = u.user_uuid
+        ORDER BY report_num DESC;
     </select>
 
     <select id="getMyReport" resultMap="reportListInfo">
@@ -96,13 +104,19 @@
         ORDER BY report_num DESC;
     </select>
 
+    <select id="getFacilityReportLt" resultMap="reportListInfo">
+        select *
+        FROM facility_report
+        WHERE facility_no = #{facilityNo} AND report_status = #{searchValue}
+        ORDER BY report_num DESC LIMIT 5;
+    </select>
+
     <select id="getFacilityReport" resultMap="reportListInfo">
         select *
         FROM facility_report
         WHERE facility_no = #{facilityNo} AND report_status = #{searchValue}
         ORDER BY report_num DESC;
     </select>
-
     <update id="updateReport">
         update facility_report
         SET report_status = #{status}

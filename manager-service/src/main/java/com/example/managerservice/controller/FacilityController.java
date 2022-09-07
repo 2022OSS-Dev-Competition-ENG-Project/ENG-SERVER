@@ -68,6 +68,13 @@ public class FacilityController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(REGISTER_COMPLETE);
     }
+    /* 시설물 등록 - uuid 검색 */
+//    @GetMapping("/facility/find/manager/{userName}/{userPhoneNumber}")
+//    public ResponseEntity findManager(@PathVariable("userName") String userName,
+//                                      @PathVariable("userPhoneNumber") String userPhoneNumber){
+//        return ResponseEntity.status(HttpStatus.OK).body(facilityService.findManager(userName,userPhoneNumber));
+//    }
+
 
     /* 시설물 삭제*/
     @GetMapping("/facility/delete/{managerUuid}/{facilityNo}")

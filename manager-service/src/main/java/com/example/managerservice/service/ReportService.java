@@ -34,10 +34,6 @@ public class ReportService {
         reportMapper.reportRegister(reportDto);
         return reportDto.getReportNum();
     }
-    /* 신고 하기 - reportNum 가져오기*/
-    public Integer getReportNum(String reportText, LocalDateTime reportTime) {
-        return reportMapper.getReportNum(reportText, reportTime);
-    }
 
     /* 신고 하기 - 신고 이미지 로컬 저장 & URL 만들  */
     /* Content Image 저장 */
@@ -129,5 +125,10 @@ public class ReportService {
 
         reportMapper.updateReport(reportNum, searchValue);
         return searchValue + "되었습니다.";
+    }
+
+    /* 신고 리스트 불러오기 - 매니저 메인페이지에서 5개 */
+    public List<GetMyReportList> getReportFacility(String facilityNo) {
+        return reportMapper.getReportFacility(facilityNo);
     }
 }

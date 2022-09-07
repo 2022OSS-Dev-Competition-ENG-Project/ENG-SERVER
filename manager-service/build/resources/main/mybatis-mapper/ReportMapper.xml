@@ -80,6 +80,14 @@
         ORDER BY report_num DESC LIMIT 5;
     </select>
 
+    <select id="getReportFacility" resultMap="reportListInfo">
+        select *
+        FROM (select * from facility_report
+              WHERE facility_no = #{facilityNo} ) as fr
+                 INNER JOIN user u ON fr.user_uuid = u.user_uuid
+        ORDER BY report_num DESC LIMIT 5;
+    </select>
+
     <select id="getMyReport" resultMap="reportListInfo">
         select *
         FROM (select * from facility_report

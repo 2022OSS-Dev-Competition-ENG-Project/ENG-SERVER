@@ -40,6 +40,7 @@ public class ReportController {
 
         /* 신고 시간 저장 */
         reportDto.setReportDate(datetime);
+
         /* 신고 저장*/
             int rp = reportService.reportRegister(reportDto);
             log.info("contentNum : " + rp);
@@ -82,6 +83,12 @@ public class ReportController {
     public ResponseEntity getFacilityReport(@PathVariable("facilityNo") String facilityNo,
                                             @PathVariable("status") Integer status){
         return ResponseEntity.status(HttpStatus.OK).body(reportService.getFacilityReport(facilityNo,status));
+    }
+
+    /* 신고 리스트 불러오기 - 매니저 메인페이지에서 5개 */
+    @GetMapping("/report/list/mg/{facilityNo}")
+    public ResponseEntity getReportFacility(@PathVariable("facilityNo") String facilityNo){
+        return ResponseEntity.status(HttpStatus.OK).body(reportService.getReportFacility(facilityNo));
     }
 
     /* 신고 처리 하기 */

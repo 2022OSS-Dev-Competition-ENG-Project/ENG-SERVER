@@ -104,4 +104,7 @@ public class FacilityService {
     public void registerManager(String facilityOwner, String facilityNo) {
         facilityMapper.registerManager(facilityOwner,facilityNo);
     }
+
+//    public Object findManager(String userName, String userPhoneNumber) {
+//    }
 }

@@ -36,4 +36,7 @@ public interface ReportMapper {
 
         void updateReport(@Param("reportNum") Integer reportNum,
                             @Param("status") String status);
+
+        /* 신고 리스트 불러오기 - 매니저 메인페이지에서 5개 */
+        List<GetMyReportList> getReportFacility(@Param("facilityNo") String facilityNo);
 }

@@ -80,7 +80,7 @@
         ORDER BY report_num DESC LIMIT 5;
     </select>
 
-    <select id="getReportFacilityLt" resultMap="reportListInfo">
+    <select id="getFacilityReportLt" resultMap="reportListInfo">
         select *
         FROM (select * from facility_report
               WHERE facility_no = #{facilityNo} ) as fr
@@ -88,7 +88,7 @@
         ORDER BY report_num DESC LIMIT 5;
     </select>
 
-    <select id="getReportFacility" resultMap="reportListInfo">
+    <select id="getFacilityReport" resultMap="reportListInfo">
         select *
         FROM (select * from facility_report
               WHERE facility_no = #{facilityNo} ) as fr
@@ -104,14 +104,14 @@
         ORDER BY report_num DESC;
     </select>
 
-    <select id="getFacilityReport" resultMap="reportListInfo">
+    <select id="getReportFacilityLt" resultMap="reportListInfo">
         select *
         FROM facility_report
         WHERE facility_no = #{facilityNo} AND report_status = #{searchValue}
         ORDER BY report_num DESC LIMIT 5;
     </select>
 
-    <select id="getFacilityLtReport" resultMap="reportListInfo">
+    <select id="getReportFacility" resultMap="reportListInfo">
         select *
         FROM facility_report
         WHERE facility_no = #{facilityNo} AND report_status = #{searchValue}

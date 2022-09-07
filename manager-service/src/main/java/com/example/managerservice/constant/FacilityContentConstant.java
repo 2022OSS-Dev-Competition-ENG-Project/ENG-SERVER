@@ -7,10 +7,10 @@ public class FacilityContentConstant {
     public static final String FACILITY_CONTENT_REGISTER_SUCCESS = "게시물이 정상적으로 등록되었습니다.";
     public static final String FACILITY_CONTENT_DELETE_VALID_FAIL= "게시물 작성자만 삭제 하실수 있습니다.";
     public static final String FACILITY_CONTENT_DELETE_VALID_COMPLETE = "게시물을 정상적으로 삭제 하였습니다.";
-    public static final String FACILITY_CONTENT_IMAGE_SAVE_PATH = "/Users/jeonghunlee/image/content/";
-//    public static final String FACILITY_CONTENT_IMAGE_SAVE_PATH = "/home/icslab/ENG-store/image/content/";
-    public static final String FACILITY_CONTENT_IMAGE_SAVE_PATH_DB = "http://localhost:2200/api/facility/content/image/view/Users&jeonghunlee&image&content&";
-//    public static final String FACILITY_CONTENT_IMAGE_SAVE_PATH_DB = "http://203.250.32.29:2200/api/facility/content/image/view/home&icslab&ENG-store&image&content&";
+//    public static final String FACILITY_CONTENT_IMAGE_SAVE_PATH = "/Users/jeonghunlee/image/content/";
+    public static final String FACILITY_CONTENT_IMAGE_SAVE_PATH = "/home/icslab/ENG-store/image/content/";
+//    public static final String FACILITY_CONTENT_IMAGE_SAVE_PATH_DB = "http://localhost:2200/api/facility/content/image/view/Users&jeonghunlee&image&content&";
+    public static final String FACILITY_CONTENT_IMAGE_SAVE_PATH_DB = "http://203.250.32.29:2200/api/facility/content/image/view/home&icslab&ENG-store&image&content&";
 
 
     /* 게시물 메인에 보일 공지 게시물 갯수 */

@@ -4,10 +4,10 @@ public class QRCodeConstant {
 
     /* QR 코드 생성 셋팅 */
     public static final String QR_CODE_GENERATE_URL = "$id/$name/$address";
-//    public static final String QR_CODE_SAVE_PATH = "/home/icslab/ENG-store/image/QR/";
-//    public static final String QR_CODE_SAVE_PATH_DB = "http://203.250.32.29:2200/api/facility/content/image/view/home&icslab&ENG-store&image&QR&";
-    public static final String QR_CODE_SAVE_PATH = "/Users/jeonghunlee/qr";
-    public static final String QR_CODE_SAVE_PATH_DB = "http://203.250.32.29:2200/api/facility/content/image/view/Users&jeonghunlee&qr&";
+    public static final String QR_CODE_SAVE_PATH = "/home/icslab/ENG-store/image/QR/";
+    public static final String QR_CODE_SAVE_PATH_DB = "http://203.250.32.29:2200/api/facility/content/image/view/home&icslab&ENG-store&image&QR&";
+//    public static final String QR_CODE_SAVE_PATH = "/Users/jeonghunlee/qr";
+//    public static final String QR_CODE_SAVE_PATH_DB = "http://203.250.32.29:2200/api/facility/content/image/view/Users&jeonghunlee&qr&";
 
 
     public static final int QR_CODE_WIDTH = 200;

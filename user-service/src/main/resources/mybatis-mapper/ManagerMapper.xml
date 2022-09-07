@@ -36,6 +36,13 @@
         <result property="facility_qr_location" column="facilityQrLocation"/>
         <result property="facility_owner" column="facilityOwner"/>
     </resultMap>
+
+    <select id="PhoneNumberCheck" resultType="com.example.userservice.dto.ManagerDto">
+        select *
+        from manager
+        where manager_phone_number = #{managerPhoneNum}
+    </select>
+
     <update id="SignupManager" parameterType="com.example.userservice.dto.ManagerDto">
         UPDATE manager
         SET manager_uuid = #{managerUuid}, manager_password = #{managerPassword}, manager_name = #{managerName}, manager_nickname = #{managerNickname},
@@ -58,7 +65,7 @@
 
     <insert id="ManagerEmailConform" parameterType="com.example.userservice.dto.ManagerDto">
         insert into manager(manager_uuid,
-                         manager_email)
+                            manager_email)
         values(#{temporaryUuid},
                #{managerEmail})
     </insert>
@@ -124,27 +131,16 @@
         where facility_no = #{facilityNo}
     </select>
 
-<!--    <select id="AdminList" resultMap="AdminVO">-->
-<!--        select *-->
-<!--        from manager-->
-<!--        where facility_no = #{facilityNo}-->
-<!--    </select>-->
+    <select id="AdminList" resultMap="AdminVO">
+        select *
+        from manager
+        where facility_no = #{facilityNo}
+    </select>
 
-<!--    <update id="addAdmin" parameterType="com.example.userservice.dto.ManagerDto">-->
-<!--        update manager-->
-<!--        set facility_grade = #{facilityGrade} , facility_no = #{facilityNo}-->
-<!--        where manager_name = #{managerName}-->
-<!--    </update>-->
-
-<!--    <update id="deleteAdmin" parameterType="com.example.userservice.dto.ManagerDto">-->
-<!--        update manager-->
-<!--        set facility_grade = #{facilityGrade} , facility_no = #{facilityNo}-->
-<!--        where manager_name = #{managerName}-->
-<!--    </update>-->
-
-    <update id="changeOwner" parameterType="com.example.userservice.dto.FacilityDto">
-        update facility
+    <update id="updateGrade" parameterType="com.example.userservice.dto.ManagerDto">
+        update manager
         set facility_grade = #{facilityGrade} , facility_no = #{facilityNo}
         where manager_name = #{managerName}
     </update>
+
 </mapper>

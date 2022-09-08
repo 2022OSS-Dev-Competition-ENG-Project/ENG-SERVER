@@ -78,7 +78,7 @@ public class ReportController {
         return ResponseEntity.status(HttpStatus.OK).body(reportService.getMyReport(userUuid));
     }
 
-    /* 신고 처리 현황 별 리스트 */
+    /* 신고 리스트 불러오기 - 처리 현황 별 리스트 */
     @GetMapping("/report/list/{facilityNo}/{status}")
     public ResponseEntity getFacilityReport(@PathVariable("facilityNo") String facilityNo,
                                             @PathVariable("status") Integer status){
@@ -92,10 +92,10 @@ public class ReportController {
     }
 
     /* 신고 리스트 불러오기 */
-    @GetMapping("/report/list/mg/{facilityNo}")
-    public ResponseEntity getReportFacility(@PathVariable("facilityNo") String facilityNo){
-        return ResponseEntity.status(HttpStatus.OK).body(reportService.getReportFacility(facilityNo));
-    }
+//    @GetMapping("/report/list/mg/{facilityNo}")
+//    public ResponseEntity getReportFacility(@PathVariable("facilityNo") String facilityNo){
+//        return ResponseEntity.status(HttpStatus.OK).body(reportService.getReportFacility(facilityNo));
+//    }
 
     /* 신고 처리 하기 */
     @GetMapping("/report/{reportNum}/{status}")

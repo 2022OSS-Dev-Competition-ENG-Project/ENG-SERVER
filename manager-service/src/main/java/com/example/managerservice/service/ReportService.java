@@ -132,8 +132,4 @@ public class ReportService {
         return reportMapper.getReportFacilityLt(facilityNo);
     }
 
-
-    public List<GetMyReportList> getReportFacility(String facilityNo) {
-        return reportMapper.getReportFacility(facilityNo);
-    }
 }

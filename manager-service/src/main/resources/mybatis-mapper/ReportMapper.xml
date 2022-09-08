@@ -29,6 +29,7 @@
         <result property="facility_no" column="facilityNo"/>
     </resultMap>
 
+    <!-- 신고 하기 -->
     <insert id="reportRegister" useGeneratedKeys="true"
             keyProperty="reportNum" keyColumn="report_num">
         insert into facility_report(
@@ -53,12 +54,7 @@
                 )
     </insert>
 
-    <select id="getReportNum" resultType="java.lang.Integer">
-        select report_num
-        from facility_report
-        where report_text = #{reportText} AND report_date = #{reportDate} AND report_title = #{reportTitle}
-    </select>
-
+    <!-- 신고 상세 보기 -->
     <select id="getReport" resultMap="reportInfo">
         select *
         from facility_report
@@ -72,30 +68,7 @@
         WHERE report_num = #{reportNum};
     </update>
 
-    <select id="getMyReportLt" resultMap="reportListInfo">
-        select *
-        FROM (select * from facility_report
-              WHERE user_uuid = #{userUuid} ) as fr
-        INNER JOIN user u ON fr.user_uuid = u.user_uuid
-        ORDER BY report_num DESC LIMIT 5;
-    </select>
-
-    <select id="getFacilityReportLt" resultMap="reportListInfo">
-        select *
-        FROM (select * from facility_report
-              WHERE facility_no = #{facilityNo} ) as fr
-                 INNER JOIN user u ON fr.user_uuid = u.user_uuid
-        ORDER BY report_num DESC LIMIT 5;
-    </select>
-
-    <select id="getFacilityReport" resultMap="reportListInfo">
-        select *
-        FROM (select * from facility_report
-              WHERE facility_no = #{facilityNo} ) as fr
-                 INNER JOIN user u ON fr.user_uuid = u.user_uuid
-        ORDER BY report_num DESC;
-    </select>
-
+    <!-- 내가 신고한 리스트 불러오기 -->
     <select id="getMyReport" resultMap="reportListInfo">
         select *
         FROM (select * from facility_report
@@ -104,19 +77,32 @@
         ORDER BY report_num DESC;
     </select>
 
-    <select id="getReportFacilityLt" resultMap="reportListInfo">
+    <!-- 내가 신고한 리스트 불러오기 5개만 -->
+    <select id="getMyReportLt" resultMap="reportListInfo">
+        select *
+        FROM (select * from facility_report
+              WHERE user_uuid = #{userUuid} ) as fr
+        INNER JOIN user u ON fr.user_uuid = u.user_uuid
+        ORDER BY report_num DESC LIMIT 5;
+    </select>
+
+    <!-- 신고 처리 현황 별 리스트 -->
+    <select id="getFacilityReport" resultMap="reportListInfo">
         select *
         FROM facility_report
         WHERE facility_no = #{facilityNo} AND report_status = #{searchValue}
         ORDER BY report_num DESC LIMIT 5;
     </select>
 
-    <select id="getReportFacility" resultMap="reportListInfo">
+    <!-- 신고 리스트 불러오기 - 매니저 메인페이지에서 5개 -->
+    <select id="getReportFacilityLt" resultMap="reportListInfo">
         select *
-        FROM facility_report
-        WHERE facility_no = #{facilityNo} AND report_status = #{searchValue}
-        ORDER BY report_num DESC;
+        FROM (select * from facility_report
+              WHERE facility_no = #{facilityNo} ) as fr
+                 INNER JOIN user u ON fr.user_uuid = u.user_uuid
+        ORDER BY report_num DESC LIMIT 5;
     </select>
+
     <update id="updateReport">
         update facility_report
         SET report_status = #{status}

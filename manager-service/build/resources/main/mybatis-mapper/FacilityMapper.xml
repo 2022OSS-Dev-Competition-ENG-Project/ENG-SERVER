@@ -23,6 +23,12 @@
         <result property="is_liked" column="isLiked"/>
     </resultMap>
 
+    <resultMap type="com.example.managerservice.vo.FindManagerUuid" id="managerInfo">
+        <result property="manager_name" column="managerName"/>
+        <result property="manager_phone_number" column="managerPhoneNumber"/>
+        <result property="manager_uuid" column="managerUuid"/>
+    </resultMap>
+
     <!-- 시설물 등록하기 -->
     <insert id="registerFacility" parameterType="com.example.managerservice.dto.FacilityDto">
         INSERT INTO facility (
@@ -157,4 +163,12 @@
         from facility
         where facility_no = #{facilityNo};
     </delete>
+
+    <select id="findManager" resultMap="managerInfo">
+        select manager_uuid,
+               manager_name,
+               manager_phone_number
+        from manager
+        where manager_phone_number = #{managerPhoneNumber} AND manager_name = #{managerName};
+    </select>
 </mapper>

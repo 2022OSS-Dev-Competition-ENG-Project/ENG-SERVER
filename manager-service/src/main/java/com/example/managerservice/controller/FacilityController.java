@@ -4,6 +4,7 @@ import com.example.managerservice.dto.FacilityDto;
 import com.example.managerservice.dto.FacilityJoinDto;
 import com.example.managerservice.service.FacilityService;
 import com.example.managerservice.service.QRService;
+import com.example.managerservice.vo.FindManagerUuid;
 import com.google.zxing.WriterException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,12 +69,15 @@ public class FacilityController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(REGISTER_COMPLETE);
     }
-    /* 시설물 등록 - uuid 검색 */
-//    @GetMapping("/facility/find/manager/{userName}/{userPhoneNumber}")
-//    public ResponseEntity findManager(@PathVariable("userName") String userName,
-//                                      @PathVariable("userPhoneNumber") String userPhoneNumber){
-//        return ResponseEntity.status(HttpStatus.OK).body(facilityService.findManager(userName,userPhoneNumber));
-//    }
+    /* 시설물 등록 - manager uuid 검색 */
+    @GetMapping("/facility/find/manager/{managerName}/{managerPhoneNumber}")
+    public ResponseEntity findManager(@PathVariable("managerName") String managerName,
+                                      @PathVariable("managerPhoneNumber") String managerPhoneNumber){
+
+        FindManagerUuid fmu = facilityService.findManager(managerName,managerPhoneNumber);
+
+        return ResponseEntity.status(HttpStatus.OK).body(fmu);
+    }
 
 
     /* 시설물 삭제*/

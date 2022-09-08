@@ -1,6 +1,7 @@
 package com.example.managerservice.mapper;
 
 import com.example.managerservice.dto.FacilityDto;
+import com.example.managerservice.vo.FindManagerUuid;
 import com.example.managerservice.vo.GetMyFacilityListVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -79,4 +80,8 @@ public interface FacilityMapper {
     /* 시설물 관리자 지정 */
     void registerManager(@Param("facilityOwner") String facilityOwner,
                          @Param("facilityNo") String facilityNo);
+
+    /* 시설물 가입 - 매니저 UUID 검색*/
+    FindManagerUuid findManager(@Param("managerName") String managerName,
+                                @Param("managerPhoneNumber") String managerPhoneNumber);
 }

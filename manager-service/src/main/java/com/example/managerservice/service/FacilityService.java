@@ -2,6 +2,7 @@ package com.example.managerservice.service;
 
 import com.example.managerservice.dto.FacilityDto;
 import com.example.managerservice.mapper.FacilityMapper;
+import com.example.managerservice.vo.FindManagerUuid;
 import com.example.managerservice.vo.GetMyFacilityListVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,6 +106,9 @@ public class FacilityService {
         facilityMapper.registerManager(facilityOwner,facilityNo);
     }
 
-//    public Object findManager(String userName, String userPhoneNumber) {
-//    }
+    /* 시설물 가입 - 이름, 전화 번호로 uuid 찾기 */
+    public FindManagerUuid findManager(String managerName, String managerPhoneNumber) {
+        return facilityMapper.findManager(managerName,managerPhoneNumber);
+    }
+
 }

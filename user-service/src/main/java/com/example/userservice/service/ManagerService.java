@@ -38,7 +38,8 @@ public class ManagerService {
         return managerMapper.ManagerEmailCheck(managerEmail);
     }
 
-    public void ManagerEmailCode(String userEmail,Integer LoginKey) {
+    public void ManagerEmailCode(String userEmail) {
+        Integer LoginKey = 1;
         managerMapper.ManagerEmailCode(userEmail, LoginKey);
     }
 
@@ -50,7 +51,8 @@ public class ManagerService {
         return managerMapper.ManagerNickNameCheck(nickname);
     }
 
-    public void NickNameCheckAccess(String managerNickname, Integer AccessType, String managerEmail){
+    public void NickNameCheckAccess(String managerNickname, String managerEmail){
+        Integer AccessType = 1;
         managerMapper.NickNameCheckAccess(managerNickname, AccessType, managerEmail);
     }
 

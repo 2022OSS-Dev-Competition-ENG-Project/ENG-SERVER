@@ -9,8 +9,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 
@@ -50,11 +48,8 @@ public class UserService {
         return userMapper.registerNickNameCheck(nickname);
     }
 
-    public UserDto registerPhoneNumberCheck(String ResponsePhoneNum){
-        return userMapper.registerPhoneNumberCheck(ResponsePhoneNum);
-    }
-
-    public void NickNameCheck(String userNickname, Integer AccessType, String userEmail){
+    public void NickNameCheck(String userNickname, String userEmail){
+        Integer AccessType = 1;
         userMapper.NickNameCheck(userNickname, AccessType, userEmail);
     }
 
@@ -62,19 +57,12 @@ public class UserService {
         return userMapper.findEmail(userDto);
     }
 
-    public UserDto findName(FindIdVo findIdVo) {
-        return userMapper.findName(findIdVo);
-    }
-
-    public UserDto findPhoneNum(UserDto userDto) {
-        return userMapper.findPhoneNum(userDto);
-    }
-
     public UserDto findUuid(String uuid) {
         return userMapper.findUuid(uuid);
     }
 
-    public void EmailCode(String userEmail,Integer LoginKey) {
+    public void EmailCode(String userEmail) {
+        Integer LoginKey = 1;
         userMapper.EmailCode(userEmail, LoginKey);
     }
 
@@ -102,10 +90,6 @@ public class UserService {
     public String findId(FindIdVo findIdVo){
         return userMapper.findId(findIdVo);
     }
-
-//    public UserDto findUserUuid(UserDto userDto) {
-//        return userMapper.findUserUuid(userDto);
-//    }
 
     public void changePW(UserDto userDto) {
         //변경할 비밀번호 해싱

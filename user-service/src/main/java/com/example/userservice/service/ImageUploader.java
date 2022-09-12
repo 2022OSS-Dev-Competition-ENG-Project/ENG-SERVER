@@ -1,7 +1,6 @@
 package com.example.userservice.service;
 
 import com.example.userservice.mapper.ImageMapper;
-import com.example.userservice.vo.GetProfileImageVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 
-import static com.example.userservice.constant.SignUpConstant.SAVE_PATH;
+import static com.example.userservice.constant.ImageConstant.SAVE_PATH;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,11 +28,6 @@ public class ImageUploader {
         String savaPath = SAVE_PATH;
         File file = new File(  savaPath + userUuid);
         multipartFile.transferTo(file);
-        log.info("upload : 로컬서버 이미지 저장");
-
         imageMapper.upload(multipartFile, userImg, userUuid);
     }
-
-
-
 }

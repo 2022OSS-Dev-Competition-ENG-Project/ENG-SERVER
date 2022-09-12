@@ -12,17 +12,11 @@ public interface UserMapper {
 
     UserDto findEmail(UserDto userDto);
 
-    UserDto findName(FindIdVo findIdVo);
-
-    UserDto findPhoneNum(UserDto userDto);
-
     UserDto findUuid(String uuid);
 
     UserDto registerEmailCheck(String email);
 
     UserDto registerNickNameCheck(String nickname);
-
-    UserDto registerPhoneNumberCheck(String userPhoneNumber);
 
     void NickNameCheck(String nickName, Integer AccessType, String userEmail);
 
@@ -30,10 +24,7 @@ public interface UserMapper {
 
     void changeRandomPassword(UserDto userDto);
 
-//    UserDto findUserUuid(UserDto userDto);
-
     void changePW(UserDto userDto);
 
-    /* 추후 변경 */
     String findId(FindIdVo findIdVo);
 }

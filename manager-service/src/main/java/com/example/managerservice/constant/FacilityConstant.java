@@ -10,7 +10,7 @@ public class FacilityConstant {
 
     /* 시설물 가입 Constant */
     public static final String FACILITY_JOIN_NOT_FOUND = "가입 하실려는 시설물은 존재하지 않습니다.";
-    public static final String FACILITY_JOIN_USER_NOT_FOUND = "해당 서비스를 이용하실수 없습니다.";
+    public static final String FACILITY_JOIN_USER_NOT_FOUND = "시설물에 가입 하려는 사용자가 존재 하지 않습니다.";
     public static final String FACILITY_JOIN_CONFLICT = "이미 가입하신 시설물입니다.";
     public static final String FACILITY_JOIN_USER = "user_use_facility";
     public static final String FACILITY_JOIN_MANAGER = "manager_use_facility";
@@ -23,7 +23,7 @@ public class FacilityConstant {
     public static final String FACILITY_LIST_MANAGER_TYPE = "manager_uuid";
     public static final String FACILITY_LIST_USER_TABLE = "user_use_facility";
     public static final String FACILITY_LIST_MANAGER_TABLE = "manager_use_facility";
-    public static final String FACILITY_MY_DELETE_NOT_FOUND = "삭제 하려는 게시물이 없습니다.";
+    public static final String FACILITY_MY_DELETE_NOT_FOUND = "삭제 하려는 시설물이 없습니다.";
     public static final String FACILITY_MY_DELETE = "정상적으로 가입한 시설물이 삭제 되었습니다.";
 
     /* 가입된 시설물 좋아요 */

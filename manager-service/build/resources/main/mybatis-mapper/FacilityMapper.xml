@@ -29,6 +29,13 @@
         <result property="manager_uuid" column="managerUuid"/>
     </resultMap>
 
+    <resultMap type="com.example.managerservice.vo.FacilityManagerListVo" id="managerListInfo">
+        <result property="manager_uuid" column="managerUuid"/>
+        <result property="manager_name" column="managerName"/>
+        <result property="facility_address" column="facilityAddress"/>
+        <result property="manager_phone_number" column="managerPhoneNumber"/>
+    </resultMap>
+
     <!-- 시설물 등록하기 -->
     <insert id="registerFacility" parameterType="com.example.managerservice.dto.FacilityDto">
         INSERT INTO facility (
@@ -170,5 +177,16 @@
                manager_phone_number
         from manager
         where manager_phone_number = #{managerPhoneNumber} AND manager_name = #{managerName};
+    </select>
+
+    <select id="facilityManagerList" resultMap="managerListInfo">
+        SELECT m.manager_uuid,
+               m.manager_name,
+               m.manager_phone_number,
+               f.facility_address
+        FROM (SELECT * FROM manager_use_facility
+              WHERE use_facility = #{facilityNo} ) AS mf
+        INNER JOIN manager m ON m.manager_uuid = mf.manager_uuid
+        INNER JOIN facility f ON f.facility_no = mf.use_facility
     </select>
 </mapper>

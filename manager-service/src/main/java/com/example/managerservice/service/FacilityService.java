@@ -1,6 +1,7 @@
 package com.example.managerservice.service;
 
 import com.example.managerservice.dto.FacilityDto;
+import com.example.managerservice.dto.ManagerDto;
 import com.example.managerservice.mapper.FacilityMapper;
 import com.example.managerservice.vo.FindManagerUuid;
 import com.example.managerservice.vo.GetMyFacilityListVo;
@@ -102,6 +103,7 @@ public class FacilityService {
         return "시설물 삭제";
     }
 
+    /* 매니저 가입 */
     public void registerManager(String facilityOwner, String facilityNo) {
         facilityMapper.registerManager(facilityOwner,facilityNo);
     }
@@ -111,4 +113,8 @@ public class FacilityService {
         return facilityMapper.findManager(managerName,managerPhoneNumber);
     }
 
+    /* 시설물 별 관리자 리스트*/
+    public List<ManagerDto> facilityManagerList(String facilityNo) {
+        return facilityMapper.facilityManagerList(facilityNo);
+    }
 }

@@ -33,6 +33,7 @@
         <result property="manager_uuid" column="managerUuid"/>
         <result property="manager_name" column="managerName"/>
         <result property="facility_name" column="facilityName"/>
+        <result property="facility_owner" column="facilityOwner"/>
         <result property="manager_phone_number" column="managerPhoneNumber"/>
     </resultMap>
 
@@ -183,7 +184,8 @@
         SELECT m.manager_uuid,
                m.manager_name,
                m.manager_phone_number,
-               f.facility_name
+               f.facility_name,
+               f.facility_owner
         FROM (SELECT * FROM manager_use_facility
               WHERE use_facility = #{facilityNo} ) AS mf
         INNER JOIN manager m ON m.manager_uuid = mf.manager_uuid

@@ -63,25 +63,24 @@ public class FacilityContentService {
     }
 
     /* 게시물 삭제 */
-    /* 조건 : 게시물 등록한사람, 게시물 번호 일치*/
-    public String deleteContent(String uuid, Integer contentId){
+    public ResponseEntity deleteContent(String uuid, Integer contentId){
 
         if (fcm.validContentOwner(uuid,contentId) == 0 ){
-            return FACILITY_CONTENT_DELETE_VALID_FAIL;
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(FACILITY_CONTENT_DELETE_VALID_FAIL);
         }else{
             fcm.deleteAllLike(contentId);
             fcm.deleteAllComment(contentId);
             fcm.deleteContent(uuid,contentId);
-        return FACILITY_CONTENT_DELETE_VALID_COMPLETE;
+        return ResponseEntity.status(HttpStatus.OK).body(FACILITY_CONTENT_DELETE_VALID_COMPLETE);
         }
     }
 
     /* 게시물 삭제 - 매니저용 */
-    public String deleteContentManager(Integer contentId, String facility_no) {
+    public ResponseEntity deleteContentManager(Integer contentId, String facility_no) {
         fcm.deleteAllLike(contentId);
         fcm.deleteAllComment(contentId);
         fcm.deleteContentManager(contentId,facility_no);
-        return FACILITY_CONTENT_DELETE_VALID_COMPLETE;
+        return ResponseEntity.status(HttpStatus.OK).body(FACILITY_CONTENT_DELETE_VALID_COMPLETE);
     }
 
     /* 게시물 좋아요 여부 확인 */

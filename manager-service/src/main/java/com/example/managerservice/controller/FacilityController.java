@@ -194,7 +194,7 @@ public class FacilityController {
         }
     }
 
-    /*게시물을 관리하는 매니저들 리스트*/
+    /* 시설물을 관리하는 매니저들 리스트 */
     @GetMapping("/facility/manager/{facilityNo}/list")
     public ResponseEntity facilityManagerList(@PathVariable("facilityNo") String facilityNo) {
         return ResponseEntity.status(HttpStatus.OK).body(facilityService.facilityManagerList(facilityNo));

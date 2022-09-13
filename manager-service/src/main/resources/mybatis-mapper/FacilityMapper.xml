@@ -32,7 +32,7 @@
     <resultMap type="com.example.managerservice.vo.FacilityManagerListVo" id="managerListInfo">
         <result property="manager_uuid" column="managerUuid"/>
         <result property="manager_name" column="managerName"/>
-        <result property="facility_address" column="facilityAddress"/>
+        <result property="facility_name" column="facilityName"/>
         <result property="manager_phone_number" column="managerPhoneNumber"/>
     </resultMap>
 
@@ -183,7 +183,7 @@
         SELECT m.manager_uuid,
                m.manager_name,
                m.manager_phone_number,
-               f.facility_address
+               f.facility_name
         FROM (SELECT * FROM manager_use_facility
               WHERE use_facility = #{facilityNo} ) AS mf
         INNER JOIN manager m ON m.manager_uuid = mf.manager_uuid

@@ -111,7 +111,7 @@ public class FacilityContentController {
         return ResponseEntity.status(HttpStatus.OK).body(fcs.getLikeCount(contentNum));
     }
 
-    /*  게시물 삭제 - 관리자용*/
+    /* 게시물 삭제 - 관리자용 */
     @GetMapping("/facility/content/delete/mg/{facilityNo}/{contentId}")
     public ResponseEntity deleteContentManager(@PathVariable("contentId") Integer contentId,
                                                @PathVariable("facilityNo") String facilityNo){
@@ -119,10 +119,10 @@ public class FacilityContentController {
     }
 
     /*  게시물 삭제 */
-    @GetMapping("/facility/content/delete/{uuid}/{contentId}")
+    @GetMapping("/facility/content/delete/{uuid}/{contentNum}")
     public ResponseEntity deleteContent(@PathVariable("uuid") String uuid,
-                                        @PathVariable("contentId") Integer contentId){
-        return ResponseEntity.status(HttpStatus.OK).body(fcs.deleteContent(uuid, contentId));
+                                        @PathVariable("contentNum") Integer contentNum){
+        return ResponseEntity.status(HttpStatus.OK).body(fcs.deleteContent(uuid, contentNum));
     }
 
     /* 메인 배너에 보일 공지 게시물 불러오기 */

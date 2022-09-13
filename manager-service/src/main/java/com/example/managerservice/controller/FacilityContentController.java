@@ -65,7 +65,6 @@ public class FacilityContentController {
                 StringBuilder sb = new StringBuilder();
                 for(String item : is.saveContentImage(images, facilityNo, (int)contentNum)){
                     sb.append(item);
-                    sb.append(" ");
                 }
             fcs.contentImageUpdate(sb.toString(), (int)contentNum);
             }

@@ -32,6 +32,9 @@ public class FacilityContentService {
 
     /* 게시물 등록 */
     public long registerContent(FacilityContentDto fcd){
+        if (fcd.getContentType() == 1){
+
+        }
         fcm.registerContent(fcd);
         long cn = fcd.getContentNum();
         return cn;

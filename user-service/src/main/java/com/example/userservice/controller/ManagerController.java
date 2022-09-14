@@ -151,10 +151,9 @@ public class ManagerController {
     }
 
     /* 매니저 마이페이지 (비밀번호 재 설정) */
-    @GetMapping("/manager-service/myPage/changePW/{uuid}")
-    public ResponseEntity ChangePW(@PathVariable("uuid") String uuid,
-                                   @RequestBody ManagerDto managerDto) {
-        managerDto.setManagerUuid(uuid);
+    @PostMapping("/manager-service/myPage/changePW")
+    public ResponseEntity ChangePW(@RequestBody ManagerDto managerDto) {
+        String uuid = managerDto.getManagerUuid();
         managerService.changeManagerPW(managerDto);
         String managerName = managerService.findManagerUuid(uuid).getManagerName();
         return ResponseEntity.status(HttpStatus.OK).body(managerName + MyPageConstant.MYPAGE_CLEAR);

@@ -119,14 +119,7 @@ public class ManagerController {
     /* 매니저 아이디 찾기 */
     @PostMapping (value = "/manager-service/FindManagerId")
     public ResponseEntity FindManagerId (@RequestBody FindManagerIdVo findManagerIdVo){
-        /* 이름 전화 번호가 한컬럼 안에서 다를 때 */
-        try{
-            log.info(managerService.findManagerId(findManagerIdVo));
-        }catch (NullPointerException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(SignUpConstant.FIND_ID_FAIL);
-        }
-
-        if (managerService.findManagerId(findManagerIdVo) == null){
+        if (managerService.findManagerId(findManagerIdVo) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(SignUpConstant.FIND_ID_FAIL);
         }
         return ResponseEntity.status(HttpStatus.OK).body(managerService.findManagerId(findManagerIdVo));

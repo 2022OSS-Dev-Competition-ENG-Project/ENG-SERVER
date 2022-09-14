@@ -23,6 +23,7 @@
 
     </resultMap>
 
+    <!--User 회원가입-->
     <update id="SignupUser" parameterType="com.example.userservice.dto.UserDto">
         UPDATE user
         SET user_uuid = #{userUuid}, user_password = #{userPassword}, user_name = #{userName}, user_nickname = #{userNickname},
@@ -30,12 +31,14 @@
         where user_email = #{userEmail}
     </update>
 
-    <update id="NickNameCheck" parameterType="com.example.userservice.dto.UserDto">
-        update user
-        set user_access_type = #{AccessType}, user_nickname = #{nickName}
+    <!--User 회원가입 - 중복된 Email 검사하기-->
+    <select id="registerEmailCheck" resultType="com.example.userservice.dto.UserDto">
+        select *
+        from user
         where user_email = #{userEmail}
-    </update>
+    </select>
 
+    <!--User 회원가입 - Email 중복 검사 성공시-->
     <insert id="EmailConform" parameterType="com.example.userservice.dto.UserDto">
         insert into user(user_uuid,
                          user_email)
@@ -43,54 +46,42 @@
                #{userEmail})
     </insert>
 
-    <select id="registerNickNameCheck" resultMap="userInfo">
-        select *
-        from user
-        where user_nickname = #{userNickName}
-    </select>
-
-    <select id="registerEmailCheck" resultType="com.example.userservice.dto.UserDto">
-        select *
-        from user
-        where user_email = #{userEmail}
-    </select>
-
-    <select id="registerPhoneNumberCheck" resultType="com.example.userservice.dto.UserDto">
-        select user_phone_number
-        from user
-        where user_phone_number = #{userPhoneNum}
-    </select>
-
-    <select id="findEmail" resultType="com.example.userservice.dto.UserDto">
-        select *
-        from user
-        where user_email = #{userEmail}
-    </select>
-
-    <select id="findUuid" resultType="com.example.userservice.dto.UserDto">
-        select *
-        from user
-        where user_uuid = #{userUuid}
-    </select>
-
+    <!--User 회원가입 - Email 인코드 검사 성공시-->
     <update id="EmailCode" parameterType="com.example.userservice.dto.UserDto">
         UPDATE user
         SET user_login_key = #{LoginKey}
         where user_email = #{userEmail}
     </update>
 
-    <select id="findName" resultType="com.example.userservice.dto.UserDto">
+    <!--User 회원가입 - 중복된 Nickname 검사하기-->
+    <select id="registerNickNameCheck" resultMap="userInfo">
         select *
         from user
-        where user_name = #{userName}
+        where user_nickname = #{userNickName}
     </select>
 
-    <select id="findPhoneNum" resultType="com.example.userservice.dto.UserDto">
+    <!--User 회원가입 - Nickname 검사 성공시-->
+    <update id="NickNameCheck" parameterType="com.example.userservice.dto.UserDto">
+        update user
+        set user_access_type = #{AccessType}, user_nickname = #{nickName}
+        where user_email = #{userEmail}
+    </update>
+
+    <!--User 로그인-->
+    <select id="findEmail" resultType="com.example.userservice.dto.UserDto">
         select *
         from user
-        where user_phone_number = #{userPhoneNum}
+        where user_email = #{userEmail}
     </select>
 
+    <!--User 로그인 - 성공시 uuid 검색-->
+    <select id="findUuid" resultType="com.example.userservice.dto.UserDto">
+        select *
+        from user
+        where user_uuid = #{userUuid}
+    </select>
+
+    <!--User 비밀번호 찾기 - 랜덤 비밀번호 생성-->
     <update id="changeRandomPassword">
         update user
         set user_password = #{userPassword}
@@ -98,18 +89,14 @@
           and user_name = #{userName}
     </update>
 
+    <!--User 아이디 찾기-->
     <select id="findId" resultType="java.lang.String">
         select user_email
         from user
         where user_phone_number = #{userPhoneNumber} AND user_name = #{userName}
     </select>
 
-    <select id="findUserUuid" resultType="com.example.userservice.dto.UserDto">
-        select *
-        from user
-        where user_uuid = #{userUuid}
-    </select>
-
+    <!--User 마이페이지 - 비빌번호 재설정-->
     <update id="changePW">
         update user
         set user_password = #{userPassword}

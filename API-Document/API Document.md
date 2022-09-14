@@ -7,7 +7,7 @@
     - **Method : GET**
     - **Request**
     
-    ```
+    ```jsonc
     "userUuid" : 사용자 UUID
     "facilityNo" : 시설물 고유 번호
     ```
@@ -15,7 +15,7 @@
     - **Response**
         - 200 OK
         
-        ```
+        ```jsonc
         is_like = 0 일때
         "좋아요 처리가 완료되었습니다."
         is_like = 1 일때

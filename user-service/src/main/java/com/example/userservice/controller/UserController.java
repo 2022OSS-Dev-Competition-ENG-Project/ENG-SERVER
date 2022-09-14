@@ -42,10 +42,6 @@ public class UserController {
         if ( LoginKeyCheck == 1 && AccessType == 1) {
             userService.SignupUser(userDto);
             return ResponseEntity.status(HttpStatus.CREATED).body(SignUpConstant.SIGNUP_CLEAR);
-        } else if ( LoginKeyCheck != 1 && AccessType == 1) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("이메일 인증을 진행해주세요.");
-        } else if ( AccessType != 1 && LoginKeyCheck == 1) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("닉네임 중복 체크를 진행해주세요.");
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(SignUpConstant.SIGNUP_FAIL_CONTENT);
         }
@@ -117,14 +113,7 @@ public class UserController {
     /* 아이디 찾기 */
     @PostMapping (value = "/user-service/FindUserid")
     public ResponseEntity FindUserId (@RequestBody FindIdVo findIdVo){
-        /* 이름 전화 번호가 한컬럼 안에서 다를 때 */
-        try{
-            log.info(userService.findId(findIdVo));
-        }catch (NullPointerException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(SignUpConstant.FIND_ID_FAIL);
-        }
-
-        if (userService.findId(findIdVo) == null){
+        if (userService.findId(findIdVo) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(SignUpConstant.FIND_ID_FAIL);
         }
         return ResponseEntity.status(HttpStatus.OK).body(userService.findId(findIdVo));
@@ -181,7 +170,6 @@ public class UserController {
     @PostMapping("/user-service/SaveProfileImage/{uuid}")
     public ResponseEntity<String> upload(@RequestParam("images") MultipartFile multipartFile,
                                          @PathVariable("uuid")String userUuid) throws IOException {
-        log.info("ProfileImages : 이미지 저장 시도");
         String userImg = "http://203.250.32.29:2201/api/user-service/ProfileImage/" + userUuid;
         ImageUploader.upload(multipartFile,userImg,userUuid);
         return ResponseEntity.status(HttpStatus.OK).body(ImageConstant.IMAGE_SUCCESS);

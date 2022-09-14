@@ -24,6 +24,7 @@ public class ImageUploader {
     }
     private static ImageMapper imageMapper;
 
+    /* User ProfileImage 저장 */
     public static void upload(MultipartFile multipartFile, String userImg, String userUuid) throws IOException {
         String savaPath = SAVE_PATH;
         File file = new File(  savaPath + userUuid);

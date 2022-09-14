@@ -23,47 +23,51 @@ public class UserService {
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
 
+    /* User 회원가입 */
     public void SignupUser(UserDto userDto) {
         LocalDate localDate = LocalDate.now();
-
-        log.info(userDto.toString());
         userDto.setUserUuid(UUID.randomUUID().toString());
         userDto.setUserJoinDate(localDate);
-        // 해싱
         String encodePassword = passwordEncoder.encode(userDto.getUserPassword());
         userDto.setUserPassword(encodePassword);
-
         userMapper.SignupUser(userDto);
     }
 
+    /* User 회원가입 - 중복된 Email 검사하기 */
     public UserDto registerEmailCheck(String email){
         return userMapper.registerEmailCheck(email);
     }
 
+    /* User 회원가입 - Email 중복 검사 성공시 */
     public void  EmailConform(String userEmail, String temporaryUuid){
         userMapper.EmailConform(userEmail,temporaryUuid);
     }
 
+    /* User 회원가입 - Email 인코드 검사 성공시 */
+    public void EmailCode(String userEmail) {
+        Integer LoginKey = 1;
+        userMapper.EmailCode(userEmail, LoginKey);
+    }
+
+    /* User 회원가입 - 중복된 Nickname 검사하기 */
     public UserDto registerNickNameCheck(String nickname){
         return userMapper.registerNickNameCheck(nickname);
     }
 
+    /* User 회원가입 - Nickname 검사 성공시 */
     public void NickNameCheck(String userNickname, String userEmail){
         Integer AccessType = 1;
         userMapper.NickNameCheck(userNickname, AccessType, userEmail);
     }
 
+    /* User 로그인 */
     public UserDto findEmail(UserDto userDto) {
         return userMapper.findEmail(userDto);
     }
 
+    /* User 로그인 - 성공시 uuid 검색 */
     public UserDto findUuid(String uuid) {
         return userMapper.findUuid(uuid);
-    }
-
-    public void EmailCode(String userEmail) {
-        Integer LoginKey = 1;
-        userMapper.EmailCode(userEmail, LoginKey);
     }
 
     public String RandomObject () {
@@ -79,20 +83,22 @@ public class UserService {
         }
         return buf.toString();
     }
+
+    /* User 비밀번호 찾기 - 랜덤 비밀번호 생성 */
     public void changeRandomPassword (UserDto userDto) {
-        //랜덤 비밀번호 해싱
         String encodePassword = passwordEncoder.encode(userDto.getUserPassword());
         userDto.setUserPassword(encodePassword);
 
         userMapper.changeRandomPassword(userDto);
     }
 
+    /* User 아이디 찾기 */
     public String findId(FindIdVo findIdVo){
         return userMapper.findId(findIdVo);
     }
 
+    /* User 마이페이지 - 비빌번호 재설정 */
     public void changePW(UserDto userDto) {
-        //변경할 비밀번호 해싱
         String ChgPassword = passwordEncoder.encode(userDto.getUserPassword());
         userDto.setUserPassword(ChgPassword);
         userMapper.changePW(userDto);

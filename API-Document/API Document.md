@@ -7,7 +7,7 @@
     - **Method : GET**
     - **Request**
     
-    ```json
+    ```
     "userUuid" : 사용자 UUID
     "facilityNo" : 시설물 고유 번호
     ```
@@ -15,7 +15,7 @@
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         is_like = 0 일때
         "좋아요 처리가 완료되었습니다."
         is_like = 1 일때
@@ -28,7 +28,7 @@
     - **Body :  raw (json)**
     - **Request**
     
-    ```json
+    ```
     {
     	"userEmail" : user의 ID에 해당
     	"userPassword" : user의 Password
@@ -128,7 +128,7 @@
     
     ```json
     {
-        "userEmail" : user회원가입시 기입한 Email
+        "userEmail" : user회원가입시 기입한 Email,
         "userPassword" : user회원가입시 기입한 Password
     }
     ```
@@ -160,7 +160,7 @@
     
     ```json
     {    
-    		"userName" : user회원가입시 기입한 Name
+    	"userName" : user회원가입시 기입한 Name,
         "userPhoneNumber" : user회원가입시 기입한 PhoneNumber
     }
     ```
@@ -184,9 +184,9 @@
     - **Body :  raw (json)**
     - **Request**
     
-    ```json
+    ```
     {    
-    		"userEmail" : user회원가입시 기입한 Email
+    	"userEmail" : user회원가입시 기입한 Email
         "userName" : user회원가입시 기입한 Name
     }
     ```
@@ -195,7 +195,7 @@
         - 200 OK
         
         ```json
-        	"ChgManagerPassword" : 랜덤함수 패스워드
+        "ChgManagerPassword" : 랜덤함수 패스워드
         ```
         
         - 404 NOT_FOUND
@@ -224,9 +224,9 @@
         
         ```json
         {
-            "userEmail": user회원가입시 기입한 Email
-            "userNickname": user회원가입시 기입한 Nickname
-            "userJoinDate": user회원가입시 기입한 JoinDate
+            "userEmail": user회원가입시 기입한 Email,
+            "userNickname": user회원가입시 기입한 Nickname,
+            "userJoinDate": user회원가입시 기입한 JoinDate,
             "userImg": user회원가입시 기입한 ProfileImage
         }
         ```

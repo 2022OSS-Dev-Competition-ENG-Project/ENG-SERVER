@@ -1,5 +1,11 @@
-</br>
+# ENG-SERVER
 
+>2022년 공개 SW 개발자대회\
+>**프로젝트 기간 : 2022.07 ~**
+>
+>안전불감증 솔루션
+
+</br>
 # 🪧 소개
 
 >### IOS APP 과의 관계
@@ -8,7 +14,7 @@
 >### WEB 과의 관계
 >> - [웹](https://github.com/2022OSS-Dev-Competition-ENG-Project/ENG_Web)을 통해서 매니저가 관리하는 시설물들의 정보를 확인하고 신고가 들어 왔을 사용자들의 불편한 점이나 위험해 보이는 것들을 해결해줄수 있습니다.
 
-</br></br>
+</br>
 
 # 🏆 프로젝트 컨벤션
 - 함수 네이밍을 보고 누구나 이 함수가 무엇을 의미하는지 알수 있도록 하는 것이 목표입니다.
@@ -16,7 +22,8 @@
 - 문서화를 통해 Setting이나 Return 되는 값들을 누구나 손쉽게 수정할수 있도록 하는 것이 목표 입니다.
 - 프로젝트 개발의 편의성을 위해 자동화 구축하는것이 목표 입니다.
 
-</br></br>
+</br>
+
 # 🎯 코딩 컨벤션
 1. 문서화
 2. 중복된 코드 간소화
@@ -24,7 +31,8 @@
 4. DB와 네트워크 통신 최소화
 5. 모든 함수 또는 API에 주석 작성
 
-</br></br>
+</br>
+
 # 🙇🏻 개발
 >### Develop Enviroment
 - Language  : JAVA
@@ -124,5 +132,101 @@ $ docker-compose -version
 ```shell
 $ docker pull mariadb
 ```
+- MariaDB 이미지 설치가 다 되었으면 docker-compose 설정을 해주어야 합니다.</br>docker-compose에 설정하기전 아래와 같이 디렉터리를 셋팅해주세요.
 
- 
+```
+📄 mariadb-compose.yml
+🗂 임의의 폴더
+│
++ 🗂 conf.d
+│       └── 📄 my.cnf
++ 🗂 data
+│
++ 🗂 initdb.d
+
+```
+
+- 📄 mariadb-compose.yml
+```
+ersion: "3"
+
+services:
+  db:
+    image: mariadb
+    ports:
+      - 3306:3306
+    volumes:
+      - ./db/conf.d:/etc/mysql/conf.d
+      - ./db/data:/var/lib/mysql
+      - ./db/initdb.d:/docker-entrypoint-initdb.d
+    env_file: .env
+    environment:
+      TZ: Asia/Seoul
+    networks:
+      - backend
+    restart: always
+
+networks:
+  backend:
+```
+
+- 📄 my.cnf
+```
+[client]
+default-character-set = utf8mb4
+
+[mysql]
+default-character-set = utf8mb4
+
+[mysqld]
+character-set-client-handshake = FALSE
+character-set-server           = utf8mb4
+collation-server               = utf8mb4_unicode_ci
+```
+
+- 위 처럼 모든 셋팅이 끝났다면 아래 커맨드를 입력해주세요
+```shell
+$ docker-compose -f mariadb-compose.yml up -d
+```
+- 아무 오류 잘 동작 한다면 DB 셋팅은 끝입니다.
+
+> #### Step 5
+>> 빌드
+- Intelli J에서 빌드 기능을 제공 하지만 만약 Intelli J에서 제공하는 빌드 기능을 사용하지 않는다면 따라 해주시기 바랍니다.</br><주의> build를 하기에 앞서 Gradle이 설치가 되어 있어야 Build가 가능합니다.
+
+>>gradle 설치
+
+- gralde이 설치 되어 있으신분은 이 단계를 뛰어 넘으셔도 됩니다.
+```shell
+$ wget https://services.gradle.org/distributions/gradle-7.5.1-bin.zip -P /tmp
+$ sudo unzip -d /opt/gradle /tmp/gradle-7.5.1-bin.zip
+$ sudo ln -s /opt/gradle/gradle-7.5.1 /opt/gradle/latest
+
+$ sudo vim /etc/profile.d/gradle.sh
+```
+- 아래 내용을 입력하고 저장합니다.
+```sh
+export GRADLE_HOME=/opt/gradle/latest
+export PATH=${GRADLE_HOME}/bin:${PATH}
+```
+- 다시 명령어로 Executable 권환을 부여하고 source명령어로 스크립트를 적용 시킨 설치 확인을 합니다.
+
+```shell
+$ sudo chmod +x /etc/profile.d/gradle.sh
+$ source /etc/profile.d/gradle.sh
+$ gradle -v
+
+------------------------------------------------------------
+Gradle 7.5.1
+------------------------------------------------------------
+```
+
+# 👨🏻‍💻 개발자
+<div float=left; align= center >
+<img src="https://user-images.githubusercontent.com/51457973/190268484-83958fd9-fa69-43eb-973d-25d7a7b4c535.png" width=200; float=left;></br>
+<a href="https://github.com/Jeonghoon2">[ 이정훈 JeonghunLee : Manager-Service, Facility-Service 개발 ]</a>
+</div>
+<div float=left; align=center>
+
+<a href="https://github.com/ChoiBoHyeon">[ 최보현 BohyeonChoi : User-Service 개발 ]</a>
+</div>

@@ -41,13 +41,13 @@
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         회원가입 완료
         ```
         
         - 401 *UNAUTHORIZED*
         
-        ```json
+        ```
         회원가입 시도중 오류가 발생했습니다. 이메일 인증과 닉네임 중복체크를 확인해주세요.
         ```
         
@@ -56,20 +56,20 @@
     - **Method : GET**
     - **Request**
     
-    ```json
+    ```
     "userEmail" : Email을 통하여 중복 체크
     ```
     
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         사용 가능한 이메일입니다.\n 인증코드가 발송 되었습니다.
         ```
         
         - 409 *CONFLICT*
         
-        ```json
+        ```
         사용중인 이메일입니다.
         ```
         
@@ -79,7 +79,7 @@
     - **Method : GET**
     - **Request**
     
-    ```json
+    ```
     "nickname" : 중복체크할 닉네임,
     "email" : 중복체크가 성공되면 해당 ID의 닉네임으로 지정
     ```
@@ -87,13 +87,13 @@
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         사용 가능한 닉네임입니다.
         ```
         
         - 409 *CONFLICT*
         
-        ```json
+        ```
         사용중인 닉네임입니다.
         ```
         
@@ -102,7 +102,7 @@
     - **Method : GET**
     - **Request**
     
-    ```json
+    ```
     "email" : 유저가 Email 중복 체크때 사용한 이메일,
     "code" : 중복체크를 위한 코드번호
     ```
@@ -110,13 +110,13 @@
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         이메일 인증이 완료 되었습니다.
         ```
         
         - 203 *NON_AUTHORITATIVE_INFORMATION*
         
-        ```json
+        ```
         잘못된 인증 코드 입니다.
         ```
         
@@ -126,7 +126,7 @@
     - **Body :  raw (json)**
     - **Request**
     
-    ```json
+    ```
     {
         "userEmail" : user회원가입시 기입한 Email,
         "userPassword" : user회원가입시 기입한 Password
@@ -136,19 +136,19 @@
     - **Response**
         - 200 OK
         
-        ```json
+        ```
             "userUuid": user회원가입할때 지정된 Uuid
         ```
         
         - 401 *UNAUTHORIZED*
         
-        ```json
+        ```
         아이디가 틀렸습니다.
         ```
         
         - 401 *UNAUTHORIZED*
         
-        ```json
+        ```
         비밀번호가 틀렸습니다.
         ```
         
@@ -158,7 +158,7 @@
     - **Body :  raw (json)**
     - **Request**
     
-    ```json
+    ```
     {    
     	"userName" : user회원가입시 기입한 Name,
         "userPhoneNumber" : user회원가입시 기입한 PhoneNumber
@@ -168,13 +168,13 @@
     - **Response**
         - 200 OK
         
-        ```json
+        ```
           "userEmail" : user회원가입시 기입한 Email
         ```
         
         - 404 *NOT_FOUND*
         
-        ```json
+        ```
         입력하신 정보가 없습니다.
         ```
         
@@ -194,19 +194,19 @@
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         "ChgManagerPassword" : 랜덤함수 패스워드
         ```
         
         - 404 NOT_FOUND
         
-        ```json
+        ```
         이메일을 다시 확인해주세요.
         ```
         
         - 404 NOT_FOUND
         
-        ```json
+        ```
         이름을 다시 확인해주세요.
         ```
         
@@ -215,14 +215,14 @@
     - **Method : GET**
     - **Request**
     
-    ```json
+    ```
     "uuid" : user회원가입할때 지정된 Uuid
     ```
     
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         {
             "userEmail": user회원가입시 기입한 Email,
             "userNickname": user회원가입시 기입한 Nickname,
@@ -236,14 +236,14 @@
     - **Method : GET**
     - **Request**
     
-    ```json
+    ```
         "uuid": user회원가입할때 지정된 Uuid
     ```
     
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         userName + 님의 비밀번호가 변경되었습니다.
         ```
         
@@ -253,7 +253,7 @@
     - **Body :  form-data**
     - **Request**
     
-    ```json
+    ```
     "uuid": user회원가입할때 지정된 Uuid
     
     KEY : images
@@ -263,7 +263,7 @@
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         이미지 저장을 성공했습니다.
         ```
         
@@ -272,14 +272,14 @@
     - **Method : GET**
     - **Request**
     
-    ```json
+    ```
     "uuid": user회원가입할때 지정된 Uuid
     ```
     
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         fileArray // userImage 출력
         ```
         
@@ -292,7 +292,7 @@
     - **Body :  raw (json)**
     - **Request**
     
-    ```json
+    ```
     {
     	"managerEmail" : manager의 ID에 해당
     	"managerPassword" : manager의 Password
@@ -305,19 +305,19 @@
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         회원가입 완료
         ```
         
         - 401 *UNAUTHORIZED*
         
-        ```json
+        ```
         회원가입 시도중 오류가 발생했습니다. 이메일 인증과 닉네임 중복체크를 확인해주세요.
         ```
         
         - 400 *BAD_REQUEST*
         
-        ```json
+        ```
         ResponsePhoneNum + 는 이미 회원가입된 전화번호입니다.
         ```
         
@@ -326,20 +326,20 @@
     - **Method : GET**
     - **Request**
     
-    ```json
+    ```
     "managerEmail" : Email을 통하여 중복 체크
     ```
     
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         사용 가능한 이메일입니다.\n 인증코드가 발송 되었습니다.
         ```
         
         - 409 *CONFLICT*
         
-        ```json
+        ```
         사용중인 이메일입니다.
         ```
         
@@ -349,7 +349,7 @@
     - **Method : GET**
     - **Request**
     
-    ```json
+    ```
     "nickname" : 중복체크할 닉네임,
     "email" : 중복체크가 성공되면 해당 ID의 닉네임으로 지정
     ```
@@ -357,13 +357,13 @@
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         사용 가능한 닉네임입니다.
         ```
         
         - 409 *CONFLICT*
         
-        ```json
+        ```
         사용중인 닉네임입니다.
         ```
         
@@ -372,7 +372,7 @@
     - **Method : GET**
     - **Request**
     
-    ```json
+    ```
     "email" : 유저가 Email 중복 체크때 사용한 이메일,
     "code" : 중복체크를 위한 코드번호
     ```
@@ -380,13 +380,13 @@
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         이메일 인증이 완료 되었습니다.
         ```
         
         - 203 *NON_AUTHORITATIVE_INFORMATION*
         
-        ```json
+        ```
         잘못된 인증 코드 입니다.
         ```
         
@@ -396,7 +396,7 @@
     - **Body :  raw (json)**
     - **Request**
     
-    ```json
+    ```
     {
       "managerEmail" : manager회원가입시 기입한 Email
       "managerPassword" : manager회원가입시 기입한 Password
@@ -406,7 +406,7 @@
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         {
           "managerUuid": manager회원가입할때 지정된 Uuid
           "managerName": manager회원가입시 기입한 Name
@@ -415,13 +415,13 @@
         
         - 401 *UNAUTHORIZED*
         
-        ```json
+        ```
         아이디가 틀렸습니다.
         ```
         
         - 401 *UNAUTHORIZED*
         
-        ```json
+        ```
         비밀번호가 틀렸습니다.
         ```
         
@@ -431,7 +431,7 @@
     - **Body :  raw (json)**
     - **Request**
     
-    ```json
+    ```
     {
       "managerName" : manager회원가입시 기입한 Name
       "managerPhoneNumber" : manager회원가입시 기입한 PhoneNumber
@@ -441,13 +441,13 @@
     - **Response**
         - 200 OK
         
-        ```json
+        ```
           "managerEmail" : manager회원가입시 기입한 Email
         ```
         
         - 404 *NOT_FOUND*
         
-        ```json
+        ```
         입력하신 정보가 없습니다.
         ```
         
@@ -456,7 +456,7 @@
     - **Method : POST**
     - **Request**
     
-    ```json
+    ```
     {
       "managerEmail" : manager회원가입시 기입한 Email
       "managerName" : manager회원가입시 기입한 Name
@@ -466,19 +466,19 @@
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         	"ChgManagerPassword" : 랜덤함수 패스워드
         ```
         
         - 404 NOT_FOUND
         
-        ```json
+        ```
         이메일을 다시 확인해주세요.
         ```
         
         - 404 NOT_FOUND
         
-        ```json
+        ```
         이름을 다시 확인해주세요.
         ```
         
@@ -487,14 +487,14 @@
     - **Method : GET**
     - **Request**
     
-    ```json
+    ```
         "uuid": manager회원가입할때 지정된 Uuid
     ```
     
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         managerName + 님의 비밀번호가 변경되었습니다.
         ```
         
@@ -511,7 +511,7 @@
     
     **Request Data**
     
-    ```json
+    ```
     {
         "facilityOwner": "Test Owner",
         "facilityName" : "Test Name",
@@ -523,19 +523,19 @@
     
     - **400 BAD REQUEST**
     
-    ```json
+    ```
     매니저의 계정만 시설물을 등록할수 있습니다.
     ```
     
     - **409 CONFLICT**
     
-    ```json
+    ```
     입력하신 주소로 이미 등록된 시설이 있습니다.
     ```
     
     - **200 OK**
     
-    ```json
+    ```
     정상적으로 시설물이 등록되었습니다.
     ```
     
@@ -544,7 +544,7 @@
     - **Method** : GET
     - **Request**
     
-    ```json
+    ```
     "managerName" : 매니저 이름
     "managerPhoneNumber" : 매니저 전화번호
     ```
@@ -552,13 +552,13 @@
     - **Response**
         - 400 BAD REQUEST
         
-        ```json
+        ```
         입력하신 데이터와 일치하는 매니저를 찾을수 없습니다.
         ```
         
         - 200 OK
         
-        ```json
+        ```
         managerUuid
         ```
         
@@ -567,7 +567,7 @@
     - **Method :** GET
     - **Request**
     
-    ```json
+    ```
     "managerUuid" : 매니저 아이디
     "facilityNo" : 시설물 번호
     ```
@@ -575,13 +575,13 @@
     - **Response**
         - 400 BAD REQUEST
         
-        ```json
+        ```
         시설물의 주인만 시설물을 삭제 하실수 있습니다.
         ```
         
         - 200 OK
         
-        ```json
+        ```
         정상적으로 시설물 삭제가 되었습니다.
         ```
         
@@ -590,32 +590,32 @@
     - **Method :** POST
     - **Request**
     
-    ```json
+    ```
     "type" : 유저와 매저 구별을 위함 - **매니저는 mg** / **유저는 us**
     ```
     
     - **Response**
         - 400 BAD REQUEST
         
-        ```json
+        ```
         시설물에 가입 하려는 사용자가 존재 하지 않습니다.
         ```
         
         - 404 NOT FOUND
         
-        ```json
+        ```
         가입 하실려는 시설물은 존재하지 않습니다.
         ```
         
         - 409 CONFLICT
         
-        ```json
+        ```
         이미 가입하신 시설물입니다.
         ```
         
         - 200 OK
         
-        ```json
+        ```
         시설물에 정상적으로 가입되셨습니다.
         ```
         
@@ -625,7 +625,7 @@
     - **Body : raw (json)**
     - **Request**
     
-    ```json
+    ```
     {
         "facilityName" : "대구가톨릭대학교",
         "facilityAddress" : "경상북도 경산시 하양읍 하양로 13-13"
@@ -635,7 +635,7 @@
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         시설물에 정상적으로 가입되셨습니다.
         ```
         
@@ -644,7 +644,7 @@
     - **Method : GET**
     - **Request**
     
-    ```json
+    ```
     "uuid" : 매니저, 유저 UUID
     "type" : 유저와 매저 구별을 위함 - **매니저는 mg** / **유저는 us**
     ```
@@ -652,7 +652,7 @@
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         {
                 "uuid": "",
                 "name": "",
@@ -669,7 +669,7 @@
     - **Method : GET**
     - **Request**
     
-    ```json
+    ```
     "type" : 유저와 매저 구별을 위함 - **매니저는 mg** / **유저는 us**
     "uuid" : 매니저, 유저 UUID
     "facilityNo" : 시설물 번호
@@ -678,13 +678,13 @@
     - **Response**
         - 404 NOT FOUND
         
-        ```json
+        ```
         삭제 하려는 시설물이 없습니다.
         ```
         
         - 200 OK
         
-        ```json
+        ```
         정상적으로 가입한 시설물이 삭제 되었습니다.
         ```
         
@@ -697,7 +697,7 @@
     - **Body : form-data**
     - **Request**
     
-    ```json
+    ```
     // content-Type : application/json
     KEY : facilityContentDto
     VALUE : {
@@ -716,7 +716,7 @@
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         게시물이 정상적으로 등록되었습니다.
         ```
         
@@ -725,7 +725,7 @@
     - **Method : GET**
     - **Request**
     
-    ```json
+    ```
     "userUuid" : 사용자 Uuid or 매니저 Uuid
     "contentId" : 게시물 번호
     ```
@@ -733,7 +733,7 @@
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         {
             "contentNum": 0,
             "contentTitle": "Test Title",
@@ -753,7 +753,7 @@
     - **Method : POST**
     - **Request**
     
-    ```json
+    ```
     {
     	"userUuid" : " ",
     	"contentNum" : " "
@@ -763,7 +763,7 @@
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         user_like_content에 해당 데이터가 존재 하지 않을 때
         "해당 게시물을 좋아요 처리가 되었습니다." 
         user_like_content에 해당 데이터가 존재 할 때
@@ -774,14 +774,14 @@
     - **Method : POST**
     - **Request**
     
-    ```json
+    ```
     "contentNum" : 게시물 번호
     ```
     
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         0
         ```
         
@@ -790,7 +790,7 @@
     - **Method : GET**
     - **Request**
     
-    ```json
+    ```
     // Body : raw (json)
     
     "uuid" : 유저 UUID,
@@ -800,13 +800,13 @@
     - **Response**
         - 400 BAD REQUEST
         
-        ```json
+        ```
         게시물 작성자만 삭제 하실수 있습니다.
         ```
         
         - 200 OK
         
-        ```json
+        ```
         게시물을 정상적으로 삭제 하였습니다.
         ```
         
@@ -815,7 +815,7 @@
     - **Method : GET**
     - **Request**
     
-    ```json
+    ```
     // Body : raw (json)
     
     "facilityNo" : 유저 UUID,
@@ -825,7 +825,7 @@
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         게시물을 정상적으로 삭제 하였습니다.
         ```
         
@@ -834,7 +834,7 @@
     - **Method : GET**
     - **Request**
     
-    ```json
+    ```
     "facilityNo" : 시설물 번호,
     "type" : 게시물 타입 - 0 = 일반 게시물, 1 = 공지 사항
     ```
@@ -842,7 +842,7 @@
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         [
             {
                 "contentNum": 0,
@@ -892,7 +892,7 @@
     - **Method : GET**
     - **Request**
     
-    ```json
+    ```
     "facilityNo" : 시설물 번호,
     "type" : 게시물 타입 - 0 = 일반 게시물, 1 = 공지 사항
     "position" : 페이지 넘버
@@ -901,7 +901,7 @@
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         [
             {
                 "contentNum": 0,
@@ -951,14 +951,14 @@
     - **Method : GET**
     - **Request**
     
-    ```json
+    ```
     "userUuid" : 사용자 번호
     ```
     
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         [
             {
                 "contentNum": 0,
@@ -998,14 +998,14 @@
     - **Method : GET**
     - **Request**
     
-    ```json
+    ```
     "userUuid" : 사용자 번호
     ```
     
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         [
             {
                 "contentNum": 0,
@@ -1046,7 +1046,7 @@
     - **Body : raw( json )**
     - **Request**
     
-    ```json
+    ```
     {
         "commentText" : "CommentTest",
         "contentNum" : "0",
@@ -1058,7 +1058,7 @@
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         게시물에 정상적으로 댓글이 등록 되었습니다.
         ```
         
@@ -1067,7 +1067,7 @@
     - **Method : GET**
     - **Request**
     
-    ```json
+    ```
     "contentNum" : 게시물 번호,
     "userUuid" : 유저 Uuid
     ```
@@ -1075,7 +1075,7 @@
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         정상적으로 댓글이 삭제 되었습니다.
         ```
         
@@ -1084,14 +1084,14 @@
     - **Method : GET**
     - **Request**
     
-    ```json
+    ```
     "contentNum" : 게시물 번호
     ```
     
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         	{
         		"commentNum": 0,
         		"commentText": "commentTest",
@@ -1117,7 +1117,7 @@
     - **Body : form-data**
     - **Request**
     
-    ```json
+    ```
     // content-type : appliciation/json
     KEY : reportDto 
     VALUE : {
@@ -1135,7 +1135,7 @@
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         신고가 정상적으로 접수 되었습니다.
         ```
         
@@ -1144,14 +1144,14 @@
     - **Method : GET**
     - **Request**
     
-    ```json
+    ```
     "reportNum" : 신고 번호
     ```
     
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         {
             "reportNum": 0,
             "reportTitle": "ReportTitleTest",
@@ -1170,14 +1170,14 @@
     - **Method : GET**
     - **Request**
     
-    ```json
+    ```
     "userUuid" : 유저 Uuid
     ```
     
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         [
             {
                 "reportNum": 0,
@@ -1224,14 +1224,14 @@
     - **Method : GET**
     - **Request**
     
-    ```json
+    ```
     "userUuid" : 유저 Uuid
     ```
     
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         [
             {
                 "reportNum": 0,
@@ -1278,14 +1278,14 @@
     - **Method : GET**
     - **Request**
     
-    ```json
+    ```
     "userUuid" : 유저 Uuid
     ```
     
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         [
             {
                 "reportNum": 0,
@@ -1332,14 +1332,14 @@
     - **Method : GET**
     - **Request**
     
-    ```json
+    ```
     "facilityNo" : 시설물 Uuid
     ```
     
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         [
             {
                 "reportNum": 0,
@@ -1386,7 +1386,7 @@
     - **Method : GET**
     - **Request**
     
-    ```json
+    ```
     "reportNum" : 신고 번호
     "status" : 0 = 미처리, 1 = 처리, 2 = 반려
     ```
@@ -1394,7 +1394,7 @@
     - **Response**
         - 200 OK
         
-        ```json
+        ```
         status = 0 일때
         "미처리 되었습니다"
         status = 1 일때

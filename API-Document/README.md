@@ -28,7 +28,7 @@
     - **Body :  raw (json)**
     - **Request**
     
-    ```
+    ```jsonc
     {
     	"userEmail" : user의 ID에 해당
     	"userPassword" : user의 Password

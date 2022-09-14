@@ -75,7 +75,7 @@
 ```
 
 </br></br>
->__step 1__
+>#### __step 1__
 >> __툴 설치__
 >
 >>프로젝트를 시작하기 앞서 개발하기전 위 개발 환경과 동일하게 해주시기 바랍니다.
@@ -83,7 +83,7 @@
 - 우선 자신이 개발을 할수 있는 툴이 있다면 이 단계는 넘어 가도 좋습니다. 만약 자신이 개발을 하는 툴이 없다면 이 [링크](https://www.jetbrains.com/ko-kr/idea/download/)에 들어가 다운받아 주세요.
 - Intelli J 설치가 다 되었다면 이제 아래 터미널을 열고 소스 파일을 다운받아 열어 주세요.
 
->__Step 2__
+>#### __Step 2__
 >> __소스 파일 설치__
 
 - 아래의 명령어를 통해 자신이 원하는 디렉토리 안에 소스 파일을 다운 받으실수 있습니다.
@@ -91,7 +91,7 @@
 $ git clone https://github.com/2022OSS-Dev-Competition-ENG-Project/ENG-SERVER.git
 ```
 
->__Step 3__
+>#### __Step 3__
 >>Docker 설치
 - MariaDB를 설치 하기 이전에 자신의 컴퓨터의 자원 관리를 위해 Docker Desktop을 먼저 설치 해줍니다.
     - [Dokcer Desktop - mac](https://docs.docker.com/desktop/install/mac-install/)
@@ -102,6 +102,11 @@ $ git clone https://github.com/2022OSS-Dev-Competition-ENG-Project/ENG-SERVER.gi
 ```shell
 # Docker 실행
 $ docker run -d -p 80:80 docker/getting-started
+
+# 도커 권환 설정후 재 실행
+$ sudo usermod -aG docker ${USER}
+$ sudo service docker restart
+
 
 # Dcoker-Compose 설치
 $ sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
@@ -114,10 +119,10 @@ $ docker-compose -version
 ```
 - Docker가 정상적으로 실행되고 docker-compose의 설치 확인이 완료 되면 Docker Install은 끝입니다.
 
->Step 4
+>#### __Step 4__
 >> MariaDB 설치
 ```shell
-
+$ docker pull mariadb
 ```
 
  

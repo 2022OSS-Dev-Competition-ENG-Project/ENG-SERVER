@@ -51,14 +51,14 @@ public class UserController {
     @GetMapping("/user-service/register/check/email/{userEmail}")
     public ResponseEntity registerEmailCheck(
             @PathVariable("userEmail")String userEmail) throws NullPointerException{
-        try {
-            userService.registerEmailCheck(userEmail);
-        } catch (NullPointerException e) {
+        UserDto userDto = userService.registerEmailCheck(userEmail);
+        if (userDto == null){
             String temporaryUuid = userService.RandomObject();
-            userService.EmailConform(userEmail, temporaryUuid);
+            userService.EmailConform(userEmail,temporaryUuid);
             return ResponseEntity.status(HttpStatus.OK).body(SignUpConstant.EMAIL_CHECK_CLEAR);
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(SignUpConstant.EMAIL_CHECK_FAIL);
         }
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(SignUpConstant.EMAIL_CHECK_FAIL);
     }
 
     /* 닉네임 중복 체크 */

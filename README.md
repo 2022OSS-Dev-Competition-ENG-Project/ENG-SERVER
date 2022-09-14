@@ -221,12 +221,20 @@ Gradle 7.5.1
 ------------------------------------------------------------
 ```
 
+>> ENG Shell
+- gradle 설치가 끝났다면 맨 처음 다운받은 소스코드 디렉터리로 이동합니다.</br> 아래 명령어를 사용하여 빌드와 서버 구동을 쉽게 할수 있습니다.
+```shell
+# 명령어
+
+$ ./ENG-Tool build [manager] or [user]
+$ ./ENG-Tool start [manager] or [user]
+```
+
 # 👨🏻‍💻 개발자
 <div float=left; align= center >
 <img src="https://user-images.githubusercontent.com/51457973/190268484-83958fd9-fa69-43eb-973d-25d7a7b4c535.png" width=200; float=left;></br>
 <a href="https://github.com/Jeonghoon2">[ 이정훈 JeonghunLee : Manager-Service, Facility-Service 개발 ]</a>
 </div>
 <div float=left; align=center>
-
 <a href="https://github.com/ChoiBoHyeon">[ 최보현 BohyeonChoi : User-Service 개발 ]</a>
 </div>

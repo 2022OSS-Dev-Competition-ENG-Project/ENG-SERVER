@@ -61,20 +61,19 @@ public class UserController {
         }
     }
 
-    /* 닉네임 중복 체크 */
+    /* 닉네임 중복 확인 */
     @GetMapping("/user-service/register/check/nickname/{nickname}/{email}")
     public ResponseEntity registerNicknameCheck(
             @PathVariable("nickname")String nickname,
             @PathVariable("email")String email){
-        try {
-            userService.registerNickNameCheck(nickname);
-        } catch (NullPointerException e) {
+        UserDto userDto = userService.registerNickNameCheck(nickname);
+        if (userDto == null){
             userService.NickNameCheck(nickname,email);
             return ResponseEntity.status(HttpStatus.OK).body(SignUpConstant.NICKNAME_CHECK_CLEAR);
+        }else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(SignUpConstant.NICKNAME_CHECK_FAIL);
         }
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(SignUpConstant.NICKNAME_CHECK_FAIL);
     }
-
 
     /* 이메일 코드 확인 */
     @GetMapping("/user-service/register/check/email/{email}/{code}")

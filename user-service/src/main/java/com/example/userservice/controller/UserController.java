@@ -75,7 +75,6 @@ public class UserController {
         }
     }
 
-
     /* 이메일 코드 확인 */
     @GetMapping("/user-service/register/check/email/{email}/{code}")
     public ResponseEntity emailCheck(@PathVariable("email") String email,

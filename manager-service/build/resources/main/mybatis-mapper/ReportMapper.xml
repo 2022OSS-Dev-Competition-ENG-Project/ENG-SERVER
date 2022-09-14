@@ -88,10 +88,15 @@
 
     <!-- 신고 처리 현황 별 리스트 -->
     <select id="getFacilityReport" resultMap="reportListInfo">
-        select *
-        FROM facility_report
-        WHERE facility_no = #{facilityNo} AND report_status = #{searchValue}
-        ORDER BY report_num DESC LIMIT 5;
+        select fr.report_num,
+               fr.report_title,
+               fr.report_type,
+               u.user_nickname,
+               fr.report_date
+        FROM (  SELECT * FROM facility_report
+                WHERE facility_no = #{facilityNo} AND report_status = #{searchValue}) as fr
+        INNER JOIN user u ON fr.user_uuid = u.user_uuid
+        ORDER BY report_num DESC;
     </select>
 
     <!-- 신고 리스트 불러오기 - 매니저 메인페이지에서 5개 -->

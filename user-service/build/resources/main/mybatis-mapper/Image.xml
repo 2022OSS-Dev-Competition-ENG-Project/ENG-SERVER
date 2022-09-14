@@ -18,6 +18,7 @@
         <result property="user_img" column="userImg"/>
     </resultMap>
 
+    <!--User ProfileImage 저장-->
     <update id="upload" parameterType="com.example.userservice.dto.UserDto">
         UPDATE user
         SET user_img = #{userImg}

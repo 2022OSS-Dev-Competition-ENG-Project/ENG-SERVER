@@ -13,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.example.managerservice.constant.ReportConstant.REPORT_REGISTER_COMPLETE;
+
 @Slf4j
 @RestController
 @RequestMapping("/api")
@@ -28,6 +30,7 @@ public class ReportController {
         this.reportService = reportService;
     }
 
+    /* 신고 하기 */
     @PostMapping(value = "/report/register")
     public ResponseEntity reportRegister(@RequestPart ReportDto reportDto,
                                          @RequestPart(required = false) List<MultipartFile> files) throws Exception{
@@ -57,7 +60,7 @@ public class ReportController {
             reportDto.setReportImg(sb.toString());
             reportService.reportImgUpdate(rd,reportDto.getReportImg());
         }
-        return ResponseEntity.status(HttpStatus.OK).body("ok");
+        return ResponseEntity.status(HttpStatus.OK).body(REPORT_REGISTER_COMPLETE);
     }
 
     /* 신고 상세 보기 */
@@ -90,12 +93,6 @@ public class ReportController {
     public ResponseEntity getReportFacilityLt(@PathVariable("facilityNo") String facilityNo){
         return ResponseEntity.status(HttpStatus.OK).body(reportService.getReportFacilityLt(facilityNo));
     }
-
-    /* 신고 리스트 불러오기 */
-//    @GetMapping("/report/list/mg/{facilityNo}")
-//    public ResponseEntity getReportFacility(@PathVariable("facilityNo") String facilityNo){
-//        return ResponseEntity.status(HttpStatus.OK).body(reportService.getReportFacility(facilityNo));
-//    }
 
     /* 신고 처리 하기 */
     @GetMapping("/report/{reportNum}/{status}")

@@ -38,7 +38,7 @@ public class FacilityContentConstant {
     public static final String COMMENT_REGISTER_COMPLETE = "게시물에 정상적으로 댓글이 등록 되었습니다.";
     public static final String COMMENT_REGISTER_UPDATE = "게시물에 댓글이 수정되었습니다.";
     public static final String COMMENT_REGISTER_UPDATE_FAIL = "수정 할수 없는 댓글입니다.";
-    public static final String COMMENT_DELETE_COMPLETE = "정상적으로 ";
+    public static final String COMMENT_DELETE_COMPLETE = "정상적으로 댓글이 삭제 되었습니다.";
 
     /* 게시물 좋아요 */
     public static final String COMMENT_LIKE = "해당 게시물을 좋아요 처리가 되었습니다.";

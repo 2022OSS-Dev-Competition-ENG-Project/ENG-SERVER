@@ -36,34 +36,35 @@ public class QRService {
         this.imageService = imageService;
     }
 
-    public String generateQRCodeImage(String id,String name,String address) throws WriterException, IOException {
+    /* QR 코드 생성 */
+    public String generateQRCodeImage(String id, String name, String address) throws WriterException, IOException {
 
 
         String url = QR_CODE_GENERATE_URL
-                .replaceAll("\\$id",id)
-                .replaceAll("\\$name",name)
-                .replaceAll("\\$address",address);
+                .replaceAll("\\$id", id)
+                .replaceAll("\\$name", name)
+                .replaceAll("\\$address", address);
 
-        String codeUrl = new String(url.getBytes(StandardCharsets.UTF_8),StandardCharsets.ISO_8859_1);
+        String codeUrl = new String(url.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
 
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = qrCodeWriter.encode(codeUrl, BarcodeFormat.QR_CODE, QR_CODE_HEIGHT, QR_CODE_WIDTH);
 
-        MatrixToImageConfig matrixToImageConfig = new MatrixToImageConfig(QR_CODE_COLOR,QR_CODE_BACKGROUND_COLOR);
-        BufferedImage bufferedImage = MatrixToImageWriter.toBufferedImage(bitMatrix,matrixToImageConfig);
+        MatrixToImageConfig matrixToImageConfig = new MatrixToImageConfig(QR_CODE_COLOR, QR_CODE_BACKGROUND_COLOR);
+        BufferedImage bufferedImage = MatrixToImageWriter.toBufferedImage(bitMatrix, matrixToImageConfig);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         String fileName = sdf.format(new Date());
-        File temp = new File(QR_CODE_SAVE_PATH + fileName + name + address +".png");
+        File temp = new File(QR_CODE_SAVE_PATH + fileName + name + address + ".png");
 
 //        imageService.saveQRImage(bufferedImage,temp);
-        ImageIO.write(bufferedImage,"png",temp);
-        String saveDBUrl = QR_CODE_SAVE_PATH_DB + fileName + name + address +".png";
+        ImageIO.write(bufferedImage, "png", temp);
+        String saveDBUrl = QR_CODE_SAVE_PATH_DB + fileName + name + address + ".png";
         return saveDBUrl;
     }
 
     /* QR 불러오기 */
-    public String getQRCode(GetQrLocationVo qv){
+    public String getQRCode(GetQrLocationVo qv) {
         log.info(qv.toString());
         return qrMapper.getQRCode(qv.getFacilityName(), qv.getFacilityAddress());
     }

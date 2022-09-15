@@ -5,7 +5,7 @@
 
 <mapper namespace="com.example.managerservice.mapper.FacilityCommentMapper">
 
-    <resultMap type="com.example.managerservice.dto.FacilityCommentDto" id="commentInfo" >
+    <resultMap type="com.example.managerservice.dto.FacilityCommentDto" id="commentInfo">
         <result property="comment_text" column="commentText"/>
         <result property="comment_like" column="commentLike"/>
         <result property="comment_dislike" column="commentDisLike"/>
@@ -15,7 +15,7 @@
         <result property="facility_no" column="facilityUuid"/>
     </resultMap>
 
-    <resultMap type="com.example.managerservice.vo.ContentCommentVo" id="getCommentInfo" >
+    <resultMap type="com.example.managerservice.vo.ContentCommentVo" id="getCommentInfo">
         <result property="comment_num" column="contentNum"/>
         <result property="comment_text" column="contentTitle"/>
         <result property="comment_date" column="contentDate"/>
@@ -38,31 +38,34 @@
     <update id="updateComment" parameterType="com.example.managerservice.dto.FacilityCommentDto">
         update facility_content_comment
         set comment_text = #{commentText}
-        where comment_num = #{commentNum} AND user_uuid = #{userUuid}
+        where comment_num = #{commentNum}
+          AND user_uuid = #{userUuid}
     </update>
 
     <delete id="deleteComment">
         delete
         from facility_content_comment
-        where comment_num = #{commentNum} AND user_uuid = #{userUuid}
+        where comment_num = #{commentNum}
+          AND user_uuid = #{userUuid}
     </delete>
 
     <select id="getComment" resultMap="getCommentInfo">
-    SELECT fcc.comment_num,
-           fcc.comment_text,
-           fcc.comment_date,
-           u.user_uuid,
-           u.user_nickname
-    FROM( SELECT * FROM facility_content_comment
-          WHERE content_num = #{contentNum}
-        ) AS fcc
-            INNER JOIN
-        user u
-        ON fcc.user_uuid = u.user_uuid;
+        SELECT fcc.comment_num,
+               fcc.comment_text,
+               fcc.comment_date,
+               u.user_uuid,
+               u.user_nickname
+        FROM (SELECT *
+              FROM facility_content_comment
+              WHERE content_num = #{contentNum}) AS fcc
+                 INNER JOIN
+             user u
+             ON fcc.user_uuid = u.user_uuid;
     </select>
 
-    <insert id="registerUser" >
-        insert into user (user_uuid,) values (#{userUuid},)
+    <insert id="registerUser">
+        insert into user (user_uuid,)
+        values (#{userUuid},)
     </insert>
 
 </mapper>

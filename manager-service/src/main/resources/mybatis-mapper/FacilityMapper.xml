@@ -5,7 +5,7 @@
 
 <mapper namespace="com.example.managerservice.mapper.FacilityMapper">
 
-    <resultMap type="com.example.managerservice.dto.FacilityDto" id="facilityInfo" >
+    <resultMap type="com.example.managerservice.dto.FacilityDto" id="facilityInfo">
         <result property="facility_no" column="facilityNo"/>
         <result property="facility_name" column="facilityName"/>
         <result property="facility_address" column="facilityAddress"/>
@@ -39,20 +39,16 @@
 
     <!-- 시설물 등록하기 -->
     <insert id="registerFacility" parameterType="com.example.managerservice.dto.FacilityDto">
-        INSERT INTO facility (
-            facility_no,
-            facility_name,
-            facility_address,
-            facility_qr_location,
-            facility_owner
-        )
-        values (
-                   #{facilityNo},
-                   #{facilityName},
-                   #{facilityAddress},
-                   #{facilityQrLocation},
-                   #{facilityOwner}
-               )
+        INSERT INTO facility (facility_no,
+                              facility_name,
+                              facility_address,
+                              facility_qr_location,
+                              facility_owner)
+        values (#{facilityNo},
+                #{facilityName},
+                #{facilityAddress},
+                #{facilityQrLocation},
+                #{facilityOwner})
     </insert>
 
     <select id="validManager" resultType="java.lang.Integer">
@@ -80,11 +76,9 @@
     <!-- 시설물 가입하기 - USER & MANAGER-->
     <insert id="joinFacility" parameterType="com.example.managerservice.dto.FacilityJoinDto">
         INSERT INTO ${table}
-        values (
-                   #{uuid},
-                   #{facilityNo},
-                    0
-               );
+        values (#{uuid},
+                #{facilityNo},
+                0);
     </insert>
 
     <!-- 시설물 가입 - 시설물 존재 유무 -->
@@ -98,7 +92,8 @@
     <select id="conflictJoinValidFacility" resultType="java.lang.Integer">
         select if(count(*) = 1, 1, 0)
         FROM ${table}
-        WHERE use_facility = #{facilityNo} AND ${userType} = #{userUuid};
+        WHERE use_facility = #{facilityNo}
+          AND ${userType} = #{userUuid};
     </select>
 
     <!-- 시설물 가입 - 사용자 확인 -->
@@ -109,39 +104,41 @@
     </select>
 
     <update id="registerManager">
-        update manager set facility_no = #{facilityNo}
+        update manager
+        set facility_no = #{facilityNo}
         where manager_uuid = #{facilityOwner}
     </update>
 
     <!-- 내가 가입한 시설물 불러오기 -->
     <select id="getMyFacilityList" resultMap="facilityList">
-        select uuf.${colum} as uuid,
+        select uuf.${colum}   as uuid,
                u.manager_name as name,
                uuf.use_facility,
                uuf.is_liked,
-               f.facility_name ,
+               f.facility_name,
                f.facility_address,
                f.facility_owner
-        From(
-                select * from ${table}
-                where ${colum} = #{uuid}
-            ) as uuf
-                INNER JOIN facility f ON uuf.use_facility  = f.facility_no
-                LEFT OUTER JOIN manager u ON u.manager_uuid = f.facility_owner
+        From (select *
+              from ${table}
+              where ${colum} = #{uuid}) as uuf
+                 INNER JOIN facility f ON uuf.use_facility = f.facility_no
+                 LEFT OUTER JOIN manager u ON u.manager_uuid = f.facility_owner
     </select>
 
     <!-- 내가 가입한 시설물 삭제하기 -->
     <delete id="deleteMyFacility">
         delete
         from ${table}
-        where ${colum} = #{uuid} AND use_facility = #{facilityNo};
+        where ${colum} = #{uuid}
+          AND use_facility = #{facilityNo};
     </delete>
 
     <!-- 내가 가입한 시설물 삭제 할수 있는지 검증 -->
     <select id="validJoinFacility" resultType="java.lang.Integer">
-        select if(count(*) = 1, 1,0)
+        select if(count(*) = 1, 1, 0)
         from ${table}
-        where ${colum} = #{uuid} AND use_facility = #{facilityNo};
+        where ${colum} = #{uuid}
+          AND use_facility = #{facilityNo};
     </select>
 
     <!-- 좋이요 -->
@@ -149,20 +146,23 @@
         <![CDATA[
         update user_use_facility
         set is_liked = ${value}
-        where user_uuid = #{userUuid} AND use_facility = #{useFacility}
+        where user_uuid = #{userUuid}
+          AND use_facility = #{useFacility}
         ]]>
     </update>
 
     <select id="myFacilityLikeBool" resultType="java.lang.Integer">
         select if(is_liked = 0, 0, 1)
         from user_use_facility
-        where user_uuid = #{userUuid} AND use_facility = #{useFacility}
+        where user_uuid = #{userUuid}
+          AND use_facility = #{useFacility}
     </select>
 
     <select id="deleteValidFacility" resultType="java.lang.Integer">
-        select if(COUNT(*)=0, NULL, 1)
+        select if(COUNT(*) = 0, NULL, 1)
         from manager
-        where manager_uuid = #{managerUuid} AND facility_no = #{facilityNo};
+        where manager_uuid = #{managerUuid}
+          AND facility_no = #{facilityNo};
 
     </select>
 
@@ -177,7 +177,8 @@
                manager_name,
                manager_phone_number
         from manager
-        where manager_phone_number = #{managerPhoneNumber} AND manager_name = #{managerName};
+        where manager_phone_number = #{managerPhoneNumber}
+          AND manager_name = #{managerName};
     </select>
 
     <select id="facilityManagerList" resultMap="managerListInfo">
@@ -186,9 +187,10 @@
                m.manager_phone_number,
                f.facility_name,
                f.facility_owner
-        FROM (SELECT * FROM manager_use_facility
-              WHERE use_facility = #{facilityNo} ) AS mf
-        INNER JOIN manager m ON m.manager_uuid = mf.manager_uuid
-        INNER JOIN facility f ON f.facility_no = mf.use_facility
+        FROM (SELECT *
+              FROM manager_use_facility
+              WHERE use_facility = #{facilityNo}) AS mf
+                 INNER JOIN manager m ON m.manager_uuid = mf.manager_uuid
+                 INNER JOIN facility f ON f.facility_no = mf.use_facility
     </select>
 </mapper>

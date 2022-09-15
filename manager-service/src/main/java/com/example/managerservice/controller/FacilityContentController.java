@@ -28,9 +28,6 @@ public class FacilityContentController {
     private ImageService is;
     LocalDateTime now = LocalDateTime.now();
 
-
-
-
     @Autowired
     public FacilityContentController(FacilityContentService fcs, ImageService is) {
         this.fcs = fcs;
@@ -39,9 +36,9 @@ public class FacilityContentController {
 
     /* 게시물 등록 */
     @PostMapping(value = "/facility/content/register",
-            consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity registerContent(@RequestPart FacilityContentDto facilityContentDto,
-                                          @RequestPart(required = false) List<MultipartFile> images) throws Exception{
+                                          @RequestPart(required = false) List<MultipartFile> images) throws Exception {
 
         /* 현재 시간 가져와서 시간을 저장 */
         LocalDateTime datetime = LocalDateTime.of(now.getYear(),
@@ -60,14 +57,14 @@ public class FacilityContentController {
         log.info("contentNum : " + contentNum);
 
         /* 3. 게시물 번호와 시설물 번호를 들고 오면 ImageService.saveContentImage 로 보낸다. */
-        if(facilityContentDto.getContentType() == 1) {
-            if(!images.isEmpty()){
+        if (facilityContentDto.getContentType() == 1) {
+            if (!images.isEmpty()) {
                 StringBuilder sb = new StringBuilder();
-                for(String item : is.saveContentImage(images, facilityNo, (int)contentNum)){
+                for (String item : is.saveContentImage(images, facilityNo, (int) contentNum)) {
                     sb.append(item);
                     sb.append(" ");
                 }
-            fcs.contentImageUpdate(sb.toString(), (int)contentNum);
+                fcs.contentImageUpdate(sb.toString(), (int) contentNum);
             }
         }
 
@@ -77,22 +74,21 @@ public class FacilityContentController {
     /*게시물 상세 보가*/
     @GetMapping("/facility/content/{userUuid}/{contentId}")
     public ResponseEntity contentDetailView(@PathVariable("contentId") Integer contentId,
-                                            @PathVariable("userUuid") String userUuid){
+                                            @PathVariable("userUuid") String userUuid) {
 
-        return ResponseEntity.status(HttpStatus.OK).body(fcs.contentDetailsView(contentId,userUuid));
+        return ResponseEntity.status(HttpStatus.OK).body(fcs.contentDetailsView(contentId, userUuid));
     }
 
     /* 게시물 좋아요 */
     @PostMapping("/facility/content/liked")
     public ResponseEntity contentLike(@RequestBody FacilityContentLikeDto facilityContentLikeDto) {
         /* 좋아요 여부 알아보기 */
-        if(fcs.contentLikeBool(
+        if (fcs.contentLikeBool(
                 facilityContentLikeDto.getUserUuid(),
                 facilityContentLikeDto.getContentNum()
-        ) == 0) /* 좋아요 누른 상태가 아닐 때*/
-        {
+        ) == 0) /* 좋아요 누른 상태가 아닐 때*/ {
             return ResponseEntity.status(HttpStatus.OK).body(fcs.facilityContentLike(facilityContentLikeDto));
-        }else{
+        } else {
             return ResponseEntity.status(HttpStatus.OK).body(fcs.deleteContentLike(
                     facilityContentLikeDto.getUserUuid(),
                     facilityContentLikeDto.getContentNum()));
@@ -101,11 +97,11 @@ public class FacilityContentController {
 
     /* 게시물 좋아요 개수 불러오기 */
     @GetMapping("/facility/content/liked/{contentNum}")
-    public ResponseEntity getLikeCount(@PathVariable("contentNum")Integer contentNum){
+    public ResponseEntity getLikeCount(@PathVariable("contentNum") Integer contentNum) {
         log.info(contentNum.toString());
         try {
-        fcs.getLikeCount(contentNum).toString();
-        }catch (NullPointerException e){
+            fcs.getLikeCount(contentNum).toString();
+        } catch (NullPointerException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(0);
         }
         return ResponseEntity.status(HttpStatus.OK).body(fcs.getLikeCount(contentNum));
@@ -114,14 +110,14 @@ public class FacilityContentController {
     /* 게시물 삭제 - 관리자용 */
     @GetMapping("/facility/content/delete/mg/{facilityNo}/{contentId}")
     public ResponseEntity deleteContentManager(@PathVariable("contentId") Integer contentId,
-                                               @PathVariable("facilityNo") String facilityNo){
+                                               @PathVariable("facilityNo") String facilityNo) {
         return ResponseEntity.status(HttpStatus.OK).body(fcs.deleteContentManager(contentId, facilityNo));
     }
 
     /*  게시물 삭제 */
     @GetMapping("/facility/content/delete/{uuid}/{contentNum}")
     public ResponseEntity deleteContent(@PathVariable("uuid") String uuid,
-                                        @PathVariable("contentNum") Integer contentNum){
+                                        @PathVariable("contentNum") Integer contentNum) {
         return ResponseEntity.status(HttpStatus.OK).body(fcs.deleteContent(uuid, contentNum));
     }
 
@@ -129,7 +125,7 @@ public class FacilityContentController {
     @GetMapping("/facility/{facilityNo}/content/{type}/main")
     public ResponseEntity getContentListMain(
             @PathVariable("facilityNo") String facilityNo,
-            @PathVariable("type") Integer type){
+            @PathVariable("type") Integer type) {
         return ResponseEntity.status(HttpStatus.OK).body(fcs.getContentListMain(facilityNo, type));
     }
 
@@ -139,7 +135,7 @@ public class FacilityContentController {
     public ResponseEntity<List<ContentListVo>> getMyFacilityContentList(
             @PathVariable("facility") String facility,
             @PathVariable("type") Integer type,
-            @PathVariable("position") Integer position){
+            @PathVariable("position") Integer position) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(fcs.getContentList(facility, type, position));
 
@@ -149,20 +145,20 @@ public class FacilityContentController {
     @GetMapping("/facility/content/getcount/{facilityNo}/{type}")
     public Integer getContentCount(
             @PathVariable("facilityNo") String facilityNo,
-            @PathVariable("type") Integer type){
+            @PathVariable("type") Integer type) {
 
-        return fcs.getContentCount(facilityNo,type);
+        return fcs.getContentCount(facilityNo, type);
     }
 
     /* 내가 쓴 게시물 5개만 불러오기 */
     @GetMapping("/facility/content/main/user/{userUuid}")
-    public ResponseEntity getMyContentLt(@PathVariable("userUuid")String userUuid){
+    public ResponseEntity getMyContentLt(@PathVariable("userUuid") String userUuid) {
         return ResponseEntity.status(HttpStatus.OK).body(fcs.getMyContentLt(userUuid));
     }
 
     /* 내가 쓴 게시물 불러오기 */
     @GetMapping("/facility/my/content/{userUuid}")
-    public ResponseEntity getMyContent(@PathVariable("userUuid")String userUuid){
+    public ResponseEntity getMyContent(@PathVariable("userUuid") String userUuid) {
         return ResponseEntity.status(HttpStatus.OK).body(fcs.getMyContent(userUuid));
     }
 

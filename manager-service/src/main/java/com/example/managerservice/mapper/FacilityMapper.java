@@ -1,7 +1,7 @@
 package com.example.managerservice.mapper;
 
 import com.example.managerservice.dto.FacilityDto;
-import com.example.managerservice.dto.ManagerDto;
+import com.example.managerservice.vo.FacilityManagerListVo;
 import com.example.managerservice.vo.FindManagerUuid;
 import com.example.managerservice.vo.GetMyFacilityListVo;
 import org.apache.ibatis.annotations.Mapper;
@@ -28,17 +28,17 @@ public interface FacilityMapper {
     void joinFacility(@Param("uuid") String uuid,
                       @Param("facilityNo") String facilityNo,
                       @Param("table") String table
-                      );
+    );
 
     /* 시설물 가입하기 - 존재하는 시설물인지 확인 */
     Integer validFacility(@Param("facilityNo") String facilityNo);
 
     /* 시설물 가입하기 - 중복된 시설물인지 검사 하기 - Manager & User */
     Integer conflictJoinValidFacility(@Param("facilityNo") String facilityNo,
-                                       @Param("userUuid") String userUuid,
+                                      @Param("userUuid") String userUuid,
                                       @Param("userType") String userType,
-                                       @Param("table") String table
-                                       );
+                                      @Param("table") String table
+    );
 
 
     /* 시설물 가입하기 - 사용자 확인 */
@@ -54,17 +54,17 @@ public interface FacilityMapper {
 
 
     void deleteMyFacility(@Param("uuid") String uuid,
-                            @Param("facilityNo") String facilityNo,
-                            @Param("table") String table,
-                            @Param("colum") String colum);
+                          @Param("facilityNo") String facilityNo,
+                          @Param("table") String table,
+                          @Param("colum") String colum);
 
     /* 내가 등록한 시설물 좋아요 */
     void myFacilityLike(@Param("userUuid") String userUuid,
                         @Param("useFacility") String useFacility,
-                        @Param("value")Integer value);
+                        @Param("value") Integer value);
 
     /* 내가 등록한 시설물 좋아요 여부 */
-    Integer myFacilityLikeBool(@Param("userUuid") String userUuid,@Param("useFacility") String useFacility);
+    Integer myFacilityLikeBool(@Param("userUuid") String userUuid, @Param("useFacility") String useFacility);
 
     int validJoinFacility(@Param("uuid") String uuid,
                           @Param("facilityNo") String facilityNo,
@@ -76,7 +76,7 @@ public interface FacilityMapper {
 
     /* 시설물 삭제 조건 검사 */
     Integer deleteValidFacility(@Param("managerUuid") String managerUuid,
-                             @Param("facilityNo")String facilityNo);
+                                @Param("facilityNo") String facilityNo);
 
     /* 시설물 관리자 지정 */
     void registerManager(@Param("facilityOwner") String facilityOwner,
@@ -87,5 +87,5 @@ public interface FacilityMapper {
                                 @Param("managerPhoneNumber") String managerPhoneNumber);
 
     /* 시설물 별 관리자 리스트 */
-    List<ManagerDto> facilityManagerList(@Param("facilityNo") String facilityNo);
+    List<FacilityManagerListVo> facilityManagerList(@Param("facilityNo") String facilityNo);
 }

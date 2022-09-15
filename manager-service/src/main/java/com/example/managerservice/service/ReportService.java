@@ -30,7 +30,7 @@ public class ReportService {
     }
 
     /* 신고 하기 */
-    public Integer reportRegister(ReportDto reportDto){
+    public Integer reportRegister(ReportDto reportDto) {
         reportMapper.reportRegister(reportDto);
         return reportDto.getReportNum();
     }
@@ -42,26 +42,26 @@ public class ReportService {
 
         String savePath = REPORT_IMAGES_SAVE_PATH;
 
-        String createFolderPath = savePath + facilityNo + '/' + reportNum +'/';
+        String createFolderPath = savePath + facilityNo + '/' + reportNum + '/';
         List newlist = new ArrayList<>();
         /* 저장될 폴더가 있는지 확인*/
-        if(!new File(createFolderPath).exists()){
+        if (!new File(createFolderPath).exists()) {
             try {
                 /* 저장될 폴더가 없다면 생성*/
                 new File(createFolderPath).mkdirs();
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.getStackTrace();
             }
         }
 
-        for (MultipartFile file : files){
+        for (MultipartFile file : files) {
             /* 파일 명 변수에 저장*/
             String originalFileName = file.getOriginalFilename();
             /* File Object 생성 */
-            String filePath =savePath + facilityNo + '/' + reportNum + '/' + originalFileName;
+            String filePath = savePath + facilityNo + '/' + reportNum + '/' + originalFileName;
             File object = new File(filePath);
             /* list에 DB에 저장시킬 Location 추가*/
-            newlist.add(REPORT_IMAGES_SAVE_DB_PATH + facilityNo + '&' + reportNum + '&' + originalFileName );
+            newlist.add(REPORT_IMAGES_SAVE_DB_PATH + facilityNo + '&' + reportNum + '&' + originalFileName);
             /* 파일 전송 */
             file.transferTo(object);
         }
@@ -69,10 +69,11 @@ public class ReportService {
     }
 
     /* 신고 하기 - 이미지 경로 업데이트 */
-    public void reportImgUpdate(Integer reportNum,String reportImg){
-        reportMapper.reportImgUpdate(reportNum ,reportImg);
+    public void reportImgUpdate(Integer reportNum, String reportImg) {
+        reportMapper.reportImgUpdate(reportNum, reportImg);
     }
 
+    /* 신고 상세 보기 */
     public ReportDto getReport(Integer reportNum) {
         return reportMapper.getReport(reportNum);
     }
@@ -102,7 +103,7 @@ public class ReportService {
                 searchValue = "반려";
                 break;
         }
-        return reportMapper.getFacilityReport(facilityNo,searchValue);
+        return reportMapper.getFacilityReport(facilityNo, searchValue);
     }
 
 

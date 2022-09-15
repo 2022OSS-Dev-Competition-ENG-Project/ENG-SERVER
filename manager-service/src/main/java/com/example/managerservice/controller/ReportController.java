@@ -33,7 +33,7 @@ public class ReportController {
     /* 신고 하기 */
     @PostMapping(value = "/report/register")
     public ResponseEntity reportRegister(@RequestPart ReportDto reportDto,
-                                         @RequestPart(required = false) List<MultipartFile> files) throws Exception{
+                                         @RequestPart(required = false) List<MultipartFile> files) throws Exception {
         LocalDateTime datetime = LocalDateTime.of(now.getYear(),
                 now.getMonth(),
                 now.getDayOfMonth(),
@@ -45,59 +45,59 @@ public class ReportController {
         reportDto.setReportDate(datetime);
 
         /* 신고 저장*/
-            int rp = reportService.reportRegister(reportDto);
-            log.info("contentNum : " + rp);
+        int rp = reportService.reportRegister(reportDto);
+        log.info("contentNum : " + rp);
 
         /* 신고 하기 - reportNum 가져오기*/
         int rd = rp;
         /* 이미지가 있다면 이미지 생성 reportDto img Update*/
-        if (!files.isEmpty()){
+        if (!files.isEmpty()) {
             StringBuilder sb = new StringBuilder();
-            for (String item : reportService.saveContentImage(files,reportDto.getFacilityNo(),rd)){
+            for (String item : reportService.saveContentImage(files, reportDto.getFacilityNo(), rd)) {
                 sb.append(item + " ");
             }
             /* reportDto에 reportImg를 방금 들어온 경로로 업데이트 한다. */
             reportDto.setReportImg(sb.toString());
-            reportService.reportImgUpdate(rd,reportDto.getReportImg());
+            reportService.reportImgUpdate(rd, reportDto.getReportImg());
         }
         return ResponseEntity.status(HttpStatus.OK).body(REPORT_REGISTER_COMPLETE);
     }
 
     /* 신고 상세 보기 */
     @GetMapping("/report/{reportNum}")
-    public ResponseEntity getReport(@PathVariable("reportNum") Integer reportNum){
+    public ResponseEntity getReport(@PathVariable("reportNum") Integer reportNum) {
         return ResponseEntity.status(HttpStatus.OK).body(reportService.getReport(reportNum));
     }
 
     /* 내가 신고한 리스트 불러오기 5개만 */
     @GetMapping("/report/list/main/{userUuid}")
-    public ResponseEntity getMyReportLt(@PathVariable("userUuid") String userUuid){
+    public ResponseEntity getMyReportLt(@PathVariable("userUuid") String userUuid) {
         return ResponseEntity.status(HttpStatus.OK).body(reportService.getMyReportLt(userUuid));
     }
 
     /* 내가 신고한 리스트 불러오기 */
     @GetMapping("/report/list/{userUuid}")
-    public ResponseEntity getMyReport(@PathVariable("userUuid") String userUuid){
+    public ResponseEntity getMyReport(@PathVariable("userUuid") String userUuid) {
         return ResponseEntity.status(HttpStatus.OK).body(reportService.getMyReport(userUuid));
     }
 
     /* 신고 리스트 불러오기 - 처리 현황 별 리스트 */
     @GetMapping("/report/list/{facilityNo}/{status}")
     public ResponseEntity getFacilityReport(@PathVariable("facilityNo") String facilityNo,
-                                            @PathVariable("status") Integer status){
-        return ResponseEntity.status(HttpStatus.OK).body(reportService.getFacilityReport(facilityNo,status));
+                                            @PathVariable("status") Integer status) {
+        return ResponseEntity.status(HttpStatus.OK).body(reportService.getFacilityReport(facilityNo, status));
     }
 
     /* 신고 리스트 불러오기 - 매니저 메인페이지에서 5개 */
     @GetMapping("/report/list/mg/lt/{facilityNo}")
-    public ResponseEntity getReportFacilityLt(@PathVariable("facilityNo") String facilityNo){
+    public ResponseEntity getReportFacilityLt(@PathVariable("facilityNo") String facilityNo) {
         return ResponseEntity.status(HttpStatus.OK).body(reportService.getReportFacilityLt(facilityNo));
     }
 
     /* 신고 처리 하기 */
     @GetMapping("/report/{reportNum}/{status}")
     public ResponseEntity updateReport(@PathVariable("reportNum") Integer reportNum,
-                                       @PathVariable("status") Integer status){
-        return ResponseEntity.status(HttpStatus.OK).body(reportService.updateReport(reportNum,status));
+                                       @PathVariable("status") Integer status) {
+        return ResponseEntity.status(HttpStatus.OK).body(reportService.updateReport(reportNum, status));
     }
 }

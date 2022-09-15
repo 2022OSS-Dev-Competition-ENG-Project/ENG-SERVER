@@ -8,9 +8,9 @@
     <select id="getQRCode" resultType="java.lang.String">
         select facility_qr_location
         from facility
-        where facility_name = #{facilityName} AND facility_address = #{facilityAddress}
+        where facility_name = #{facilityName}
+          AND facility_address = #{facilityAddress}
     </select>
-
 
 
 </mapper>

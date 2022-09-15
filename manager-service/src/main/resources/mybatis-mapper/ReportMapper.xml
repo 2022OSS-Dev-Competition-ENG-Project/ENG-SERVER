@@ -32,26 +32,22 @@
     <!-- 신고 하기 -->
     <insert id="reportRegister" useGeneratedKeys="true"
             keyProperty="reportNum" keyColumn="report_num">
-        insert into facility_report(
-                                    report_num,
+        insert into facility_report(report_num,
                                     report_title,
                                     report_text,
                                     report_type,
                                     report_date,
                                     report_img,
                                     user_uuid,
-                                    facility_no
-                                    )
-        values (
-                #{reportNum},
+                                    facility_no)
+        values (#{reportNum},
                 #{reportTitle},
                 #{reportText},
                 #{reportType},
                 #{reportDate},
                 #{reportImg},
                 #{userUuid},
-                #{facilityNo}
-                )
+                #{facilityNo})
     </insert>
 
     <!-- 신고 상세 보기 -->
@@ -61,7 +57,7 @@
         where report_num = #{reportNum};
 
     </select>
-    
+
     <update id="reportImgUpdate">
         update facility_report
         SET report_img = #{reportImg}
@@ -71,8 +67,9 @@
     <!-- 내가 신고한 리스트 불러오기 -->
     <select id="getMyReport" resultMap="reportListInfo">
         select *
-        FROM (select * from facility_report
-              WHERE user_uuid = #{userUuid} ) as fr
+        FROM (select *
+              from facility_report
+              WHERE user_uuid = #{userUuid}) as fr
                  INNER JOIN user u ON fr.user_uuid = u.user_uuid
         ORDER BY report_num DESC;
     </select>
@@ -80,9 +77,10 @@
     <!-- 내가 신고한 리스트 불러오기 5개만 -->
     <select id="getMyReportLt" resultMap="reportListInfo">
         select *
-        FROM (select * from facility_report
-              WHERE user_uuid = #{userUuid} ) as fr
-        INNER JOIN user u ON fr.user_uuid = u.user_uuid
+        FROM (select *
+              from facility_report
+              WHERE user_uuid = #{userUuid}) as fr
+                 INNER JOIN user u ON fr.user_uuid = u.user_uuid
         ORDER BY report_num DESC LIMIT 5;
     </select>
 
@@ -93,17 +91,20 @@
                fr.report_type,
                u.user_nickname,
                fr.report_date
-        FROM (  SELECT * FROM facility_report
-                WHERE facility_no = #{facilityNo} AND report_status = #{searchValue}) as fr
-        INNER JOIN user u ON fr.user_uuid = u.user_uuid
+        FROM (SELECT *
+              FROM facility_report
+              WHERE facility_no = #{facilityNo}
+                AND report_status = #{searchValue}) as fr
+                 INNER JOIN user u ON fr.user_uuid = u.user_uuid
         ORDER BY report_num DESC;
     </select>
 
     <!-- 신고 리스트 불러오기 - 매니저 메인페이지에서 5개 -->
     <select id="getReportFacilityLt" resultMap="reportListInfo">
         select *
-        FROM (select * from facility_report
-              WHERE facility_no = #{facilityNo} ) as fr
+        FROM (select *
+              from facility_report
+              WHERE facility_no = #{facilityNo}) as fr
                  INNER JOIN user u ON fr.user_uuid = u.user_uuid
         ORDER BY report_num DESC LIMIT 5;
     </select>
@@ -113,7 +114,6 @@
         SET report_status = #{status}
         WHERE report_num = #{reportNum};
     </update>
-
 
 
 </mapper>

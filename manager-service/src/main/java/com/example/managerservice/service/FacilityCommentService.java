@@ -26,31 +26,31 @@ public class FacilityCommentService {
 
 
     /* 댓글 등록 */
-    public ResponseEntity registerComment(FacilityCommentDto fccd){
+    public ResponseEntity registerComment(FacilityCommentDto fccd) {
         fccd.setCommentDate(now);
         fccm.registerComment(fccd);
         return ResponseEntity.status(HttpStatus.OK).body(COMMENT_REGISTER_COMPLETE);
     }
 
     /* 댓글 수정 */
-    public ResponseEntity updateComment(FacilityCommentDto fccd){
-        try{
+    public ResponseEntity updateComment(FacilityCommentDto fccd) {
+        try {
             fccm.updateComment(fccd);
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(COMMENT_REGISTER_UPDATE_FAIL);
         }
         return ResponseEntity.status(HttpStatus.OK).body(COMMENT_REGISTER_UPDATE);
     }
 
     /* 댓글 삭제 */
-    public ResponseEntity deleteComment(Integer commentNum, String commentText){
+    public ResponseEntity deleteComment(Integer commentNum, String commentText) {
         fccm.deleteComment(commentNum, commentText);
         return ResponseEntity.status(HttpStatus.OK).body(COMMENT_DELETE_COMPLETE);
     }
 
 
     /* 댓글 조회 */
-    public List<ContentCommentVo> getComment(Integer contentNum){
+    public List<ContentCommentVo> getComment(Integer contentNum) {
         /* 유저인지 사용자인지 확인 하기 위함 */
         /* 사용자가 이 게시물이 속해있는 시설물 소속인가 */
         return fccm.getComment(contentNum);

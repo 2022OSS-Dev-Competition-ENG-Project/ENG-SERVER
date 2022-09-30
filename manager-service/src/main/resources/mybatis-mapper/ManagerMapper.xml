@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.managerservice.mapper.ManagerMapper">
+
+    <resultMap type="com.example.managerservice.dto.Manager" id="managerInfo" >
+        <result property="manager_uuid" column="managerUuid"/>
+        <result property="manager_email" column="managerEmail"/>
+        <result property="manager_password" column="managerPassword"/>
+        <result property="manager_name" column="managerName"/>
+        <result property="manager_phone_number" column="managerPhoneNum"/>
+        <result property="manager_join_date" column="managerJoinDate"/>
+        <result property="manager_nickname" column="managerNickname"/>
+        <result property="manager_access_type" column="managerAccessType"/>
+        <result property="manager_login_key" column="managerLoginKey"/>
+        <result property="facility_no" column="facilityNo"/>
+        <result property="facility_grade" column="facilityGrade"/>
+    </resultMap>
+
+    <!--Manger 회원가입-->
+    <update id="SignupManager" parameterType="com.example.managerservice.dto.Manager">
+        UPDATE manager
+        SET manager_uuid = #{managerUuid}, manager_password = #{managerPassword}, manager_name = #{managerName}, manager_nickname = #{managerNickname},
+            manager_phone_number = #{managerPhoneNum}, manager_join_date = #{managerJoinDate}
+        where manager_email = #{managerEmail}
+    </update>
+
+    <!--Manager 회원가입 - 중복된 Email 검사하기-->
+    <select id="ManagerEmailCheck" resultType="com.example.managerservice.dto.Manager">
+        select *
+        from manager
+        where manager_email = #{managerEmail}
+    </select>
+
+    <!--Manager 회원가입 - Email 중복 검사 성공시-->
+    <select id="ManagerEmailConform" resultType="java.lang.Integer">
+        select count(*)
+        from manager
+        where manager_email = #{managerEmail}
+    </select>
+
+    <!--Manager 회원가입 - Email 인증코드 검사 성공시-->
+    <update id="ManagerEmailCode" parameterType="com.example.managerservice.dto.Manager">
+        UPDATE manager
+        SET manager_login_key = #{LoginKey}
+        where manager_email = #{managerEmail}
+    </update>
+
+    <!--Manager 회원가입 - 중복된 Nickname 검사하기-->
+    <select id="ManagerNickNameCheck" resultMap="managerInfo">
+        select *
+        from manager
+        where manager_nickname = #{managerNickName}
+    </select>
+
+    <!--Manager 회원가입 - Nickname 검사 성공시-->
+    <update id="NickNameCheckAccess" parameterType="com.example.managerservice.dto.Manager">
+        update manager
+        set manager_access_type = #{AccessType}, manager_nickname = #{nickName}
+        where manager_email = #{managerEmail}
+    </update>
+
+    <!--Manager 회원가입 - 중복된 PhoneNumber 검사하기-->
+    <select id="PhoneNumberCheck" resultType="java.lang.Integer">
+        select count(*)
+        from manager
+        where manager_phone_number = #{managerPhoneNum}
+    </select>
+
+    <!--Manager 로그인-->
+    <select id="findManagerEmail" resultType="com.example.managerservice.dto.Manager">
+        select *
+        from manager
+        where manager_email = #{managerEmail}
+    </select>
+
+    <!--Manager 로그인 - 성공시 uuid 검색-->
+    <select id="findManagerName" resultType="com.example.managerservice.dto.Manager">
+        select *
+        from manager
+        where manager_name = #{managerName}
+    </select>
+
+    <!--Manager 아이디 찾기-->
+    <select id="findManagerId" resultType="java.lang.String">
+        select manager_email
+        from manager
+        where manager_phone_number = #{managerPhoneNumber} AND manager_name = #{managerName}
+    </select>
+
+    <!--Manager 마이페이지 - 비빌번호 재설정-->
+    <update id="changeManagerPW">
+        update manager
+        set manager_password = #{managerPassword}
+        where manager_uuid = #{managerUuid}
+    </update>
+
+    <!--Manager 마이페이지 - uuid를통해 유저 정보 수정-->
+    <select id="findManagerUuid" resultType="com.example.managerservice.dto.Manager">
+        select *
+        from manager
+        where manager_uuid = #{managerUuid}
+    </select>
+
+    <!--Manager 로그인 - 로그인 성공시 데이터 찾기-->
+    <select id="findManagerID" resultType="com.example.managerservice.dto.Manager">
+        select *
+        from manager
+        where manager_email = #{managerEmail}
+    </select>
+
+    <!--Manager 비밀번호 찾기- 랜덤 비밀번호 생성-->
+    <update id="resetPassword">
+        update manager
+        set manager_password = #{managerPassword}
+        where manager_email = #{managerEmail}
+          and manager_name = #{managerName}
+    </update>
+</mapper>

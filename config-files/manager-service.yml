@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://jlchj.iptime.org:5001/engbase
+    username: rooteng
+    password: eng1234
+  servlet:
+    multipart:
+      file-size-threshold: 1MB
+      location: /home/icslab/ENG-store/image/content/
+      # location: /Users/jeonghunlee/image/content/
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://192.168.0.2:8761/eureka

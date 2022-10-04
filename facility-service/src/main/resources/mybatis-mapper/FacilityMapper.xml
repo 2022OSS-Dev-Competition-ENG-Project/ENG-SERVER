@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.managerservice.mapper.FacilityMapper">
+
+    <resultMap type="com.example.managerservice.dto.FacilityDto" id="facilityInfo">
+        <result property="facility_no" column="facilityNo"/>
+        <result property="facility_name" column="facilityName"/>
+        <result property="facility_address" column="facilityAddress"/>
+        <result property="facility_qr_location" column="facilityQrLocation"/>
+        <result property="facility_owner" column="facilityOwner"/>
+    </resultMap>
+
+    <resultMap type="com.example.managerservice.vo.GetMyFacilityListVo" id="facilityList">
+        <result property="uuid" column="uuid"/>
+        <result property="name" column="name"/>
+        <result property="facility_address" column="facilityAddress"/>
+        <result property="use_facility" column="useFacility"/>
+        <result property="facility_name" column="facilityName"/>
+        <result property="facility_owner" column="facilityOwner"/>
+        <result property="is_liked" column="isLiked"/>
+    </resultMap>
+
+    <resultMap type="com.example.managerservice.vo.FindManagerUuid" id="managerInfo">
+        <result property="manager_name" column="managerName"/>
+        <result property="manager_phone_number" column="managerPhoneNumber"/>
+        <result property="manager_uuid" column="managerUuid"/>
+    </resultMap>
+
+    <resultMap type="com.example.managerservice.vo.FacilityManagerListVo" id="managerListInfo">
+        <result property="manager_uuid" column="managerUuid"/>
+        <result property="manager_name" column="managerName"/>
+        <result property="facility_name" column="facilityName"/>
+        <result property="facility_owner" column="facilityOwner"/>
+        <result property="manager_phone_number" column="managerPhoneNumber"/>
+    </resultMap>
+
+    <!-- 시설물 등록하기 -->
+    <insert id="registerFacility" parameterType="com.example.facilityservice.vo.RequestFacilityRegister">
+        INSERT INTO ALL
+            INTO facility VALUES (
+                #{facilityNum},
+                #{facilityName},
+                #{facilityAddress},
+                #{facilityQr})
+            INTO facility_join_manager VALUES(
+                #{managerId},
+                #{facilityNum})
+    </insert>
+</mapper>

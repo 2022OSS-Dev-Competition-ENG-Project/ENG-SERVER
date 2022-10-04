@@ -1,0 +1,61 @@
+
+spring:
+  application:
+    name: apigateway-serivce
+  cloud:
+    gateway:
+      default-filters:
+        - name: GlobalFilter
+          args:
+            baseMessage: Spring Cloud Gateway Global Filter
+            preLogger: true
+            postLogger: true
+      routes:
+        - id: manager-service
+          uri: lb://MANAGER-SERVICE
+          predicates:
+            - Path=/manager-service/**
+            - Method=GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/manager-service/(?<segment>.*), /${segment}
+        - id: manager-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/**
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /${segment}
+        - id: manager-service
+          uri: lb://MANAGER-SERVICE
+          predicates:
+            - Path=/manager-service/**
+            - Method=GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/manager-service/(?<segment>.*), /${segment}
+        - id: manager-service
+          uri: lb://MANAGER-SERVICE
+          predicates:
+            - Path=/manager-service/**
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/manager-service/(?<segment>.*), /${segment}
+        - id: facility-service
+          uri: lb://FACILITY-SERVICE
+          predicates:
+            - Path=/facility-service/**
+            - Method=GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/facility-service/(?<segment>.*), /${segment}
+        - id: facility-service
+          uri: lb://FACILITY-SERVICE
+          predicates:
+            - Path=/facility-service/**
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/facility-service/(?<segment>.*), /${segment}

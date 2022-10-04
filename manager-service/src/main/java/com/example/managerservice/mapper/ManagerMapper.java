@@ -50,4 +50,6 @@ public interface ManagerMapper {
     /* Manager 비밀번호 찾기- 랜덤 비밀번호 생성 */
     void resetPassword(Manager managerDto);
 
+    /* 매니저 검증 */
+    void getValidManager(@Param("managerId") String managerId);
 }

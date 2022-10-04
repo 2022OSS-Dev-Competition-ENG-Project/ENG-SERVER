@@ -134,4 +134,10 @@ public class ManagerController {
         String managerName = managerService.findManagerUuid(uuid).getManagerName();
         return ResponseEntity.status(HttpStatus.OK).body(managerName + MyPageConstant.MYPAGE_CLEAR);
     }
+
+    /* 매니저 검증 - FacilityService를 위한 코드 */
+    @GetMapping("/valid/manager/{managerId}")
+    public Integer getValidManager(@PathVariable("managerId") String managerId){
+        return managerService.getValidManager(managerId);
+    }
 }

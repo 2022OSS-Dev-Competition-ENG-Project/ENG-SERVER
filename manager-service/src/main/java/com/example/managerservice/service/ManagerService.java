@@ -122,4 +122,9 @@ public class ManagerService {
 
         managerMapper.resetPassword(manager);
     }
+
+    /* 매니저 검증 */
+    public Integer getValidManager(String managerId) {
+        managerMapper.getValidManager(managerId);
+    }
 }

@@ -29,12 +29,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     /* DB */
-    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    implementation 'mysql:mysql-connector-java'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
-
-    /* QR Code */
-    implementation 'com.google.zxing:core:3.5.0'
-    implementation group: 'com.solvoj.zxing-java6', name: 'javase-java6', version: '3.2.0'
 
     /* Cloud */
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
@@ -42,9 +38,11 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap:3.1.4'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:3.1.4'
 
-    //Security
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    testImplementation 'org.springframework.security:spring-security-test'
+    /* redis */
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    /* mail */
+    implementation("org.springframework.boot:spring-boot-starter-mail")
 
 }
 dependencyManagement {

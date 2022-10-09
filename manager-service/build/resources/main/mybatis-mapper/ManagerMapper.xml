@@ -118,4 +118,11 @@
         where manager_email = #{managerEmail}
           and manager_name = #{managerName}
     </update>
+
+    <!-- Manager 검증 -->
+    <select id="getValidManager" resultType="java.lang.Integer">
+        select count(*)
+        from  manager
+        where manager_id = #{managerId}
+    </select>
 </mapper>

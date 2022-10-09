@@ -11,113 +11,92 @@
         <result property="manager_password" column="managerPassword"/>
         <result property="manager_name" column="managerName"/>
         <result property="manager_phone_number" column="managerPhoneNum"/>
+        <result property="manager_nick_name" column="managerNickname"/>
         <result property="manager_join_date" column="managerJoinDate"/>
-        <result property="manager_nickname" column="managerNickname"/>
-        <result property="manager_access_type" column="managerAccessType"/>
-        <result property="manager_login_key" column="managerLoginKey"/>
-        <result property="facility_no" column="facilityNo"/>
-        <result property="facility_grade" column="facilityGrade"/>
     </resultMap>
 
-    <!--Manger 회원가입-->
-    <update id="SignupManager" parameterType="com.example.managerservice.dto.Manager">
-        UPDATE manager
-        SET manager_uuid = #{managerUuid}, manager_password = #{managerPassword}, manager_name = #{managerName}, manager_nickname = #{managerNickname},
-            manager_phone_number = #{managerPhoneNum}, manager_join_date = #{managerJoinDate}
-        where manager_email = #{managerEmail}
-    </update>
+    <!-- Manger 회원가입 -->
+    <insert id="registerManager" parameterType="com.example.managerservice.dto.Manager">
+        insert into manager(manager_uuid,
+                            manager_email,
+                            manager_password,
+                            manager_name,
+                            manager_phone_number,
+                            manager_nick_name,
+                            manager_join_date
+                            )
+                            values ( #{managerUuid},
+                                     #{managerEmail},
+                                     #{managerPassword},
+                                     #{managerName},
+                                     #{managerPhoneNumber},
+                                     #{managerNickname},
+                                     #{managerJoinDate}
+                                     );
+    </insert>
 
-    <!--Manager 회원가입 - 중복된 Email 검사하기-->
-    <select id="ManagerEmailCheck" resultType="com.example.managerservice.dto.Manager">
-        select *
+    <!-- Manager 회원가입 - PhoneNumber 중복 검사 -->
+    <select id="phoneNumberConflictCheck" resultType="java.lang.Integer">
+        select count(*)
         from manager
-        where manager_email = #{managerEmail}
+        where manager_phone_number = #{managerPhoneNumber}
     </select>
 
-    <!--Manager 회원가입 - Email 중복 검사 성공시-->
-    <select id="ManagerEmailConform" resultType="java.lang.Integer">
+    <!-- Manager 회원가입 - Email 중복 검사 -->
+    <select id="emailConflictCheck" resultType="java.lang.Integer">
         select count(*)
         from manager
         where manager_email = #{managerEmail}
     </select>
 
-    <!--Manager 회원가입 - Email 인증코드 검사 성공시-->
-    <update id="ManagerEmailCode" parameterType="com.example.managerservice.dto.Manager">
-        UPDATE manager
-        SET manager_login_key = #{LoginKey}
-        where manager_email = #{managerEmail}
-    </update>
-
-    <!--Manager 회원가입 - 중복된 Nickname 검사하기-->
-    <select id="ManagerNickNameCheck" resultMap="managerInfo">
-        select *
-        from manager
-        where manager_nickname = #{managerNickName}
-    </select>
-
-    <!--Manager 회원가입 - Nickname 검사 성공시-->
-    <update id="NickNameCheckAccess" parameterType="com.example.managerservice.dto.Manager">
-        update manager
-        set manager_access_type = #{AccessType}, manager_nickname = #{nickName}
-        where manager_email = #{managerEmail}
-    </update>
-
-    <!--Manager 회원가입 - 중복된 PhoneNumber 검사하기-->
-    <select id="PhoneNumberCheck" resultType="java.lang.Integer">
+    <!-- Manager 회원가입 - 닉네임 중복 체크 -->
+    <select id="registerNicknameCheck" resultType="java.lang.Integer">
         select count(*)
         from manager
-        where manager_phone_number = #{managerPhoneNum}
+        where manager_nick_name = #{managerNickname}
     </select>
 
-    <!--Manager 로그인-->
-    <select id="findManagerEmail" resultType="com.example.managerservice.dto.Manager">
+    <!-- Manager 로그인 - 매니저 찾기 (managerEmail) -->
+    <select id="findManager" resultMap="managerInfo">
         select *
         from manager
         where manager_email = #{managerEmail}
     </select>
 
-    <!--Manager 로그인 - 성공시 uuid 검색-->
-    <select id="findManagerName" resultType="com.example.managerservice.dto.Manager">
-        select *
-        from manager
-        where manager_name = #{managerName}
-    </select>
-
-    <!--Manager 아이디 찾기-->
+    <!-- Manager 아이디 찾기 -->
     <select id="findManagerId" resultType="java.lang.String">
         select manager_email
         from manager
         where manager_phone_number = #{managerPhoneNumber} AND manager_name = #{managerName}
     </select>
 
-    <!--Manager 마이페이지 - 비빌번호 재설정-->
-    <update id="changeManagerPW">
+    <!-- Manager 비밀번호 찾기 -->
+    <select id="findManagerPassword" resultType="java.lang.Integer">
+        select count(*)
+        from manager
+        where manager_email = #{managerEmail} AND manager_name = #{managerName}
+    </select>
+
+    <!-- Manager 비밀번호 찾기 - 비밀번호 초기화 -->
+    <update id="resetPassword">
         update manager
-        set manager_password = #{managerPassword}
+        set manager_password = #{resetPassword}
+        where manager_email = #{managerEmail}
+    </update>
+
+    <!--Manager 마이페이지 - 비밀번호 재설정-->
+    <update id="changeManagerPassword" parameterType="com.example.managerservice.vo.RequestChangePassword">
+        update manager
+        set manager_password = #{changePassword}
         where manager_uuid = #{managerUuid}
     </update>
 
-    <!--Manager 마이페이지 - uuid를통해 유저 정보 수정-->
+    <!--Manager 마이페이지 - uuid를 통해 유저 정보 수정-->
     <select id="findManagerUuid" resultType="com.example.managerservice.dto.Manager">
         select *
         from manager
         where manager_uuid = #{managerUuid}
     </select>
-
-    <!--Manager 로그인 - 로그인 성공시 데이터 찾기-->
-    <select id="findManagerID" resultType="com.example.managerservice.dto.Manager">
-        select *
-        from manager
-        where manager_email = #{managerEmail}
-    </select>
-
-    <!--Manager 비밀번호 찾기- 랜덤 비밀번호 생성-->
-    <update id="resetPassword">
-        update manager
-        set manager_password = #{managerPassword}
-        where manager_email = #{managerEmail}
-          and manager_name = #{managerName}
-    </update>
 
     <!-- Manager 검증 -->
     <select id="getValidManager" resultType="java.lang.Integer">

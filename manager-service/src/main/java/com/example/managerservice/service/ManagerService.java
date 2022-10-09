@@ -1,11 +1,13 @@
 package com.example.managerservice.service;
 
 
-import com.example.managerservice.constant.SignUpConstant;
+import com.example.managerservice.constant.RegisterConstant;
 import com.example.managerservice.dto.Manager;
 import com.example.managerservice.mapper.ManagerMapper;
 import com.example.managerservice.vo.RequestChangePassword;
+import com.example.managerservice.vo.RequestFindManagerId;
 import com.example.managerservice.vo.RequestFindManagerPassword;
+import com.example.managerservice.vo.RequestManagerLogin;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,58 +16,59 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Random;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static com.example.managerservice.constant.EmailConstant.*;
 import static com.example.managerservice.constant.MyPageConstant.*;
-import static com.example.managerservice.constant.SignUpConstant.*;
+import static com.example.managerservice.constant.RegisterConstant.*;
 
 @Slf4j
 @Service
 public class ManagerService {
 
     @Autowired
-    public ManagerService(ManagerMapper managerMapper, PasswordEncoder passwordEncoder, EmailService emailService, Random random) {
+    public ManagerService(ManagerMapper managerMapper, PasswordEncoder passwordEncoder, EmailService emailService, RedisService redisService) {
         this.managerMapper = managerMapper;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
-        this.random = random;
+        this.redisService = redisService;
     }
 
     private ManagerMapper managerMapper;
     private PasswordEncoder passwordEncoder;
     private EmailService emailService;
-    private Random random;
+    private RedisService redisService;
 
     /* Manger 회원가입 */
-    public ResponseEntity signupManager(Manager manager) {
+    public ResponseEntity registerManager(Manager manager) {
 
         /* UUID 만들기*/
-        manager.setManagerId(UUID.randomUUID().toString());
+        manager.setManagerUuid(UUID.randomUUID().toString());
+        manager.setManagerJoinDate(LocalDateTime.now());
         /* 휴대폰 번호 중복 체크 */
         if(managerMapper.phoneNumberConflictCheck(manager.getManagerPhoneNumber()) == 0){
             /* 비밀 번호 암호화 */
             manager.setManagerPassword(passwordEncoder.encode(manager.getManagerPassword()));
             /* 회원 가입 */
-            managerMapper.signupManager(manager);
-            return ResponseEntity.status(HttpStatus.CREATED).body(SignUpConstant.SIGNUP_CLEAR);
+            managerMapper.registerManager(manager);
+            return ResponseEntity.status(HttpStatus.CREATED).body(RegisterConstant.REGISTER_COMPLETE);
             /* 휴대폰 번호 중복 발생시 */
         }else {
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(SignUpConstant.SIGNUP_FAIL_PUN_OVERLAP
+                    .body(RegisterConstant.REGISTER_PHONE_NUMBER_CONFLICT
                             .replaceAll("\\$phonnumber",manager.getManagerPhoneNumber()));
         }
     }
 
     /* Manager 회원가입 - 이메일 중복 체크, 메일 발송*/
     public ResponseEntity emailConflictCheck(String managerEmail){
-
+        /* 이메일에 발송될 키 생성 */
+        String key = RandomStringUtils.randomNumeric(6);
         /* 이메일 중복 예외 처리 */
         if (managerMapper.emailConflictCheck(managerEmail) == 0){
             /* 이메일 발송*/
-            /* 이메일에 발송될 키 생성 */
-            emailService.sendMail(managerEmail,Integer.toString(random.nextInt((int)Math.pow(10,6))),"EmailCheck");
-            /**/
+            emailService.sendMail(managerEmail,key,"EmailCheck");
             return ResponseEntity.status(HttpStatus.OK).body(EMAIL_CHECK_CLEAR);
         }else {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(EMAIL_CHECK_FAIL);
@@ -73,47 +76,54 @@ public class ManagerService {
     }
 
     /* Manager 회원가입 - 인증 코드 확인 */
-    public void ManagerEmailCode(String userEmail) {
-        Integer LoginKey = 1;
-        managerMapper.managerEmailCode(userEmail, LoginKey);
+    public ResponseEntity emailCodeCheck(String managerEmail, String code) {
+        /* Redis에 저장된 키값의 Value를 가져온다.*/
+        String key = redisService.getData(managerEmail);
+        if (key == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(SMTP_EMAIL_CODE_CHECK_NOT_COMPLETE);
+        if(Integer.parseInt(key) == Integer.parseInt(code)){
+            redisService.deleteData(managerEmail);
+            return ResponseEntity.status(HttpStatus.OK).body(SMTP_EMAIL_CODE_CHECK_COMPLETE);
+        }else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(SMTP_EMAIL_CODE_CHECK_NOT_COMPLETE);
+        }
     }
 
     /* Manager 회원가입 - 닉네임 중복 체크 */
     public ResponseEntity registerNicknameCheck(String nickname) {
         if (managerMapper.registerNicknameCheck(nickname) == 0){
-            return ResponseEntity.status(HttpStatus.OK).body(NICKNAME_CHECK_CLEAR);
+            return ResponseEntity.status(HttpStatus.OK).body(NICKNAME_CHECK_COMPLETE);
         }else {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(NICKNAME_CHECK_FAIL);
         }
     }
 
     /* Manager 로그인 */
-    public ResponseEntity managerLogin(Manager manager) {
+    public ResponseEntity managerLogin(RequestManagerLogin loginData) {
 
         /* 비교할 매니저 생성 */
-        Manager subManager = new Manager();
+        Manager subManager;
 
-        /* manager 아이디 검사 예외 처리 */
-        try {
-            subManager = managerMapper.findManager(manager.getManagerEmail());
-        } catch (NullPointerException e){
+        /* Manager 로그인 - Email 검증 */
+        subManager = managerMapper.findManager(loginData.getManagerEmail());
+        if (subManager == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(LOGIN_ID_FAIL);
         }
 
         /* subManager 와 Manager 간에 Password 매치, subManager AccessType 검사*/
-        if (passwordEncoder.matches(manager.getManagerPassword(),subManager.getManagerPassword()) && subManager.getManagerAccessType() == 1){
-            return ResponseEntity.status(HttpStatus.OK).body(subManager);
+        if (passwordEncoder.matches(loginData.getManagerPassword(),subManager.getManagerPassword())){
+            return ResponseEntity.status(HttpStatus.OK).body(subManager.getManagerUuid());
         }else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(SignUpConstant.LOGIN_PASSWORD_FAIL);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(RegisterConstant.LOGIN_PASSWORD_FAIL);
         }
     }
 
     /* Manager 아이디 찾기 */
-    public ResponseEntity findManagerId(String managerPhoneNumber, String managerName){
-        String managerEmail = managerMapper.findManagerId(managerPhoneNumber, managerName);
-        if(managerEmail.equals(null)){
+    public ResponseEntity findManagerId(RequestFindManagerId requestFindManagerId){
+        String managerEmail = managerMapper.findManagerId(requestFindManagerId);
+        if (managerEmail == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(FIND_ID_PASSWORD_FAIL);
-        }else {
+        }
+        else {
             return ResponseEntity.status(HttpStatus.OK).body(managerEmail);
         }
     }
@@ -121,28 +131,29 @@ public class ManagerService {
     /* 비밀번호 찾기 - 비밀번호 초기화 */
     public ResponseEntity findManagerPassword(RequestFindManagerPassword managerData) {
         if (managerMapper.findManagerPassword(managerData) == 0){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(FIND_ID_PASSWORD_FAIL);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(FIND_ID_PASSWORD_FAIL);
         }else {
             String resetPassword = RandomStringUtils.randomAlphanumeric(10);
             emailService.sendMail(managerData.getManagerEmail()
                     ,resetPassword
                     ,"resetPassword");
-            managerMapper.resetPassword(managerData.getManagerEmail(),resetPassword);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(FIND_RESET_PASSWORD);
+            managerMapper.resetPassword(managerData.getManagerEmail(),passwordEncoder.encode(resetPassword));
+            return ResponseEntity.status(HttpStatus.OK).body(FIND_RESET_PASSWORD);
         }
     }
 
     /* Manager 마이페이지 - 비밀번호 변경 */
-    public ResponseEntity changeManagerPW(RequestChangePassword requestChangePassword) {
+    public ResponseEntity changeManagerPassword(RequestChangePassword requestChangePassword) {
         /* 현재 비밀번호를 검증할 Sub Manager 생성 */
-        Manager subManager = new Manager();
+        Manager subManager;
 
         /* 검증할 매니저 불러오기 */
         subManager = managerMapper.findManagerUuid(requestChangePassword.getManagerUuid());
 
         /* 현재 비밀번호 검증 */
         if (passwordEncoder.matches(requestChangePassword.getCurrentPassword(), subManager.getManagerPassword())){
-            managerMapper.changeManagerPW(requestChangePassword);
+            requestChangePassword.setChangePassword(passwordEncoder.encode(requestChangePassword.getChangePassword()));
+            managerMapper.changeManagerPassword(requestChangePassword);
             return ResponseEntity.status(HttpStatus.OK).body(PASSWORD_CHANGE_CLEAR);
         }else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(PASSWORD_CHANGE_FAIL);

@@ -1,15 +1,14 @@
 package com.example.managerservice.controller;
 
 
-import com.example.managerservice.constant.MyPageConstant;
-import com.example.managerservice.constant.SignUpConstant;
 import com.example.managerservice.dto.Manager;
 import com.example.managerservice.service.ManagerService;
 import com.example.managerservice.vo.RequestChangePassword;
+import com.example.managerservice.vo.RequestFindManagerId;
 import com.example.managerservice.vo.RequestFindManagerPassword;
+import com.example.managerservice.vo.RequestManagerLogin;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -29,32 +28,26 @@ public class ManagerController {
     private PasswordEncoder passwordEncoder;
 
     /* 매니저 회원가입 */
-    @PostMapping("/signup")
+    @PostMapping("/register")
     public ResponseEntity registerManager(@RequestBody Manager manager) {
-        ResponseEntity responseEntity = managerService.signupManager(manager);
+        ResponseEntity responseEntity = managerService.registerManager(manager);
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
     /* Manager 회원가입 - 이메일 중복 체크, 메일 발송*/
-    /* 밑에 코드 수정 다 되면 작업 할것 */
     @GetMapping("/register/check/email/{managerEmail}")
     public ResponseEntity registerEmailCheck(
             @PathVariable("managerEmail")String managerEmail){
-        return ResponseEntity.status(HttpStatus.OK).body(managerService.emailConflictCheck(managerEmail));
+        ResponseEntity responseEntity = managerService.emailConflictCheck(managerEmail);
+        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
     /* Manager 회원가입 - 인증 코드 확인 */
-    /* 밑에 코드 수정 다 되면 작업 할것 */
     @GetMapping("/register/check/email/{email}/{code}")
-    public ResponseEntity emailCheck(@PathVariable("email") String email,
-                                     @PathVariable("code") String code) {
-        String temporaryKey = "11111"; // SMTP 해결시 RedisServer을 통하여 코드 수정 예정
-        if (Integer.parseInt(temporaryKey) == Integer.parseInt(code)){
-            managerService.ManagerEmailCode(email);
-            return ResponseEntity.status(HttpStatus.OK).body(SignUpConstant.EMAIL_CODE_CLEAR);
-        } else {
-            return ResponseEntity.status(HttpStatus.NON_AUTHORITATIVE_INFORMATION).body(SignUpConstant.EMAIL_CODE_FAIL);
-        }
+    public ResponseEntity emailCodeCheck(@PathVariable("email") String email,
+                                         @PathVariable("code") String code) {
+        ResponseEntity responseEntity = managerService.emailCodeCheck(email,code);
+        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
     /* Manager 회원가입 - 닉네임 중복 체크 */
@@ -67,32 +60,29 @@ public class ManagerController {
 
     /* Manager 로그인 */
     @PostMapping("/login")
-    public ResponseEntity AllManagers(@RequestBody Manager manager) {
-        ResponseEntity responseEntity = managerService.managerLogin(manager);
+    public ResponseEntity loginManager(@RequestBody RequestManagerLogin loginData) {
+        ResponseEntity responseEntity = managerService.managerLogin(loginData);
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
     /* 매니저 아이디 찾기 */
-    @PostMapping (value = "/findManagerId")
-    public ResponseEntity FindManagerId (@RequestBody Manager manager){
-        ResponseEntity responseEntity = managerService.findManagerId(
-                manager.getManagerPhoneNumber(),
-                manager.getManagerName()
-        );
+    @PostMapping ("/find/id")
+    public ResponseEntity findManagerId (@RequestBody RequestFindManagerId requestFindManagerId){
+        ResponseEntity responseEntity = managerService.findManagerId(requestFindManagerId);
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
     /* 매니저 비밀번호 찾기 - 비밀번호 초기화 */
-    @PostMapping(value = "/ManagerPasswordReset")
-    public ResponseEntity FindManagerPassword (@RequestBody RequestFindManagerPassword managerData) {
+    @PostMapping("/find/password")
+    public ResponseEntity findManagerPassword (@RequestBody RequestFindManagerPassword managerData) {
         ResponseEntity responseEntity = managerService.findManagerPassword(managerData);
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
-    /* 매니저 마이페이지 (비밀번호 재 설정) */
-    @PostMapping("/myPage/changePW")
-    public ResponseEntity ChangePW(@RequestBody RequestChangePassword requestChangePassword) {
-        ResponseEntity responseEntity = managerService.changeManagerPW(requestChangePassword);
+    /* 매니저 마이페이지 - 비밀번호 변경 */
+    @PostMapping("/myPage/change/password")
+    public ResponseEntity changePassword(@RequestBody RequestChangePassword requestChangePassword) {
+        ResponseEntity responseEntity = managerService.changeManagerPassword(requestChangePassword);
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 

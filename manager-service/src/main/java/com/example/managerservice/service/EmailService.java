@@ -25,6 +25,7 @@ public class EmailService {
         this.javaMailSender = javaMailSender;
     }
 
+    /* 이메일 전송 */
     public void sendMail(String userEmail,String key,String type){
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(userEmail);
@@ -38,13 +39,7 @@ public class EmailService {
             message.setSubject(SMTP_PASSWORD_CHANGE_TITLE_MESSAGE);
             message.setText(SMTP_PASSWORD_CHANGE_MESSAGE.replaceAll("\\$key", key));
         }
-
         javaMailSender.send(message);
     }
 
-    /* 인증번호 만들기 */
-    private String createKey() {
-        Random random = new Random();
-        return Integer.toString(random.nextInt((int)Math.pow(10,6)));
-    }
 }

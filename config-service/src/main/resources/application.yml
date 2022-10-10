@@ -9,4 +9,4 @@ spring:
     config:
       server:
         native:
-          search-locations: file://${user.home}/ENG-SERVER/config-files
+          search-locations: file://home/eng2/ENG-SERVER/config-files

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.facilityservice.mapper.FacilityJoinMapper">
+
+    <!-- 시설물 가입하기 -->
+    <insert id="registerFacility" parameterType="com.example.facilityservice.vo.RequestJoinFacility">
+        INSERT INTO ALL
+            INTO facility VALUES (
+            #{facilityNum},
+            #{facilityName},
+            #{facilityAddress},
+            #{facilityQr})
+        INTO facility_join_manager VALUES(
+            #{managerId},
+            #{facilityNum})
+    </insert>
+
+
+</mapper>

@@ -1,9 +1,28 @@
 spring:
   datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://jlchj.iptime.org:5001/engbase
-    username: rooteng
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://jlchj.iptime.org:5001/eng?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    username: root
     password: eng1234
+  mail:
+    host: smtp.naver.com
+    port: 587
+    username: ukidd12
+    password: ljh90140189!
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  redis:
+    host: jlchj.iptime.org
+    port: 6379
+    pool:
+      max-idle: 8
+      min-idle: 0
+      max-active: 8
+      max-wait: -1
   servlet:
     multipart:
       file-size-threshold: 1MB
@@ -19,4 +38,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://192.168.0.2:8761/eureka
+      defaultZone: http://jlchj.iptime.org:8761/eureka
+
+secret_settings:
+  address: ukidd12@naver.com

@@ -1,20 +1,22 @@
 package com.example.facilityservice.controller;
 
+
 import com.example.facilityservice.service.FacilityService;
+import com.example.facilityservice.vo.RequestChangeAddress;
+import com.example.facilityservice.vo.RequestDeleteFacility;
+import com.example.facilityservice.vo.RequestFacilityChangeName;
 import com.example.facilityservice.vo.RequestFacilityRegister;
 import com.google.zxing.WriterException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
 @RestController
 @RequestMapping("")
 public class FacilityController {
+
 
     private FacilityService facilityService;
 
@@ -27,13 +29,28 @@ public class FacilityController {
     /* 시설물 생성 */
     @PostMapping("/facility/register")
     public ResponseEntity registerFacility(@RequestBody RequestFacilityRegister facility) throws IOException, WriterException {
-        ResponseEntity responseEntity = new ResponseEntity<>(facilityService.registerFacility(facility).getStatusCode());
+        ResponseEntity responseEntity = facilityService.registerFacility(facility);
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
-    /* 시설물 수정 */
+    /* 시설물 수정 - 시설물 이름 */
+    @PostMapping("/facility/change/name")
+    public ResponseEntity changeFacilityName(@RequestBody RequestFacilityChangeName changeName){
+        ResponseEntity responseEntity = facilityService.facilityChangeName(changeName);
+        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
+    }
+    /* 시설물 수정 - 시설물 주소 */
+    @PostMapping("/facility/change/address")
+    public ResponseEntity changeFacilityAddress(@RequestBody RequestChangeAddress changeAddress){
+        ResponseEntity responseEntity = facilityService.facilityChangeAddress(changeAddress);
+        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
+    }
 
     /* 시설물 삭제 */
-
+    @GetMapping("/facility/delete/")
+    public ResponseEntity deleteFacility(@RequestBody RequestDeleteFacility deleteFacility){
+        ResponseEntity responseEntity = facilityService.deleteFacility(deleteFacility);
+        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
+    }
 
 }

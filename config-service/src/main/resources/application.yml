@@ -10,3 +10,6 @@ spring:
       server:
         native:
           search-locations: file://home/eng2/ENG-SERVER/config-files
+
+path:
+  text: ${user.home}

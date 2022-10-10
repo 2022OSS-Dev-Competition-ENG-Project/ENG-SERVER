@@ -7,7 +7,7 @@ spring:
   servlet:
     multipart:
       file-size-threshold: 1MB
-      location: /home/icslab/ENG-store/image/content/
+      location: /home/eng2/ENG-STORE/image/
       # location: /Users/jeonghunlee/image/content/
       max-file-size: 100MB
       max-request-size: 100MB

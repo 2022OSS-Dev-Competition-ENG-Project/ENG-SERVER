@@ -34,7 +34,7 @@ dependencies {
 
     /* Cloud */
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-    compileOnly 'org.springframework.cloud:spring-cloud-starter-config:3.1.4'
+    implementation 'org.springframework.cloud:spring-cloud-starter-config:3.1.4'
     implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap:3.1.4'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:3.1.4'
 

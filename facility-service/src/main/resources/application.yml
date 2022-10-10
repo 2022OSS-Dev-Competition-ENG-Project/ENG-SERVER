@@ -1,11 +1,12 @@
 server:
   port: 0
 
+spring:
+  application:
+    name: facility-service
 
 mybatis:
   type-aliases-package: com.example.mappertut.model
   mapper-locations: mybatis-mapper/*.xml
   configuration.map-underscore-to-camel-case: true
-spring:
-  application:
-    name: facility-service
+

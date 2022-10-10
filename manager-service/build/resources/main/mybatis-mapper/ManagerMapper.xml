@@ -84,14 +84,14 @@
         where manager_email = #{managerEmail}
     </update>
 
-    <!--Manager 마이페이지 - 비밀번호 재설정-->
+    <!-- Manager 마이페이지 - 비밀번호 변경 -->
     <update id="changeManagerPassword" parameterType="com.example.managerservice.vo.RequestChangePassword">
         update manager
         set manager_password = #{changePassword}
         where manager_uuid = #{managerUuid}
     </update>
 
-    <!--Manager 마이페이지 - uuid를 통해 유저 정보 수정-->
+    <!-- Manager 마이페이지 - 매니저 정보 불러오기 -->
     <select id="findManagerUuid" resultType="com.example.managerservice.dto.Manager">
         select *
         from manager

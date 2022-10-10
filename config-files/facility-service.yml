@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://jlchj.iptime.org:5001/eng?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    username: root
+    password: eng1234
+  servlet:
+    multipart:
+      file-size-threshold: 1MB
+      # location: /home/eng2/ENG-STORE/image/
+      location: /Users/jeonghunlee/image/
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://jlchj.iptime.org:8761/eureka

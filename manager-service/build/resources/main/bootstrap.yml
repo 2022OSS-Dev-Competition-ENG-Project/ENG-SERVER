@@ -1,5 +1,5 @@
 spring:
   cloud:
     config:
-      uri: http://36.38.62.51:8888
+      uri: http://jlchj.iptime.org:8888
       name: manager-service

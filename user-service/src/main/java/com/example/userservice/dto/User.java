@@ -5,13 +5,13 @@ import java.time.LocalDate;
 
 
 @Data
-public class UserDto {
-    private String userUuid;
+public class User {
+    private String userId;
     private String userEmail;
     private String userPassword;
     private String userName;
     private String userNickname;
-    private String userPhoneNum;
+    private String userPhoneNumber;
     private LocalDate userJoinDate;
     private Integer userLoginKey;
     private Integer userAccessType;

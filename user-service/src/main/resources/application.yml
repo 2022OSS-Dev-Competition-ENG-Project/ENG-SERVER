@@ -1,43 +1,9 @@
 server:
-  port: 2201
+  port: 0
 
 spring:
-  datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mysql://203.250.32.29:5001/engbase
-    username: rooteng
-    password: eng1234
-  servlet:
-    multipart:
-      max-file-size: 51200KB
-      max-request-size: 51200KB
-
-  redis:
-    host: 203.250.32.29
-    port: 5002
-    pool:
-      max-idle: 8
-      min-idle: 0
-      max-active: 8
-      max-wait: -1
-  #  redis:
-  #    lettuce:
-  #      pool:
-  #        max-active: 10
-  #        max-idle: 10
-  #        min-idle: 2
-  #        port: 6379
-  #        host: 203.250.32.29
-
-
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: agc01075547865@gmail.com
-    password: cavnafppgwedyiur
-    properties:
-      mail.smtp.auth: true
-      mail.smtp.starttls.enable: true
+  application:
+    name: user-service
 
 mybatis:
   type-aliases-package: com.example.mappertut.model

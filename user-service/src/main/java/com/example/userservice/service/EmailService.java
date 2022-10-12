@@ -1,6 +1,8 @@
 package com.example.userservice.service;
 
+import com.example.userservice.constant.EmailConstant;
 import com.example.userservice.constant.SignUpConstant;
+import org.apache.ibatis.mapping.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -20,19 +22,24 @@ public class EmailService {
     private RedisService redisService;
 
 
+
     /* 이메일 인증 코드 발송 */
-    public void sendMail(String userEmail){
+    public void sendMail(String userEmail, String key, String type){
         SimpleMailMessage message = new SimpleMailMessage();
-        String key = createKey();
         message.setTo(userEmail);
-        message.setSubject(SignUpConstant.SIGNUP_SEND_MAIL_TITLE);
-        message.setText(SignUpConstant.SIGNUP_SEND_MAIL_CONTENT.replaceAll("\\$key", key));
-        javaMailSender.send(message);
-        redisService.setDataExpire(userEmail,key,60 * 3L);
-    }
-    /* 인증번호 만들기 */
-    private String createKey() {
-        Random random = new Random();
-        return Integer.toString(random.nextInt((int)Math.pow(10,6)));
+        if(type.equals("EmailCheck")) {
+            message.setSubject(EmailConstant.SMTP_EMAIL_CHECK_TITLE_MESSAGE);
+            message.setText(EmailConstant.SMTP_EMAIL_CODE_CHECK_CONTENT.replaceAll("\\$key", key));
+            message.setText("\n 안증번호는" + key + "입니다.");
+            javaMailSender.send(message);
+            redisService.setDataExpire(userEmail, key, 60 * 3L);
+        }
+        if(type.equals("ChangePassword")) {
+            message.setSubject(EmailConstant.SMTP_PASSWORD_CHANGE_TITLE_MESSAGE);
+            message.setText(EmailConstant.SMTP_PASSWORD_CHANGE_MESSAGE);
+            message.setText("\n 임시 비밀번호는 [" + key + "]입니다.");
+            javaMailSender.send(message);
+            redisService.setDataExpire(userEmail, key, 60 * 3L);
+        }
     }
 }

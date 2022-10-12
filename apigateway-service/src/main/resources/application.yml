@@ -13,15 +13,15 @@ spring:
             preLogger: true
             postLogger: true
       routes:
-        - id: manager-service
+        - id: user-service
           uri: lb://MANAGER-SERVICE
           predicates:
-            - Path=/manager-service/**
+            - Path=/user-service/**
             - Method=GET
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/manager-service/(?<segment>.*), /${segment}
-        - id: manager-service
+            - RewritePath=/user-service/(?<segment>.*), /${segment}
+        - id: user-service
           uri: lb://USER-SERVICE
           predicates:
             - Path=/user-service/**

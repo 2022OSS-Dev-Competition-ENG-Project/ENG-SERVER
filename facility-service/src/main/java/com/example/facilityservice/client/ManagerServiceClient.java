@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface ManagerServiceClient {
 
     /* 매니저 검증 */
-    @GetMapping("/valid/manager/{managerId}")
-    Integer getValidManager(@PathVariable String managerId);
+    @GetMapping("/valid/manager/{managerUuid}")
+    Integer getValidManager(@PathVariable String managerUuid);
 }

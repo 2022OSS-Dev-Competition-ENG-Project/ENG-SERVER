@@ -5,18 +5,79 @@
 
 <mapper namespace="com.example.facilityservice.mapper.FacilityJoinMapper">
 
+    <!-- 내가 가입한 시설물 불러오기 -->
+    <resultMap type="com.example.facilityservice.vo.ResponseGetMyFacility" id="getMyFacility">
+        <result property="facilityNum" column="facility_num"/>
+        <result property="facilityName" column="facility_name"/>
+        <result property="facilityOwner" column="facility_owner"/>
+        <result property="facilityOwnerName" column="name"/>
+        <result property="likeBool" column="facility_like_bool"/>
+    </resultMap>
+
     <!-- 시설물 가입하기 -->
-    <insert id="registerFacility" parameterType="com.example.facilityservice.vo.RequestJoinFacility">
-        INSERT INTO ALL
-            INTO facility VALUES (
-            #{facilityNum},
-            #{facilityName},
-            #{facilityAddress},
-            #{facilityQr})
-        INTO facility_join_manager VALUES(
-            #{managerId},
-            #{facilityNum})
+    <insert id="joinFacilityUser">
+        INSERT INTO ${table} VALUES(
+                                    #{uuid},
+                                    #{facilityNum}
+                                    );
     </insert>
 
+    <!-- 시설물 가입 - 중복 가입 검사 -->
+    <select id="conflictValidJoin" resultType="java.lang.Integer">
+        SELECT if(count(*) = 0, 0, 1)
+        FROM ${table}
+        WHERE ${colum} = #{uuid}
+    </select>
+
+    <!-- 시설물 탈퇴 -->
+    <delete id="resignationFacility" parameterType="com.example.facilityservice.vo.RequestResignationFacility">
+        DELETE
+        FROM ${table}
+        WHERE ${colum} = #{uuid} AND facility_num = #{facilityNum};
+    </delete>
+
+    <!-- 시설물 탈퇴 - 사용자 존재 여부 검사 -->
+    <select id="isValidJoin" resultType="java.lang.Integer" >
+        SELECT if(count(*) = 0, 0, 1)
+        FROM ${table}
+        WHERE ${colum} = #{uuid}
+    </select>
+
+    <!-- 내가 가입한 시설물 불러오기 ( Manager ) -->
+    <select id="getMyFacilityListManager" resultMap="getMyFacility">
+        SELECT m.manager_name as name,
+               f.facility_num,
+               f.facility_name,
+               f.facility_owner
+        FROM (SELECT * FROM ${table} WHERE ${colum} = #{uuid}) as um
+            INNER JOIN facility f ON f.facility_num = um.facility_num
+            INNER JOIN manager m ON m.manager_uuid = f.facility_owner
+    </select>
+
+    <!-- 내가 가입한 시설물 불러오기 ( User ) -->
+    <select id="getMyFacilityListUser" resultMap="getMyFacility">
+        SELECT m.manager_name as name,
+               f.facility_num,
+               f.facility_name,
+               f.facility_owner,
+               f.facility_like_bool
+        FROM (SELECT * FROM ${table} WHERE ${colum} = #{uuid}) as um
+                 INNER JOIN facility f ON f.facility_num = um.facility_num
+                 INNER JOIN manager m ON m.manager_uuid = f.facility_owner
+    </select>
+
+    <!-- 내가 가입한 시설 좋아요 -->
+    <update id="updateFacilityLike">
+        update facility
+        set facility_like_bool = ${bool}
+        where user_uuid = #{userUuid} AND facility_num = #{facilityNum}
+    </update>
+
+    <!-- 내가 가입한 시설 좋아요 - 좋아요 여부 -->
+    <select id="myFacilityLikeBool" resultType="java.lang.Integer">
+        select if(is_liked = 0, 0, 1)
+        from facility
+        where user_uuid = #{userUuid} AND facility_num = #{facilityNum}
+    </select>
 
 </mapper>

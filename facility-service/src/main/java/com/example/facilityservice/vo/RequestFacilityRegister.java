@@ -6,7 +6,7 @@ import lombok.Data;
 public class RequestFacilityRegister {
 
     /* 매니저 고유 번호 */
-    private String managerId;
+    private String managerUuid;
 
     /* 시설물 번호 */
     private String facilityNum;
@@ -19,4 +19,5 @@ public class RequestFacilityRegister {
 
     /* 시설물 QR*/
     private String facilityQr;
+
 }

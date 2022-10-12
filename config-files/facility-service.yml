@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://jlchj.iptime.org:5001/eng?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://jlchj.iptime.org:5001/eng?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowMultiQueries=true
     username: root
     password: eng1234
   servlet:

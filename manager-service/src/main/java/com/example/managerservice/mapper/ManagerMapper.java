@@ -42,6 +42,6 @@ public interface ManagerMapper {
     Manager findManagerUuid(@Param("managerUuid") String managerUuid);
 
     /* 매니저 검증 */
-    Integer getValidManager(@Param("managerId") String managerId);
+    Integer getValidManager(@Param("managerUuid") String managerUuid);
 
 }

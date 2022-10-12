@@ -20,49 +20,49 @@ public class FacilityJoinController {
     }
 
     /* 시설물 가입 - Manger */
-    @PostMapping("/facility/join/manager")
+    @PostMapping("/join/manager")
     public ResponseEntity joinFacilityManager(@RequestBody RequestJoinFacility joinFacility){
-        ResponseEntity responseEntity = facilityJoinService.joinFacility(joinFacility,"facility_join_manager");
+        ResponseEntity responseEntity = facilityJoinService.joinFacility(joinFacility,"facility_join_manager", "manager_uuid");
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
     /* 시설물 가입 - User */
-    @PostMapping("/facility/join/user")
+    @PostMapping("/join/user")
     public ResponseEntity joinFacilityUser(@RequestBody RequestJoinFacility joinFacility){
-        ResponseEntity responseEntity = facilityJoinService.joinFacility(joinFacility,"facility_join_user");
+        ResponseEntity responseEntity = facilityJoinService.joinFacility(joinFacility,"facility_join_user", "user_uuid");
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
     /* 시설물 탈퇴 - Manger */
-    @GetMapping("/facility/resignation/manager")
+    @PostMapping("/resignation/manager")
     public ResponseEntity resignationFacilityManager(@RequestBody RequestResignationFacility resignationFacility){
-        ResponseEntity responseEntity = facilityJoinService.resignationFacility(resignationFacility,"facility_join_manager");
+        ResponseEntity responseEntity = facilityJoinService.resignationFacility(resignationFacility,"facility_join_manager", "manager_uuid");
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
     /* 시설물 탈퇴 - User */
-    @GetMapping("/facility/resignation/user")
+    @GetMapping("/resignation/user")
     public ResponseEntity resignationFacilityUser(@RequestBody RequestResignationFacility resignationFacility){
-        ResponseEntity responseEntity = facilityJoinService.resignationFacility(resignationFacility,"facility_join_user");
+        ResponseEntity responseEntity = facilityJoinService.resignationFacility(resignationFacility,"facility_join_user", "user_uuid");
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
     /* 내가 가입한 시설물 불러오기 - Manager */
-    @GetMapping("/facility/join/{managerUuid}/list")
-    public ResponseEntity getManagerFacilityList(@PathVariable("managerUuid")String managerUuid){
-        ResponseEntity responseEntity = facilityJoinService.getMyFacilityList(managerUuid, "facility_join_manager");
+    @GetMapping("/join/{managerUuid}/manager/list")
+    public ResponseEntity getManagerFacilityList(@PathVariable("managerUuid") String managerUuid){
+        ResponseEntity responseEntity = facilityJoinService.getMyFacilityList(managerUuid, "facility_join_manager", "manager_uuid","manager");
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
     /* 내가 가입한 시설물 불러오기 - User */
-    @GetMapping("/facility/join/{userUuid}/list")
-    public ResponseEntity getUserFacilityList(@PathVariable("userUuid")String managerUuid){
-        ResponseEntity responseEntity = facilityJoinService.getMyFacilityList(managerUuid, "facility_join_user");
+    @GetMapping("/join/{userUuid}/user/list")
+    public ResponseEntity getUserFacilityList(@PathVariable("userUuid")String userUuid){
+        ResponseEntity responseEntity = facilityJoinService.getMyFacilityList(userUuid, "facility_join_user", "user_uuid","user");
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
     /* 내가 가입한 시설 좋아요 - User */
-    @GetMapping("/facility/join/like/{userUuid}/{facilityNum}")
+    @GetMapping("/join/like/{userUuid}/{facilityNum}")
     public ResponseEntity myFacilityLike(@PathVariable("userUuid")String userUuid,
                                          @PathVariable("facilityNum") String facilityNum) {
         ResponseEntity responseEntity = facilityJoinService.myFacilityLike(userUuid, facilityNum);

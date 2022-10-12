@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.facilityservice.mapper.FacilityCommentMapper">
+
+    <!-- 게시물 댓글 불러오기 -->
+    <resultMap type="com.example.facilityservice.vo.ResponseCommentList" id="commentList">
+        <result property="commentNum" column="comment_num"/>
+        <result property="commentText" column="comment_text"/>
+        <result property="commentDate" column="comment_date"/>
+        <result property="userUuid" column="comment_writer"/>
+        <result property="userName" column="user_name"/>
+    </resultMap>
+
+    <!-- 게시물 댓글 등록 -->
+    <insert id="registerComment" parameterType="com.example.facilityservice.dto.FacilityComment">
+        insert into facility_content_comment(comment_text,
+                                            comment_date,
+                                            content_num,
+                                            comment_writer)
+        values (#{commentText},
+                #{commentDate},
+                #{contentNum},
+                #{userUuid})
+    </insert>
+
+    <!-- 댓글 작성자 검증 -->
+    <select id="validCommentWriter" resultType="java.lang.Integer">
+        select if(count(*) = 1, 1, 0)
+        from facility_content_comment
+        where comment_num = #{commentNum} AND comment_writer = #{userUuid}
+    </select>
+
+    <!-- 게시물 댓글 수정 -->
+    <update id="updateComment" parameterType="com.example.facilityservice.dto.FacilityComment">
+        update facility_content_comment
+        set comment_text = #{commentText}
+        where comment_num = #{commentNum} AND comment_writer = #{userUuid}
+    </update>
+
+    <!-- 게시물 댓글 삭제 -->
+    <delete id="deleteComment">
+        delete from facility_content_comment where comment_num = #{commentNum}
+    </delete>
+
+    <!-- 게시물 댓글 조회 -->
+    <select id="getComment" resultMap="commentList">
+        select c.comment_num,
+               c.comment_text,
+               c.comment_writer,
+               c.comment_date,
+               u.user_name
+        from (SELECT * FROM facility_content_comment WHERE content_num = #{contentNum}) as c
+        INNER JOIN user u ON u.user_uuid = c.comment_writer
+    </select>
+
+
+
+</mapper>

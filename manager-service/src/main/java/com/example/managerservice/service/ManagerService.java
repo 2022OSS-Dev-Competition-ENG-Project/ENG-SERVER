@@ -161,8 +161,8 @@ public class ManagerService {
     }
 
     /* 매니저 검증 - OpenFeign */
-    public Integer getValidManager(String managerId) {
-        return managerMapper.getValidManager(managerId);
+    public Integer getValidManager(String managerUuid) {
+        return managerMapper.getValidManager(managerUuid);
     }
 
 }

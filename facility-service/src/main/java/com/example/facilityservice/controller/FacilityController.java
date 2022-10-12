@@ -27,27 +27,27 @@ public class FacilityController {
 
 
     /* 시설물 생성 */
-    @PostMapping("/facility/register")
+    @PostMapping("/register")
     public ResponseEntity registerFacility(@RequestBody RequestFacilityRegister facility) throws IOException, WriterException {
         ResponseEntity responseEntity = facilityService.registerFacility(facility);
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
     /* 시설물 수정 - 시설물 이름 */
-    @PostMapping("/facility/change/name")
+    @PostMapping("/change/name")
     public ResponseEntity changeFacilityName(@RequestBody RequestFacilityChangeName changeName){
         ResponseEntity responseEntity = facilityService.facilityChangeName(changeName);
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
     /* 시설물 수정 - 시설물 주소 */
-    @PostMapping("/facility/change/address")
+    @PostMapping("/change/address")
     public ResponseEntity changeFacilityAddress(@RequestBody RequestChangeAddress changeAddress){
         ResponseEntity responseEntity = facilityService.facilityChangeAddress(changeAddress);
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
     /* 시설물 삭제 */
-    @GetMapping("/facility/delete/")
+    @PostMapping("/delete")
     public ResponseEntity deleteFacility(@RequestBody RequestDeleteFacility deleteFacility){
         ResponseEntity responseEntity = facilityService.deleteFacility(deleteFacility);
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());

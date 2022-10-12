@@ -87,8 +87,8 @@ public class ManagerController {
     }
 
     /* 매니저 검증 - OpenFeign */
-    @GetMapping("/valid/manager/{managerId}")
-    public Integer getValidManager(@PathVariable("managerId") String managerId){
-        return managerService.getValidManager(managerId);
+    @GetMapping("/valid/manager/{managerUuid}")
+    public Integer getValidManager(@PathVariable("managerUuid") String managerUuid){
+        return managerService.getValidManager(managerUuid);
     }
 }

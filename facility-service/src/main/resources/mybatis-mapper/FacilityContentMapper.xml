@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.facilityservice.mapper.FacilityContentMapper">
+
+    <!-- 게시물 상세 보기-->
+    <resultMap type="com.example.facilityservice.vo.ResponseContentDetail" id="contentDetail">
+        <result property="writerNickName" column="writer_nickname"/>
+        <result property="writerProfileImg" column="writer_image"/>
+        <result property="writerUuid" column="writer_uuid"/>
+        <result property="contentNum" column="content_num"/>
+        <result property="contentTitle" column="content_title"/>
+        <result property="contentText" column="content_text"/>
+        <result property="contentDate" column="content_date"/>
+        <result property="contentLook" column="content_look"/>
+        <result property="userLikeBool" column="user_like_bool"/>
+    </resultMap>
+
+    <!-- 게시물 리스트 불러오기 -->
+    <resultMap type="com.example.facilityservice.vo.ResponseContentList" id="contentList">
+        <result property="writerNickName" column="writer_nick_name"/>
+        <result property="writerProfileImg" column="writer_image"/>
+        <result property="writerUuid" column="writer_uuid"/>
+        <result property="contentNum" column="content_num"/>
+        <result property="contentTitle" column="content_title"/>
+        <result property="contentText" column="content_text"/>
+        <result property="contentDate" column="content_date"/>
+        <result property="contentLook" column="content_look"/>
+    </resultMap>
+
+    <!-- 게시물 등록 -->
+    <insert id="createContent">
+        INSERT INTO facility_content (content_num,
+                                      user_uuid,
+                                      facility_num,
+                                      content_title,
+                                      content_text,
+                                      content_date,
+                                      content_look
+                                      )
+        values (#{contentNum},
+                #{userUuid},
+                #{facilityNum},
+                #{contentTitle},
+                #{contentText},
+                #{contentDate},
+                #{contentLook}
+                )
+    </insert>
+
+    <!-- 게시물 상세 보기 -->
+    <select id="viewContentDetail" resultMap="contentDetail">
+        SELECT u.user_name as writer_nickname,
+               u.user_profile_image as writer_image,
+               fc.content_num,
+               fc.content_title,
+               fc.content_text,
+               fc.content_date,
+               fc.content_look,
+               u.user_uuid as writer_uuid,
+               if(ul.user_uuid is null, 0, 1) as user_like_bool
+        FROM (SELECT *
+              FROM facility_content
+              WHERE content_num = #{contentNum}) AS fc
+                 /* 작성자 닉네임 구하기 위함*/
+                 INNER JOIN user u ON fc.user_uuid = u.user_uuid
+            /* 조회자가 게시글 좋아요 여부 확인하기 위함*/
+                 LEFT OUTER JOIN facility_content_like ul ON #{userUuid} = ul.user_uuid AND fc.content_num = ul.content_num;
+    </select>
+
+    <!-- 게시물 삭제 -->
+    <delete id="deleteContent">
+        delete
+        from facility_content
+        where content_num = #{contentNum}
+    </delete>
+
+    <!-- 게시물 삭제 - 시설에 속해 있는지 또는 매니저인지 검증 -->
+    <select id="validJoinFacility" resultType="java.lang.Integer">
+        select if(count(*) = 1, 1, 0)
+        from manager
+        where manager_uuid = #{managerUuid};
+    </select>
+
+    <!-- 게시물 삭제 - 작성자 인지 검증 -->
+    <select id="validContentWriter" resultType="java.lang.Integer">
+        select if(count(*) = 1, 1, 0)
+        from facility_content
+        where user_uuid = #{userUuid} AND content_num = #{contentNum};
+    </select>
+
+    <!-- 게시물 좋아요 -->
+    <insert id="facilityContentLike">
+        INSERT INTO facility_content_like values(#{userUuid},#{contentNum});
+    </insert>
+
+    <!-- 게시물 좋아요 취소 -->
+    <delete id="deleteContentLike">
+        DELETE FROM facility_content_like WHERE user_uuid = #{userUuid} AND content_num = #{contentNum}
+    </delete>
+
+    <!-- 게시물 좋아요 - 여부 -->
+    <select id="contentLikeBool" resultType="java.lang.Integer">
+        SELECT if(count(*) = 0, 0, 1)
+        FROM facility_content_like
+        WHERE user_uuid = #{userUuid} AND content_num = #{contentNum}
+    </select>
+
+    <!-- 게시물 조아요 개수 -->
+    <select id="getContentLikeCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM facility_content_like
+        WHERE content_num = #{contentNum}
+    </select>
+
+    <!-- 게시물 리스트 전체 불러오기 -->
+    <select id="getContentList" resultMap="contentList">
+        select fc.content_num,
+               fc.user_uuid as writer_uuid,
+               fc.facility_num,
+               fc.content_title,
+               fc.content_text,
+               fc.content_look,
+               fc.content_date,
+               u.user_name as writer_name,
+               u.user_nick_name as writer_nick_name
+        from (select * from facility_content where facility_num = #{facilityNum}) as fc
+                 INNER JOIN user u ON u.user_uuid = fc.user_uuid
+        order by content_num desc
+    </select>
+
+    <!-- 게시물 리스트 불러오기 - Main Banner(5) -->
+    <select id="getContentListLt" resultMap="contentList">
+        select fc.content_num,
+               fc.user_uuid as writer_uuid,
+               fc.facility_num,
+               fc.content_title,
+               fc.content_text,
+               fc.content_look,
+               fc.content_date,
+               u.user_name as writer_name,
+               u.user_nick_name as writer_nick_name
+        from (select * from facility_content where facility_num = #{facilityNum}) as fc
+                 INNER JOIN user u ON u.user_uuid = fc.user_uuid
+        order by content_num desc limit ${count}
+    </select>
+
+    <!-- 내가 쓴 게시물 불러오기 - ALL -->
+    <select id="getMyContent" resultType="com.example.facilityservice.dto.FacilityContent">
+        select content_num,
+               content_title
+        from facility_content
+        where user_uuid = #{userUuid}
+        order by content_num desc
+    </select>
+
+    <!-- 내가 쓴 게시물 불러오기 - Main -->
+    <select id="getMyContentMain" resultType="com.example.facilityservice.dto.FacilityContent">
+        select content_num,
+               content_title
+        from facility_content
+        where user_uuid = #{userUuid}
+        order by content_num desc limit 5
+    </select>
+
+</mapper>

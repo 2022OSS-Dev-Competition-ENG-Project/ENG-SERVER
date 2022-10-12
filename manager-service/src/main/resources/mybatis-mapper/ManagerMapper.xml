@@ -100,8 +100,8 @@
 
     <!-- Manager 검증 -->
     <select id="getValidManager" resultType="java.lang.Integer">
-        select count(*)
+        select if(count(*) = 1, 1, 0)
         from  manager
-        where manager_id = #{managerId}
+        where manager_uuid = #{managerUuid}
     </select>
 </mapper>

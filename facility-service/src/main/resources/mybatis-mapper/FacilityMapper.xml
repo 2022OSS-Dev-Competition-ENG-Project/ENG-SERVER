@@ -3,22 +3,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.managerservice.mapper.FacilityMapper">
+<mapper namespace="com.example.facilityservice.mapper.FacilityMapper">
 
-    <!-- 시설물 등록하기 -->
+    <!-- 시설물 생성 -->
     <insert id="registerFacility" parameterType="com.example.facilityservice.vo.RequestFacilityRegister">
-        INSERT INTO ALL
-            INTO facility VALUES (
-                #{facilityNum},
-                #{facilityName},
-                #{facilityAddress},
-                #{facilityQr})
-            INTO facility_join_manager VALUES(
-                #{managerId},
-                #{facilityNum})
+        INSERT INTO facility VALUES (#{facilityNum}, #{facilityName}, #{facilityAddress}, #{facilityQr},#{managerUuid});
     </insert>
 
-    <!-- 시설물 생성 - 주소 중복 검사 -->
+    <!-- 시설물 생성 - 시설물 가입 -->
+    <insert id="rJoinFacility" parameterType="com.example.facilityservice.vo.RequestFacilityRegister">
+        INSERT INTO facility_join_manager(manager_uuid,facility_num) VALUES (#{managerUuid}, #{facilityNum});
+    </insert>
+
+    <!-- 시설물 생성 - 매니저 등급 설정 -->
+    <insert id="setGrade" >
+        INSERT INTO facility_manager_grade VALUES (#{managerUuid}, #{grade});
+    </insert>
+
+    <!-- 시설물 생성, 시설물 수정 - 주소 중복 검사 -->
     <select id="conflictValidAddress" resultType="java.lang.Integer">
         SELECT if(COUNT(*) = 1, 1, 0)
         FROM facility
@@ -28,9 +30,16 @@
     <!-- 사설물 수정 - 시설물 이름 -->
     <update id="facilityChangeName">
         update facility
-        set facility_nmae = #{changeName}
+        set facility_name = #{changeName}
         where facility_num = #{facilityNum}
     </update>
+
+    <!-- 사설물 수정 - 시설물 이름 중복 검사 -->
+    <select id="conflictValidName" resultType="java.lang.Integer">
+        SELECT if(COUNT(*) = 1, 1, 0)
+        FROM facility
+        WHERE facility_name = #{facilityName}
+    </select>
 
     <!-- 사설물 수정 - 시설물 주소 -->
     <update id="facilityChangeAddress">
@@ -40,11 +49,21 @@
     </update>
 
     <!-- 시설물 삭제 -->
-    <delete id="deleteFacility">
+    <delete id="deleteFacility" parameterType="com.example.facilityservice.vo.RequestDeleteFacility">
         delete
         from facility
-        where manager_uuid = #{managerUuid}
+        where facility_num = #{facilityNum}
     </delete>
+
+    <!-- 시설물 삭제 - 관리자 검증 -->
+    <select id="validManagerGrade" resultType="java.lang.Integer">
+        SELECT if(count(*), 1, 0)
+        FROM (select * from facility_join_manager
+                       where facility_num = #{facilityNum} AND manager_uuid = #{managerUuid}) as fjm
+        INNER JOIN facility_manager_grade fmg ON fmg.manager_uuid = fjm.manager_uuid
+        WHERE fmg.manager_grade = '관리자';
+    </select>
+
 
 
 </mapper>

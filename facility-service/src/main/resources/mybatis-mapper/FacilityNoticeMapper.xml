@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.facilityservice.mapper.FacilityNoticeMapper">
+
+    <!-- 공지 상세 보기-->
+    <resultMap type="com.example.facilityservice.vo.ResponseNoticeDetail" id="noticeDetail">
+        <result property="writerNickName" column="writer_nickname"/>
+        <result property="writerUuid" column="writer_uuid"/>
+        <result property="noticeNum" column="notice_num"/>
+        <result property="noticeTitle" column="notice_title"/>
+        <result property="noticeText" column="notice_text"/>
+        <result property="noticeDate" column="notice_date"/>
+        <result property="noticeLook" column="notice_look"/>
+        <result property="noticeImages" column="notice_images"/>
+    </resultMap>
+
+    <!-- 공지 리스트 보기-->
+    <resultMap type="com.example.facilityservice.vo.ResponseGetNoticeList" id="noticeList">
+        <result property="writerNickName" column="writer_nick_name"/>
+        <result property="writerUuid" column="writer_uuid"/>
+        <result property="writerName" column="writer_name"/>
+        <result property="noticeNum" column="notice_num"/>
+        <result property="noticeTitle" column="notice_title"/>
+        <result property="noticeText" column="notice_text"/>
+        <result property="noticeDate" column="notice_date"/>
+        <result property="noticeLook" column="notice_look"/>
+        <result property="noticeImages" column="notice_images"/>
+    </resultMap>
+
+    <!-- 공지 등록 -->
+    <insert id="createNotice" useGeneratedKeys="true" keyProperty="noticeNum" keyColumn="notice_num">
+        INSERT INTO facility_notice (notice_num,
+                                     manager_uuid,
+                                     facility_num,
+                                     notice_title,
+                                     notice_text,
+                                     notice_images,
+                                     notice_look,
+                                     notice_date
+        )
+        values (#{noticeNum},
+                #{managerUuid},
+                #{facilityNum},
+                #{noticeTitle},
+                #{noticeText},
+                #{noticeImages},
+                #{noticeLook},
+                #{noticeDate}
+               )
+    </insert>
+
+    <!-- 공지 생성 - 이미지 업데이트 -->
+    <update id="contentImageUpdate">
+        UPDATE facility_notice
+        SET notice_images = #{saveDbPath}
+        WHERE notice_num = #{noticeNum}
+    </update>
+
+    <!-- 공지 상세 보기 -->
+    <select id="viewNoticeDetail" resultMap="noticeDetail">
+        SELECT m.manager_name as writer_nickname,
+               fn.notice_num,
+               fn.notice_title,
+               fn.notice_text,
+               fn.notice_date,
+               fn.notice_look,
+               fn.notice_images,
+               m.manager_uuid as writer_uuid
+        FROM (SELECT *
+              FROM facility_notice
+              WHERE notice_num = #{noticeNum}) AS fn
+                 /* 작성자 닉네임 구하기 위함*/
+                 INNER JOIN manager m ON fn.manager_uuid = m.manager_uuid
+    </select>
+
+    <!-- 공지 리스트 불러오기 - All -->
+    <select id="getNoticeList" resultMap="noticeList">
+        select fn.notice_num,
+               fn.manager_uuid as writer_uuid,
+               fn.facility_num,
+               fn.notice_title,
+               fn.notice_text,
+               fn.notice_images,
+               fn.notice_look,
+               fn.notice_date,
+               m.manager_name as writer_name,
+               m.manager_nick_name as writer_nick_name
+        from (select * from facility_notice where facility_num = #{facilityNum}) as fn
+                 INNER JOIN manager m ON m.manager_uuid = fn.manager_uuid
+        order by notice_date desc
+    </select>
+
+    <!-- 공지 리스트 불러오기 - Main Banner(5)-->
+    <select id="getNoticeListLt" resultMap="noticeList">
+        select fn.notice_num,
+               fn.manager_uuid as writer_uuid,
+               fn.facility_num,
+               fn.notice_title,
+               fn.notice_text,
+               fn.notice_images,
+               fn.notice_look,
+               fn.notice_date,
+               m.manager_name as writer_name,
+               m.manager_nick_name as writer_nick_name
+        from (select * from facility_notice where facility_num = #{facilityNum}) as fn
+        INNER JOIN manager m ON m.manager_uuid = fn.manager_uuid
+        order by notice_date desc limit ${count}
+    </select>
+</mapper>

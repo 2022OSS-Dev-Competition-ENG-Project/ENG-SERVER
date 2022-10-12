@@ -6,10 +6,8 @@ public class FacilityContentConstant {
     public static final String FACILITY_CONTENT_CREATE = "게시물이 정상적으로 등록되었습니다.";
     /* 게시물 등록 */
     public static final String FACILITY_NOTICE_CREATE = "게시물이 정상적으로 등록되었습니다.";
-//        public static final String FACILITY_CONTENT_IMAGE_SAVE_PATH = "/Users/jeonghunlee/image/content/";
-    public static final String FACILITY_CONTENT_IMAGE_SAVE_PATH = "/home/eng2/ENG-STORE/image/content/";
-//        public static final String FACILITY_CONTENT_IMAGE_SAVE_PATH_DB = "http://jlchj.iptime.org:1001/api/facility/content/image/view/Users&jeonghunlee&image&content&";
-    public static final String FACILITY_CONTENT_IMAGE_SAVE_PATH_DB = "http://203.250.32.29:2200/api/facility/content/image/view/home&icslab&ENG-store&image&content&";
+        public static final String FACILITY_CONTENT_IMAGE_SAVE_PATH = "/home/eng2/ENG-STORAGE/images/notice/";
+        public static final String FACILITY_CONTENT_IMAGE_SAVE_PATH_DB = "http://jlchj.iptime.org:1001/api/facility/content/image/view/home&eng2&STORAGE&images&notice&";
 
     /* 게시물 삭제*/
     public static final String FACILITY_CONTENT_DELETE_VALID_COMPLETE = "게시물을 정상적으로 삭제 하였습니다.";

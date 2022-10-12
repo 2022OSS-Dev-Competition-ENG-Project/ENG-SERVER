@@ -36,7 +36,7 @@ public class FacilityService {
 
 
         /* 매니저 계정인지 확인 */
-        if (managerServiceClient.getValidManager(facility.getManagerId()) == 0){
+        if (managerServiceClient.getValidManager(facility.getManagerUuid()) == 0){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(REGISTER_VALID_FAIL_MANAGER);
         }
 
@@ -55,29 +55,51 @@ public class FacilityService {
                 facility.getFacilityAddress()));
 
         /* 시설물 생성 */
-        /* 시설물 생성과 동시에 FacilityJoin 동작이 같이 이루어 집니다. */
         /* FacilityJoin은 Logic 상이 아닌 다중 테이블 Insert를 사용하여 SQL에서 동작합니다.*/
         facilityMapper.registerFacility(facility);
+
+        /* 생성한 시설물에 가입 */
+        facilityMapper.rJoinFacility(facility);
+
+        /* 생성한 시설물에 최초 관리자 등급 등록 */
+        facilityMapper.setGrade(facility.getManagerUuid(), "관리자");
+
+
         return ResponseEntity.status(HttpStatus.OK).body(REGISTER_COMPLETE);
     }
 
 
-    /* 시설물 수정 - 시설물 이름*/
+    /* 시설물 수정 - 시설물 이름 */
     public ResponseEntity facilityChangeName(RequestFacilityChangeName changeData) {
-        facilityMapper.facilityChangeName(changeData);
-        return ResponseEntity.status(HttpStatus.OK).body(FACILITY_CHANGE_NAME);
+        /* 시설물 수정 - 이름 중복 검사 */
+        if(facilityMapper.conflictValidName(changeData.getChangeName()) == 0){
+            facilityMapper.facilityChangeName(changeData);
+            return ResponseEntity.status(HttpStatus.OK).body(FACILITY_CHANGE_NAME);
+        }else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(FACILITY_CHANGE_NAME_FAIL);
+        }
     }
 
-    /*시설물 수정 - 시설물 주소*/
+    /* 시설물 수정 - 시설물 주소 */
     public ResponseEntity facilityChangeAddress(RequestChangeAddress changeData) {
-        facilityMapper.facilityChangeAddress(changeData);
-        return ResponseEntity.status(HttpStatus.OK).body(FACILITY_CHANGE_ADDRESS);
+        /* 시설물 수정 - 이름 중복 검사 */
+        if(facilityMapper.conflictValidAddress(changeData.getChangeAddress()) == 0){
+            facilityMapper.facilityChangeAddress(changeData);
+            return ResponseEntity.status(HttpStatus.OK).body(FACILITY_CHANGE_ADDRESS);
+        }else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(FACILITY_CHANGE_ADDRESS_FAIL);
+        }
     }
 
     /* 시설물 삭제 */
     public ResponseEntity deleteFacility(RequestDeleteFacility deleteFacility) {
-        facilityMapper.deleteFacility(deleteFacility);
-        return ResponseEntity.status(HttpStatus.OK).body(FACILITY_DELETE_COMPLETE);
+        /* 시설물 삭제 - 관리자 검증 */
+        if (facilityMapper.validManagerGrade(deleteFacility.getFacilityNum(),deleteFacility.getManagerUuid()) == 1){
+            facilityMapper.deleteFacility(deleteFacility);
+            return ResponseEntity.status(HttpStatus.OK).body(FACILITY_DELETE_COMPLETE);
+        }else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(FACILITY_DELETE_FAIL);
+        }
     }
 
 

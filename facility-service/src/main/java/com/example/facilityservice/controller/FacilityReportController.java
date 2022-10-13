@@ -24,8 +24,8 @@ public class FacilityReportController {
     /* 신고 하기 */
     @PostMapping(value = "/report/register")
     public ResponseEntity registerReport(@RequestPart FacilityReport facilityReport,
-                                         @RequestPart(required = false) List<MultipartFile> files) throws Exception {
-        ResponseEntity responseEntity = facilityReportService.registerReport(facilityReport,files);
+                                         @RequestPart(required = false) List<MultipartFile> images) throws Exception {
+        ResponseEntity responseEntity = facilityReportService.registerReport(facilityReport,images);
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
 
     }

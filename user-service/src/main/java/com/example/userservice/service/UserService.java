@@ -44,7 +44,7 @@ public class UserService {
 
     /* User 회원가입 */
     public ResponseEntity signupUser(User user) {
-        user.setUserId(UUID.randomUUID().toString());
+        user.setUserUuid(UUID.randomUUID().toString());
         user.setUserJoinDate(LocalDate.now());
         /* 휴대폰 번호 중복 체크 */
         if (userMapper.PhoneNumberCheck(user.getUserPhoneNumber()) == 0) {
@@ -107,7 +107,7 @@ public class UserService {
             }
             String encodePassword = (findEmail(user)).getUserPassword();
             if (passwordEncoder.matches(ResponsePw,encodePassword)) {
-                String DBUuid = findEmail(user).getUserId();
+                String DBUuid = findEmail(user).getUserUuid();
                 return ResponseEntity.status(HttpStatus.OK).body(DBUuid);
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(SignUpConstant.LOGIN_PASSWORD_FAIL);
@@ -172,16 +172,16 @@ public class UserService {
 
         /* User 아이디 찾기 */
         public ResponseEntity findId (FindIdVo findIdVo){
+            userMapper.findId(findIdVo);
             if (findIdVo.getUserEmail() == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(SignUpConstant.FIND_ID_FAIL);
             }
-            userMapper.findId(findIdVo);
             return ResponseEntity.status(HttpStatus.OK).body(findIdVo);
         }
 
         /* User 마이페이지 - 비빌번호 재설정 */
         public ResponseEntity changePW (String id,User user){
-            user.setUserId(id);
+            user.setUserUuid(id);
             String userName = findUuid(id).getUserName();
             String ChgPassword = passwordEncoder.encode(user.getUserPassword());
             user.setUserPassword(ChgPassword);

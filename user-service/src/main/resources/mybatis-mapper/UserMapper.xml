@@ -6,7 +6,7 @@
 <mapper namespace="com.example.userservice.mapper.UserMapper">
 
     <resultMap type="com.example.userservice.dto.User" id="userInfo" >
-        <result property="user_id" column="userId"/>
+        <result property="user_uuid" column="userUuid"/>
         <result property="user_email" column="userEmail"/>
         <result property="user_password" column="userPassword"/>
         <result property="user_name" column="userName"/>
@@ -25,14 +25,14 @@
 
     <!--User 회원가입-->
     <insert id="SignupUser" parameterType="com.example.userservice.dto.User">
-        insert into user (user_id,
+        insert into user (user_uuid,
                           user_email,
                           user_password,
                           user_name,
                           user_nick_name,
                           user_phone_number,
                           user_join_date)
-        value (#{userId},
+        value (#{userUuid},
             #{userEmail},
             #{userPassword},
             #{userName},
@@ -73,7 +73,7 @@
     <select id="findUuid" resultType="com.example.userservice.dto.User">
         select *
         from user
-        where user_id = #{userId}
+        where user_uuid = #{userUuid}
     </select>
 
     <!--User 비밀번호 찾기 - 랜덤 비밀번호 생성-->
@@ -95,6 +95,6 @@
     <update id="changePW">
         update user
         set user_password = #{userPassword}
-        where user_id = #{userId}
+        where user_uuid = #{userUuid}
     </update>
 </mapper>

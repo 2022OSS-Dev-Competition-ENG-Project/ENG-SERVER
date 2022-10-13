@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Param;
 public interface UserMapper {
 
     /* User 회원가입 */
-    void SignupUser(User userDto);
+    void SignupUser(User user);
 
     /* USer 회원가입 - Email 중복 검사 */
     Integer UserEmailConform(@Param("userEmail") String userEmail);

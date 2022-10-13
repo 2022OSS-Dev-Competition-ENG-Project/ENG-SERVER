@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 @Data
 public class User {
-    private String userId;
+    private String userUuid;
     private String userEmail;
     private String userPassword;
     private String userName;

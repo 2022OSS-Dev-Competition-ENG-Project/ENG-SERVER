@@ -37,6 +37,7 @@ public class ImageUploader {
                 e.getStackTrace();
             }
         }
+
         multipartFile.transferTo(file);
         imageMapper.upload(multipartFile, userImg, userUuid);
     }

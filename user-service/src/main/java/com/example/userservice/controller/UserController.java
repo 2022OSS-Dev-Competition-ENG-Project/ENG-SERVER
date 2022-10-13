@@ -80,7 +80,8 @@ public class UserController {
     /* 마이페이지 */
     @GetMapping("/myPage/{uuid}")
     public Object myPage(@PathVariable("uuid") String uuid) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.myPage(uuid));
+        ResponseEntity responseEntity = userService.myPage(uuid);
+        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
     /* 마이페이지(비밀번호 재설정) */

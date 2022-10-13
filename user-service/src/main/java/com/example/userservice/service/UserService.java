@@ -125,6 +125,7 @@ public class UserService {
         }
 
         /* User 비밀번호 찾기 - 랜덤 비밀번호 암호화 */
+        // 로직수정해라 이메일이랑 이름 검색해야한다.
         public ResponseEntity changeRandomPassword (User user){
             String ChgUserPassword = RandomObject();
             try {

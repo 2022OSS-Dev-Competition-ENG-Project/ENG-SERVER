@@ -23,14 +23,14 @@ public class FacilityJoinController {
     /* 시설물 가입 - Manger */
     @PostMapping("/join/manager")
     public ResponseEntity joinFacilityManager(@RequestBody RequestJoinFacility joinFacility){
-        ResponseEntity responseEntity = facilityJoinService.joinFacility(joinFacility,"facility_join_manager", "manager_uuid");
+        ResponseEntity responseEntity = facilityJoinService.joinFacility(joinFacility,"facility_join_manager", "manager_uuid",1);
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
     /* 시설물 가입 - User */
     @PostMapping("/join/user")
     public ResponseEntity joinFacilityUser(@RequestBody RequestJoinFacility joinFacility){
-        ResponseEntity responseEntity = facilityJoinService.joinFacility(joinFacility,"facility_join_user", "user_uuid");
+        ResponseEntity responseEntity = facilityJoinService.joinFacility(joinFacility,"facility_join_user", "user_uuid",0);
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 

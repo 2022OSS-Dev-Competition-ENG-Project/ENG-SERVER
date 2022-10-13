@@ -1,6 +1,7 @@
 package com.example.facilityservice.mapper;
 
 import com.example.facilityservice.dto.FacilityReport;
+import com.example.facilityservice.vo.ResponseReportList;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,11 +18,15 @@ public interface FacilityReportMapper {
                            @Param("reportImage") String reportImage);
 
     /* 신고 목록 불러오기 */
-    List<FacilityReport> getReportList(@Param("facilityNum") Integer facilityNum,
-                                       @Param("statu일s") Integer status);
+    List<ResponseReportList> getReportList(@Param("facilityNum") Integer facilityNum,
+                                           @Param("status") Integer status);
 
     /* 신고 상세 보기 */
+    FacilityReport getReport(@Param("reportNum") Integer reportNum);
 
+    /* 내가 신고한 리스트 불러오기 - All */
+    List<ResponseReportList> getMyReport(String facilityNum, String userUuid);
 
-
+    /* 내가 신고한 리스트 불러오기 - Main */
+    List<ResponseReportList> getMyReportMain(String facilityNum, String userUuid, Integer count);
 }

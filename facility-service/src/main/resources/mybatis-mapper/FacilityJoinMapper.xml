@@ -18,8 +18,15 @@
     <insert id="joinFacilityUser">
         INSERT INTO ${table} VALUES(
                                     #{uuid},
-                                    #{facilityNum}
-                                    );
+                                    #{facilityNum},
+                                    0);
+    </insert>
+
+    <!-- 시설물 가입하기 -->
+    <insert id="joinFacilityManager">
+        INSERT INTO ${table} VALUES(
+                                       #{uuid},
+                                       #{facilityNum});
     </insert>
 
     <!-- 시설물 가입 - 중복 가입 검사 -->

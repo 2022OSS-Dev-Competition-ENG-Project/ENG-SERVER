@@ -25,16 +25,19 @@ public class FacilityJoinService {
     }
 
     /* 시설물 가입 */
-    public ResponseEntity joinFacility(RequestJoinFacility joinFacility,String table, String colum){
+    public ResponseEntity joinFacility(RequestJoinFacility joinFacility, String table, String colum,Integer type){
 
         /* 시설물 가입, 시설물 탈퇴 - 중복 가입 검사 */
         if (facilityJoinMapper.conflictValidJoin(joinFacility.getFacilityNum(),joinFacility.getUuid(), table, colum) == 1){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(FACILITY_JOIN_CONFLICT);
-        }else {
-            /* 시설물 가입 */
-            facilityJoinMapper.joinFacilityUser(joinFacility.getFacilityNum(),joinFacility.getUuid(),table);
-            return ResponseEntity.status(HttpStatus.OK).body(FACILITY_JOIN_COMPLETE);
         }
+        /* 시설물 가입 */
+        if(type == 0){
+            facilityJoinMapper.joinFacilityUser(joinFacility.getFacilityNum(),joinFacility.getUuid(),table);
+        }else {
+            facilityJoinMapper.joinFacilityManager(joinFacility.getFacilityNum(),joinFacility.getUuid(),table);
+        }
+            return ResponseEntity.status(HttpStatus.OK).body(FACILITY_JOIN_COMPLETE);
     }
 
     /* 시설물 탈퇴 */

@@ -31,9 +31,32 @@ public class FacilityReportController {
     }
 
     /* 신고 목록 불러오기 */
-    @GetMapping("report/{facilityNum}")
-    public ResponseEntity getReport(@PathVariable("facilityNum") Integer facilityNum){
-        ResponseEntity responseEntity = facilityReportService.getReportList(facilityNum);
+    @GetMapping("/report/list/{facilityNum}/{status}")
+    public ResponseEntity getReportList(@PathVariable("facilityNum") Integer facilityNum,
+                                    @PathVariable("status") Integer status){
+        ResponseEntity responseEntity = facilityReportService.getReportList(facilityNum, status);
+        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
+    }
+
+    /* 신고 상세 보기 */
+    @GetMapping("/report/{reportNum}")
+    public ResponseEntity getReport(@PathVariable("reportNum") Integer reportNum){
+        ResponseEntity responseEntity = facilityReportService.getReport(reportNum);
+        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
+    }
+
+    /* 내가 신고한 리스트 불러오기 - Main */
+    @GetMapping("/report/my/main/{facilityNum}/{userUuid}")
+    public ResponseEntity getMyReportListMain (@PathVariable("facilityNum") String facilityNum,
+                                               @PathVariable("userUuid") String userUuid){
+        ResponseEntity responseEntity = facilityReportService.getMyReportList(facilityNum, userUuid,5);
+        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
+    }
+    /* 내가 신고한 리스트 불러오기 - All*/
+    @GetMapping("/report/my/{facilityNum}/{userUuid}")
+    public ResponseEntity getMyReportList (@PathVariable("facilityNum") String facilityNum,
+                                           @PathVariable("userUuid") String userUuid){
+        ResponseEntity responseEntity = facilityReportService.getMyReportList(facilityNum, userUuid, null);
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 }

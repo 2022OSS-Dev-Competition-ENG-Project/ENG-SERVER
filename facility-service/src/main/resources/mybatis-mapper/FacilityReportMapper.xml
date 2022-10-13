@@ -42,7 +42,7 @@
     </update>
 
     <!-- 신고 목록 불러오기 (제목, 종류, 작성자, 작성일) -->
-    <select id="getReportList" resultMap="reportList">
+    <select id="getReportListMain" resultMap="reportList">
         select r.report_num,
                r.report_title,
                r.report_type,
@@ -51,6 +51,18 @@
                r.report_date_time
         from (select * from report where facility_num = #{facilityNum} AND report_status = {status}) as r
         INNER JOIN user u ON u.user_uuid = r.user_uuid
+    </select>
+
+    <!-- 내가 신고한 리스트 불러오기 - All -->
+    <select id="getReportList" resultMap="reportList">
+        select r.report_num,
+               r.report_title,
+               r.report_type,
+               u.user_name,
+               u.user_uuid,
+               r.report_date_time
+        from (select * from report where facility_num = #{facilityNum} AND report_status = {status}) as r
+                 INNER JOIN user u ON u.user_uuid = r.user_uuid
     </select>
 
 </mapper>

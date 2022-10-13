@@ -17,6 +17,12 @@ public interface FacilityJoinMapper {
                           @Param("uuid") String uuid,
                           @Param("table") String table);
 
+
+    /* 시설물 가입 */
+    void joinFacilityManager(@Param("facilityNum") String facilityNum,
+                            @Param("uuid") String uuid,
+                            @Param("table") String table);
+
     /* 시설물 가입 - 중복 가입 검사 */
     Integer conflictValidJoin(@Param("facilityNum") String facilityNum,
                               @Param("uuid") String uuid,

@@ -2,6 +2,7 @@ package com.example.facilityservice.service;
 
 import com.example.facilityservice.dto.FacilityReport;
 import com.example.facilityservice.mapper.FacilityReportMapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +56,22 @@ public class FacilityReportService {
     }
 
     /* 신고 목록 불러오기 */
-    public ResponseEntity getReportList(Integer facilityNum) {
-        return ResponseEntity.status(HttpStatus.OK).body(facilityReportMapper.getReportList(facilityNum));
+    public ResponseEntity getReportList(Integer facilityNum,Integer status) {
+        return ResponseEntity.status(HttpStatus.OK).body(facilityReportMapper.getReportList(facilityNum, status));
+    }
+
+    /* 신고 상세 보기 */
+    public ResponseEntity getReport(@Param("reportNum") Integer reportNum){
+        return ResponseEntity.status(HttpStatus.OK).body(facilityReportMapper.getReport(reportNum));
+    }
+
+    /* 내가 신고한 리스트 불러오기 */
+    public ResponseEntity getMyReportList(String facilityNum, String userUuid,Integer count) {
+        /* 5개 limit */
+        if(count == null){
+            return ResponseEntity.status(HttpStatus.OK).body(facilityReportMapper.getMyReport(facilityNum,userUuid));
+        }else {
+            return ResponseEntity.status(HttpStatus.OK).body(facilityReportMapper.getMyReportMain(facilityNum, userUuid,count));
+        }
     }
 }

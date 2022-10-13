@@ -4,12 +4,12 @@ public class QrConstant {
 
     /* QR 코드 생성 셋팅 */
     public static final String QR_CODE_GENERATE_URL = "$id/$name/$address";
-//    public static final String QR_CODE_SAVE_PATH = "/home/eng2/ENG-STORE/image/qr/";
-//    public static final String QR_CODE_SAVE_PATH_DB = "http://jlchj.iptime.org:8000/facility-service/image/view/home&eng2&ENG-STORAGE&images&qr&";
+    public static final String QR_CODE_SAVE_PATH = "/home/eng2/ENG-STORE/image/qr/";
+    public static final String QR_CODE_SAVE_PATH_DB = "http://jlchj.iptime.org:8000/facility-service/image/view/home&eng2&ENG-STORAGE&images&qr&";
 
     /* */
-    public static final String QR_CODE_SAVE_PATH = "/Users/jeonghunlee/image/qr";
-    public static final String QR_CODE_SAVE_PATH_DB = "http://jlchj.iptime.org:8000/facility-service/image/view/&Users&jeonghunlee&image&images&qr&";
+//    public static final String QR_CODE_SAVE_PATH = "/Users/jeonghunlee/image/qr";
+//    public static final String QR_CODE_SAVE_PATH_DB = "http://jlchj.iptime.org:8000/facility-service/image/view/&Users&jeonghunlee&image&images&qr&";
 
     public static final int QR_CODE_WIDTH = 200;
     public static final int QR_CODE_HEIGHT = 200;

@@ -81,7 +81,7 @@
     </update>
 
     <!-- 내가 가입한 시설 좋아요 - 좋아요 여부 -->
-    <select id="myFacilityLikeBool" resultType="java.lang.Integer">
+    <select id="facilityLikeBool" resultType="java.lang.Integer">
         select if(is_liked = 0, 0, 1)
         from facility
         where user_uuid = #{userUuid} AND facility_num = #{facilityNum}

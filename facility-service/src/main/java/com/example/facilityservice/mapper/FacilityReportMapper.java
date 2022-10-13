@@ -25,8 +25,11 @@ public interface FacilityReportMapper {
     FacilityReport getReport(@Param("reportNum") Integer reportNum);
 
     /* 내가 신고한 리스트 불러오기 - All */
-    List<ResponseReportList> getMyReport(String facilityNum, String userUuid);
+    List<ResponseReportList> getMyReport(@Param("facilityNum") String facilityNum,
+                                         @Param("userUuid") String userUuid);
 
     /* 내가 신고한 리스트 불러오기 - Main */
-    List<ResponseReportList> getMyReportMain(String facilityNum, String userUuid, Integer count);
+    List<ResponseReportList> getMyReportMain(@Param("facilityNum") String facilityNum,
+                                             @Param("userUuid") String userUuid,
+                                             @Param("count") Integer count);
 }

@@ -75,7 +75,7 @@
 
     <!-- 내가 가입한 시설 좋아요 -->
     <update id="updateFacilityLike">
-        update facility
+        update facility_join_user
         set facility_like_bool = ${bool}
         where user_uuid = #{userUuid} AND facility_num = #{facilityNum}
     </update>
@@ -83,7 +83,7 @@
     <!-- 내가 가입한 시설 좋아요 - 좋아요 여부 -->
     <select id="facilityLikeBool" resultType="java.lang.Integer">
         select if(facility_like_bool = 0, 0, 1)
-        from facility
+        from facility_join_user
         where user_uuid = #{userUuid} AND facility_num = #{facilityNum}
     </select>
 

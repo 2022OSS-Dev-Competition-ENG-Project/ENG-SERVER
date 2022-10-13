@@ -36,6 +36,7 @@
                 #{userUuid},
                 #{facilityNum})
     </insert>
+
     <!-- 신고 하기 - 이미지 업데이트 -->
     <update id="updateReportImage">
         update report set report_image = #{reportImage}
@@ -57,7 +58,7 @@
     <select id="getMyReportListMain" resultMap="reportList">
         select r.report_num,
                r.report_title,
-               r.report_status
+               r.report_status,
                r.report_type,
                u.user_name,
                u.user_uuid,

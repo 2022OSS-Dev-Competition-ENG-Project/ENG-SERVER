@@ -42,6 +42,7 @@ public class FacilityNoticeController {
         ResponseEntity responseEntity = facilityNoticeService.getNoticeList(facilityNum, 5);
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
+
     /* 공지 불러오기 - ALL */
     @GetMapping("/notice/{facilityNum}")
     public ResponseEntity getNoticeList( @PathVariable("facilityNum") String facilityNum) {

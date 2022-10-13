@@ -125,25 +125,22 @@ public class UserService {
         }
 
         /* User 비밀번호 찾기 - 랜덤 비밀번호 암호화 */
-        // 로직수정해라 이메일이랑 이름 검색해야한다.
-        public ResponseEntity changeRandomPassword (User user){
+        // 로직수정해라 이메일이랑 이름 검색은 완료 했는데 이메일이 안간다.
+        public ResponseEntity changeRandomPassword (User user) {
             String ChgUserPassword = RandomObject();
-            try {
-                findEmail(user).getUserEmail();
-            } catch (java.lang.NullPointerException e) {
+            Integer userEmail = userMapper.UserEmailConform(user.getUserEmail());
+            Integer userName = userMapper.UserNameConform(user.getUserName());
+            if (userEmail == 1 && userName == 1) {
+                user.setUserPassword(ChgUserPassword);
+                userMapper.changeRandomPassword(user);
+                emailService.sendMail(user.getUserEmail(), ChgUserPassword, "ChgUserPassword");
+                return ResponseEntity.status(HttpStatus.OK).body(ChgUserPassword);
+            } else if (userEmail != 1) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(SignUpConstant.FIND_PASSWORD_EMAIL_FAIL);
-            }
-
-            try {
+            } else {
                 findEmail(user).getUserName();
-            } catch (java.lang.NullPointerException e) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(SignUpConstant.FIND_PASSWORD_NAME_FAIL);
             }
-            user.setUserPassword(passwordEncoder.encode(ChgUserPassword));
-
-            userMapper.changeRandomPassword(user);
-            emailService.sendMail(user.getUserEmail(),ChgUserPassword,"ChgUserPassword");
-            return ResponseEntity.status(HttpStatus.OK).body(ChgUserPassword);
         }
 
         public String RandomObject () {

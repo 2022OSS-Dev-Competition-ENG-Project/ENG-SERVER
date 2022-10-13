@@ -31,7 +31,8 @@ public class UserController {
     /* 유저 회원가입 */
     @PostMapping("/signup")
     public ResponseEntity User(@RequestBody User user) {
-            return ResponseEntity.status(HttpStatus.OK).body(userService.signupUser(user));
+        ResponseEntity responseEntity = userService.signupUser(user);
+            return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
         }
 
 
@@ -47,7 +48,8 @@ public class UserController {
     @GetMapping("/register/check/nickname/{userNickname}")
     public ResponseEntity registerNicknameCheck(
             @PathVariable("userNickname")String userNickname){
-        return ResponseEntity.status(HttpStatus.OK).body(userService.userNickConform(userNickname));
+        ResponseEntity responseEntity = userService.userNickConform(userNickname);
+        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
     /* 이메일 코드 확인 */
@@ -61,13 +63,15 @@ public class UserController {
     /* 유저 로그인 */
     @PostMapping("/login")
     public ResponseEntity retrieveAllUsers(@RequestBody User user) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.userLogin(user));
+        ResponseEntity responseEntity = userService.userLogin(user);
+        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
     /* 아이디 찾기 */
     @PostMapping (value = "/FindUserid")
     public ResponseEntity FindUserId (@RequestBody FindIdVo findIdVo){
-        return ResponseEntity.status(HttpStatus.OK).body(userService.findId(findIdVo));
+        ResponseEntity responseEntity = userService.findId(findIdVo);
+        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
 
@@ -88,7 +92,8 @@ public class UserController {
     @GetMapping("/myPage/changePW/{userUuid}")
     public ResponseEntity ChangePW(@PathVariable("userUuid") String userUuid,
                                    @RequestBody User user) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.changePW(userUuid,user));
+        ResponseEntity responseEntity = userService.changePW(userUuid,user);
+        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
     /* 프로필 이미지 저장 */

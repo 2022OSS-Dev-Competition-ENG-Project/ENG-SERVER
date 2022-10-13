@@ -7,6 +7,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.facilityservice.constant.FacilityReportConstant.REPORT_IMAGES_SAVE_DB_PATH;
+import static com.example.facilityservice.constant.FacilityReportConstant.REPORT_IMAGES_SAVE_PATH;
+
 @Service
 public class ReportImageService {
 

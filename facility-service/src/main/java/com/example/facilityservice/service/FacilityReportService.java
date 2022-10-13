@@ -11,6 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.example.facilityservice.constant.FacilityReportConstant.REPORT_REGISTER_COMPLETE;
+
 @Service
 public class FacilityReportService {
     private ReportImageService reportImageService;

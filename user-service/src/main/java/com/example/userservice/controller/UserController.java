@@ -91,18 +91,20 @@ public class UserController {
     }
 
     /* 프로필 이미지 저장 */
-    @PostMapping("/SaveProfileImage/{id}")
+    @PostMapping("/SaveProfileImage/{uuid}")
     public ResponseEntity<String> upload(@RequestParam("images") MultipartFile multipartFile,
-                                         @PathVariable("id")String userId) throws IOException {
+                                         @PathVariable("uuid")String userUuid) throws IOException {
         //String userImg = "http://203.250.32.29:2201/api/user-service/ProfileImage/" + userId;
-        String userImg = "http://localhost:2201/user-service/ProfileImage/" + userId;
-        ImageUploader.upload(multipartFile,userImg,userId);
+        String userNickname = userService.findUuid(userUuid).getUserNickname();
+        String userImg = "http:/jlchj.iptime.org/ENG-STORAGE/images/profileImage/" + userUuid
+                + "/" + userNickname;
+        ImageUploader.upload(multipartFile,userImg,userUuid,userNickname);
         return ResponseEntity.status(HttpStatus.OK).body(ImageConstant.IMAGE_SUCCESS);
     }
 
     /* 프로필 이미지 가져오기 */
-    @GetMapping(value = "/ProfileImage/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<ResponseEntity<byte[]>> getImage(@PathVariable("id")String id) throws IOException {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.getImmage(id));
+    @GetMapping(value = "/ProfileImage/{uuid}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<ResponseEntity<byte[]>> getImage(@PathVariable("uuid")String uuid) throws IOException {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getImmage(uuid));
     }
 }

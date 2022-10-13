@@ -138,9 +138,7 @@ public class UserService {
             } catch (java.lang.NullPointerException e) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(SignUpConstant.FIND_PASSWORD_NAME_FAIL);
             }
-            user.setUserPassword(ChgUserPassword);
-            String encodePassword = passwordEncoder.encode(user.getUserPassword());
-            user.setUserPassword(encodePassword);
+            user.setUserPassword(passwordEncoder.encode(ChgUserPassword));
 
             userMapper.changeRandomPassword(user);
             emailService.sendMail(user.getUserEmail(),ChgUserPassword,"ChgUserPassword");
@@ -192,10 +190,11 @@ public class UserService {
             return ResponseEntity.status(HttpStatus.OK).body(userName + MyPageConstant.MYPAGE_CLEAR);
         }
 
-        public  ResponseEntity<byte[]> getImmage (String id) {
+        public  ResponseEntity<byte[]> getImmage (String uuid) {
             String savePath = SAVE_PATH;
             InputStream in = null;
-            String userImage = savePath + "/" + id;
+            String userNickname = userMapper.findUuid(uuid).getUserNickname();
+            String userImage = savePath + uuid + "/" + userNickname;
             try {
                 in = new FileInputStream(userImage);
             } catch (FileNotFoundException e) {

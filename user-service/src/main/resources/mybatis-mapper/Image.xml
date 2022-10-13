@@ -22,7 +22,7 @@
     <update id="upload" parameterType="com.example.userservice.dto.User">
         UPDATE user
         SET user_profile_image = #{userImg}
-        where user_id= #{userId}
+        where user_uuid= #{userUuid}
     </update>
 
 </mapper>

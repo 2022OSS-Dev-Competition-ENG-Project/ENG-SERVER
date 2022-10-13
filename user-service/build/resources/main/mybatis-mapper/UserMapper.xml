@@ -81,7 +81,6 @@
         update user
         set user_password = #{userPassword}
         where user_email = #{userEmail}
-          and user_name = #{userName}
     </update>
 
     <!--User 아이디 찾기-->

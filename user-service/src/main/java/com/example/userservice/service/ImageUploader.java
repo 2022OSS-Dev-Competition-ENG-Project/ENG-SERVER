@@ -25,9 +25,9 @@ public class ImageUploader {
     private static ImageMapper imageMapper;
 
     /* User ProfileImage 저장 */
-    public static void upload(MultipartFile multipartFile, String userImg, String userUuid) throws IOException {
+    public static void upload(MultipartFile multipartFile, String userImg, String userUuid, String userNickname) throws IOException {
         String savaPath = SAVE_PATH;
-        File file = new File(  savaPath + userUuid);
+        File file = new File(  savaPath + userUuid + "/" + userNickname);
         multipartFile.transferTo(file);
         imageMapper.upload(multipartFile, userImg, userUuid);
     }

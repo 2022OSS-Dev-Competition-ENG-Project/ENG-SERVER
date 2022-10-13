@@ -6,15 +6,15 @@
 <mapper namespace="com.example.facilityservice.mapper.FacilityReportMapper">
 
     <!-- 신고 하기 -->
-    <insert id="reportRegister" useGeneratedKeys="true" keyProperty="reportNum" keyColumn="report_num">
-        insert into facility_report(report_num,
-                                    report_title,
-                                    report_text,
-                                    report_type,
-                                    report_date,
-                                    report_img,
-                                    user_uuid,
-                                    facility_no)
+    <insert id="registerReport" useGeneratedKeys="true" keyProperty="reportNum" keyColumn="report_num">
+        insert into report( report_num,
+                            report_title,
+                            report_text,
+                            report_type,
+                            report_date_time,
+                            report_image,
+                            user_uuid,
+                            facility_num)
         values (#{reportNum},
                 #{reportTitle},
                 #{reportText},
@@ -22,7 +22,11 @@
                 #{reportDate},
                 #{reportImg},
                 #{userUuid},
-                #{facilityNo})
+                #{facilityNum})
     </insert>
+
+    <update id="updateReportImage">
+        update report set reportImage = #{}
+    </update>
 
 </mapper>

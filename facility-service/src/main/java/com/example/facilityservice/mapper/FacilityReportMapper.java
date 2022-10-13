@@ -2,6 +2,7 @@ package com.example.facilityservice.mapper;
 
 import com.example.facilityservice.dto.FacilityReport;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface FacilityReportMapper {
@@ -9,5 +10,6 @@ public interface FacilityReportMapper {
     void registerReport(FacilityReport facilityReport);
 
     /* 신고 하기 - 이미지 업데이트 */
-    void updateReportImage(int reportNum, String reportImg);
+    void updateReportImage(@Param("reportNum") int reportNum,
+                           @Param("reportImage") String reportImage);
 }

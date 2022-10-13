@@ -14,5 +14,5 @@ public class FacilityReport {
     private String reportImg;
     private String reportStatus;
     private String userUuid;
-    private String facilityNo;
+    private String facilityNum;
 }

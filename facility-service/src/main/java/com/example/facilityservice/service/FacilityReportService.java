@@ -53,4 +53,9 @@ public class FacilityReportService {
         }
         return ResponseEntity.status(HttpStatus.OK).body(REPORT_REGISTER_COMPLETE);
     }
+
+    /* 신고 목록 불러오기 */
+    public ResponseEntity getReportList(Integer facilityNum) {
+        return ResponseEntity.status(HttpStatus.OK).body(facilityReportMapper.getReportList(facilityNum));
+    }
 }

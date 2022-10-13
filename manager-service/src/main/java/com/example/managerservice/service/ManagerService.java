@@ -65,10 +65,12 @@ public class ManagerService {
     public ResponseEntity emailConflictCheck(String managerEmail){
         /* 이메일에 발송될 키 생성 */
         String key = RandomStringUtils.randomNumeric(6);
+        log.info("==== 이메일 발송 Start===");
         /* 이메일 중복 예외 처리 */
         if (managerMapper.emailConflictCheck(managerEmail) == 0){
             /* 이메일 발송*/
             emailService.sendMail(managerEmail,key,"EmailCheck");
+            log.info("==== 이메일 발송 END===");
             return ResponseEntity.status(HttpStatus.OK).body(EMAIL_CHECK_CLEAR);
         }else {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(EMAIL_CHECK_FAIL);

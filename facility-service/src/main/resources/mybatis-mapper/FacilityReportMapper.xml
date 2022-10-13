@@ -5,6 +5,18 @@
 
 <mapper namespace="com.example.facilityservice.mapper.FacilityReportMapper">
 
+    <resultMap id="reportList" type="com.example.facilityservice.vo.ResponseReportList">
+        <result property="reportNum" column="report_num"/>
+        <result property="reportTitle" column="report_title"/>
+        <result property="reportText" column="report_text"/>
+        <result property="reportType" column="report_type"/>
+        <result property="reportDate" column="report_date_time"/>
+        <result property="reportImg" column="report_image"/>
+        <result property="userUuid" column="user_uuid"/>
+        <result property="facilityNum" column="user_uuid"/>
+
+    </resultMap>
+
     <!-- 신고 하기 -->
     <insert id="registerReport" useGeneratedKeys="true" keyProperty="reportNum" keyColumn="report_num">
         insert into report( report_num,
@@ -24,9 +36,21 @@
                 #{userUuid},
                 #{facilityNum})
     </insert>
-
+    <!-- 신고 하기 - 이미지 업데이트 -->
     <update id="updateReportImage">
         update report set report_image = #{reportImage}
     </update>
+
+    <!-- 신고 목록 불러오기 (제목, 종류, 작성자, 작성일) -->
+    <select id="getReportList" resultMap="reportList">
+        select r.report_num,
+               r.report_title,
+               r.report_type,
+               u.user_name,
+               u.user_uuid,
+               r.report_date_time
+        from (select * from report where facility_num = #{facilityNum} AND report_status = {status}) as r
+        INNER JOIN user u ON u.user_uuid = r.user_uuid
+    </select>
 
 </mapper>

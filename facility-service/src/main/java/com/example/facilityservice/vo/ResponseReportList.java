@@ -1,18 +1,16 @@
-package com.example.facilityservice.dto;
+package com.example.facilityservice.vo;
 
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
-public class FacilityReport {
+public class ResponseReportList {
     private int reportNum;
     private String reportTitle;
-    private String reportText;
     private String reportType;
     private LocalDateTime reportDate;
-    private String reportImg;
     private Integer reportStatus;
     private String userUuid;
-    private String facilityNum;
+    private String userName;
 }

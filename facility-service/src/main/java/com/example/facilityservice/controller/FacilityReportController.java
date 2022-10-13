@@ -29,4 +29,11 @@ public class FacilityReportController {
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
 
     }
+
+    /* 신고 목록 불러오기 */
+    @GetMapping("report/{facilityNum}")
+    public ResponseEntity getReport(@PathVariable("facilityNum") Integer facilityNum){
+        ResponseEntity responseEntity = facilityReportService.getReportList(facilityNum);
+        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
+    }
 }

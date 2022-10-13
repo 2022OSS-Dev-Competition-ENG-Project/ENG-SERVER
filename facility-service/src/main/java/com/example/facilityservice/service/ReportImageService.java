@@ -24,7 +24,7 @@ public class ReportImageService {
         /* 저장될 폴더가 있는지 확인*/
         if (!new File(createFolderPath).exists()) {
             try {
-                /* 저장될 폴더가 없다면 생성*/
+                /* 저장될 폴더가 없다면 생성 */
                 new File(createFolderPath).mkdirs();
             } catch (Exception e) {
                 e.getStackTrace();

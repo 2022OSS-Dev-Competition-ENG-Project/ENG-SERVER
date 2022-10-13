@@ -120,8 +120,8 @@ public class UserService {
         }
 
         /* User 마이페이지 - 유저 정보 검색 */
-        public User findUuid (String id){
-            return userMapper.findUuid(id);
+        public User findUuid (String uuid){
+            return userMapper.findUuid(uuid);
         }
 
         /* User 비밀번호 찾기 - 랜덤 비밀번호 암호화 */
@@ -172,17 +172,20 @@ public class UserService {
 
         /* User 아이디 찾기 */
         public ResponseEntity findId (FindIdVo findIdVo){
-            userMapper.findId(findIdVo);
-            if (findIdVo.getUserEmail() == null) {
+            Integer DBPhoneNu = userMapper.PhoneNumberCheck(findIdVo.getUserPhoneNumber());
+            Integer DBName = userMapper.UserNameConform(findIdVo.getUserName());
+            if (DBPhoneNu == 1 && DBName == 1) {
+                findIdVo.setUserEmail(userMapper.findId(findIdVo.getUserName()));
+                return ResponseEntity.status(HttpStatus.OK).body(findIdVo);
+            } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(SignUpConstant.FIND_ID_FAIL);
             }
-            return ResponseEntity.status(HttpStatus.OK).body(findIdVo);
         }
 
         /* User 마이페이지 - 비빌번호 재설정 */
-        public ResponseEntity changePW (String id,User user){
-            user.setUserUuid(id);
-            String userName = findUuid(id).getUserName();
+        public ResponseEntity changePW (String userUuid,User user){
+            user.setUserUuid(userUuid);
+            String userName = findUuid(userUuid).getUserName();
             String ChgPassword = passwordEncoder.encode(user.getUserPassword());
             user.setUserPassword(ChgPassword);
             userMapper.changePW(user);

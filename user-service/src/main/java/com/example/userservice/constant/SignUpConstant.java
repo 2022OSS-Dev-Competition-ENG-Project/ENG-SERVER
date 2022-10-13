@@ -3,15 +3,11 @@ package com.example.userservice.constant;
 public class SignUpConstant {
     /* 회원가입 */
     public static final String SIGNUP_CLEAR = "회원가입 완료";
-    public static final String SIGNUP_FAIL_PUN_OVERLAP = "는 이미 회원가입된 전화번호입니다.";
+    public static final String SIGNUP_FAIL_PUN_OVERLAP = "이미 회원가입된 전화번호입니다.";
 
     /* 이메일 중복 검사, 코드 발송 */
     public static final String EMAIL_CHECK_CLEAR = "사용 가능한 이메일입니다. 인증코드가 발송 되었습니다.";
     public static final String EMAIL_CHECK_FAIL = "사용중인 이메일입니다.";
-
-    /* 이메일 코드 확인 */
-    public static final String EMAIL_CODE_CLEAR = "이메일 인증이 완료 되었습니다.";
-    public static final String EMAIL_CODE_FAIL = "잘못된 인증 코드 입니다.";
 
     /* 닉네임 중복 체크 */
     public static final String NICKNAME_CHECK_CLEAR = "사용 가능한 닉네임입니다.";

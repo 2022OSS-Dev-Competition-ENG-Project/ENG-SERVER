@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Param;
 public interface UserMapper {
 
     /* User 회원가입 */
-    void SignupUser(User user);
+    void SignupUser(User userDto);
 
     /* USer 회원가입 - Email 중복 검사 */
     Integer UserEmailConform(@Param("userEmail") String userEmail);
@@ -24,13 +24,15 @@ public interface UserMapper {
     User findEmail(User userDto);
 
     /* User 로그인 - 성공시 uuid 검색 */
-    User findUuid(String id);
+    User findUuid(String userUuid);
 
     /* User 비밀번호 찾기 - 랜덤 비밀번호 생성 */
     void changeRandomPassword(User userDto);
 
     /* User 아이디 찾기 */
-    String findId(FindIdVo findIdVo);
+    String findId(String userName);
+    Integer UserNameConform(@Param("userName") String userName);
+
 
     /* User 마이페이지 - 비빌번호 재설정 */
     void changePW(User userDto);

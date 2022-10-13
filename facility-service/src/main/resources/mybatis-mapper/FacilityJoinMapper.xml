@@ -60,7 +60,7 @@
                f.facility_num,
                f.facility_name,
                f.facility_owner,
-               f.facility_like_bool
+               um.facility_like_bool
         FROM (SELECT * FROM ${table} WHERE ${colum} = #{uuid}) as um
                  INNER JOIN facility f ON f.facility_num = um.facility_num
                  INNER JOIN manager m ON m.manager_uuid = f.facility_owner

@@ -7,7 +7,7 @@ public class FacilityContentConstant {
     /* 게시물 등록 */
     public static final String FACILITY_NOTICE_CREATE = "게시물이 정상적으로 등록되었습니다.";
         public static final String FACILITY_CONTENT_IMAGE_SAVE_PATH = "/home/eng2/ENG-STORAGE/images/notice/";
-        public static final String FACILITY_CONTENT_IMAGE_SAVE_PATH_DB = "http://jlchj.iptime.org:1001/api/facility/content/image/view/home&eng2&STORAGE&images&notice&";
+        public static final String FACILITY_CONTENT_IMAGE_SAVE_PATH_DB = "http://jlchj.iptime.org:8000/api/facility/content/image/view/home&eng2&STORAGE&images&notice&";
 
     /* 게시물 삭제*/
     public static final String FACILITY_CONTENT_DELETE_VALID_COMPLETE = "게시물을 정상적으로 삭제 하였습니다.";

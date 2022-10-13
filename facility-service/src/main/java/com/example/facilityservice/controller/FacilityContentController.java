@@ -1,17 +1,14 @@
 package com.example.facilityservice.controller;
 
 import com.example.facilityservice.dto.FacilityContent;
-import com.example.facilityservice.dto.FacilityNotice;
 import com.example.facilityservice.service.FacilityContentService;
 import com.example.facilityservice.vo.RequestContentLike;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("")
 public class FacilityContentController {
 

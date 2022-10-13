@@ -5,7 +5,7 @@
 
 <mapper namespace="com.example.userservice.mapper.ImageMapper">
 
-    <resultMap type="com.example.userservice.dto.UserDto" id="userInfo" >
+    <resultMap type="com.example.userservice.dto.User" id="userInfo" >
         <result property="user_uuid" column="userUuid"/>
         <result property="user_email" column="userEmail"/>
         <result property="user_password" column="userPassword"/>
@@ -15,14 +15,14 @@
         <result property="user_nickname" column="userNickname"/>
         <result property="user_access_type" column="userAccessType"/>
         <result property="user_login_key" column="userLoginKey"/>
-        <result property="user_img" column="userImg"/>
+        <result property="user_profile_image" column="userImg"/>
     </resultMap>
 
     <!--User ProfileImage 저장-->
-    <update id="upload" parameterType="com.example.userservice.dto.UserDto">
+    <update id="upload" parameterType="com.example.userservice.dto.User">
         UPDATE user
-        SET user_img = #{userImg}
-        where user_uuid = #{userUuid}
+        SET user_profile_image = #{userImg}
+        where user_id= #{userId}
     </update>
 
 </mapper>

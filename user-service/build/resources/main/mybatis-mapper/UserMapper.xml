@@ -5,14 +5,14 @@
 
 <mapper namespace="com.example.userservice.mapper.UserMapper">
 
-    <resultMap type="com.example.userservice.dto.UserDto" id="userInfo" >
-        <result property="user_uuid" column="userUuid"/>
+    <resultMap type="com.example.userservice.dto.User" id="userInfo" >
+        <result property="user_id" column="userId"/>
         <result property="user_email" column="userEmail"/>
         <result property="user_password" column="userPassword"/>
         <result property="user_name" column="userName"/>
-        <result property="user_phone_number" column="userPhoneNum"/>
+        <result property="user_phone_number" column="userPhoneNumber"/>
         <result property="user_join_date" column="userJoinDate"/>
-        <result property="user_nickname" column="userNickname"/>
+        <result property="user_nick_name" column="userNickname"/>
         <result property="user_access_type" column="userAccessType"/>
         <result property="user_login_key" column="userLoginKey"/>
     </resultMap>
@@ -24,61 +24,56 @@
     </resultMap>
 
     <!--User 회원가입-->
-    <update id="SignupUser" parameterType="com.example.userservice.dto.UserDto">
-        UPDATE user
-        SET user_uuid = #{userUuid}, user_password = #{userPassword}, user_name = #{userName}, user_nickname = #{userNickname},
-            user_phone_number = #{userPhoneNum}, user_join_date = #{userJoinDate}
-        where user_email = #{userEmail}
-    </update>
-
-    <!--User 회원가입 - 중복된 Email 검사하기-->
-    <select id="registerEmailCheck" resultType="com.example.userservice.dto.UserDto">
-        select *
-        from user
-        where user_email = #{userEmail}
-    </select>
-
-    <!--User 회원가입 - Email 중복 검사 성공시-->
-    <insert id="EmailConform" parameterType="com.example.userservice.dto.UserDto">
-        insert into user(user_uuid,
-                         user_email)
-        values(#{temporaryUuid},
-               #{userEmail})
+    <insert id="SignupUser" parameterType="com.example.userservice.dto.User">
+        insert into user (user_id,
+                          user_email,
+                          user_password,
+                          user_name,
+                          user_nick_name,
+                          user_phone_number,
+                          user_join_date)
+        value (#{userId},
+            #{userEmail},
+            #{userPassword},
+            #{userName},
+            #{userNickname},
+            #{userPhoneNumber},
+            #{userJoinDate})
     </insert>
 
-    <!--User 회원가입 - Email 인코드 검사 성공시-->
-    <update id="EmailCode" parameterType="com.example.userservice.dto.UserDto">
-        UPDATE user
-        SET user_login_key = #{LoginKey}
-        where user_email = #{userEmail}
-    </update>
-
-    <!--User 회원가입 - 중복된 Nickname 검사하기-->
-    <select id="registerNickNameCheck" resultMap="userInfo">
-        select *
+    <!--User 회원가입 - Email 중복 검사 -->
+    <select id="UserEmailConform" resultType="java.lang.Integer">
+        select count(*)
         from user
-        where user_nickname = #{userNickName}
+        where user_email = #{userEmail}
     </select>
 
-    <!--User 회원가입 - Nickname 검사 성공시-->
-    <update id="NickNameCheck" parameterType="com.example.userservice.dto.UserDto">
-        update user
-        set user_access_type = #{AccessType}, user_nickname = #{nickName}
-        where user_email = #{userEmail}
-    </update>
+    <!--User 회원가입 - Nickname 중복 검사 -->
+    <select id="UserNicknameConform" resultType="java.lang.Integer">
+        select count(*)
+        from user
+        where user_nick_name = #{userNickname}
+    </select>
+
+    <!--User 회원가입 - Email 중복 검사 -->
+    <select id="PhoneNumberCheck" resultType="java.lang.Integer">
+        select count(*)
+        from user
+        where user_phone_number = #{userPhoneNumber}
+    </select>
 
     <!--User 로그인-->
-    <select id="findEmail" resultType="com.example.userservice.dto.UserDto">
+    <select id="findEmail" resultType="com.example.userservice.dto.User">
         select *
         from user
         where user_email = #{userEmail}
     </select>
 
     <!--User 로그인 - 성공시 uuid 검색-->
-    <select id="findUuid" resultType="com.example.userservice.dto.UserDto">
+    <select id="findUuid" resultType="com.example.userservice.dto.User">
         select *
         from user
-        where user_uuid = #{userUuid}
+        where user_id = #{userId}
     </select>
 
     <!--User 비밀번호 찾기 - 랜덤 비밀번호 생성-->
@@ -100,6 +95,6 @@
     <update id="changePW">
         update user
         set user_password = #{userPassword}
-        where user_uuid = #{userUuid}
+        where user_id = #{userId}
     </update>
 </mapper>

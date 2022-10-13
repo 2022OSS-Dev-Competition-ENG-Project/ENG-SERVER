@@ -38,7 +38,7 @@ public class UserController {
     /* 이메일 중복 확인 , 코드 발송 */
     @GetMapping("/register/check/email/{userEmail}")
     public ResponseEntity registerEmailCheck(
-            @PathVariable("usoerEmail")String userEmail) throws NullPointerException{
+            @PathVariable("userEmail")String userEmail) throws NullPointerException{
         return ResponseEntity.status(HttpStatus.OK).body(userService.userEmailConform(userEmail));
     }
 

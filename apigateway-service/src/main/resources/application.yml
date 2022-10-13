@@ -7,6 +7,15 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://192.168.0.9:8761/eureka
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allow-credentials: false
+            allowedHeaders: "*"
+            allowedMethods: "*"
 
 spring:
   application:

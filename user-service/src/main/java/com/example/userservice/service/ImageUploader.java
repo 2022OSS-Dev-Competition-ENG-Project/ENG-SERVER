@@ -28,6 +28,15 @@ public class ImageUploader {
     public static void upload(MultipartFile multipartFile, String userImg, String userUuid, String userNickname) throws IOException {
         String savaPath = SAVE_PATH;
         File file = new File(  savaPath + userUuid + "/" + userNickname);
+        /* 저장될 폴더가 있는지 확인*/
+        if (!new File(savaPath).exists()) {
+            try {
+                /* 저장될 폴더가 없다면 생성*/
+                new File(savaPath).mkdirs();
+            } catch (Exception e) {
+                e.getStackTrace();
+            }
+        }
         multipartFile.transferTo(file);
         imageMapper.upload(multipartFile, userImg, userUuid);
     }

@@ -5,6 +5,6 @@ public class ImageConstant {
     public static final String IMAGE_SUCCESS = "이미지 저장을 성공했습니다.";
     //public static final String SAVE_PATH = "/home/icslab/images/";
 //    public static final String SAVE_PATH = "/Users/choebohyeon/Desktop/";
-    public static final String SAVE_PATH = "/ENG-STORAGE/images/profileImage/";
+    public static final String SAVE_PATH = "home/eng2/ENG-STORAGE/images/profileImage/";
     public static final String USER_IMG = "http://203.250.32.29:2201/api/user-service/ProfileImage/";
 }

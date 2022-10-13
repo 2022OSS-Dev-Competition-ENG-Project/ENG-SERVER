@@ -53,7 +53,7 @@ public class FacilityCommentService {
             facilityCommentMapper.deleteComment(commentNum,userUuid);
             return ResponseEntity.status(HttpStatus.OK).body("정상적으로 댓글 삭제되었습니다.");
         }else {
-            return ResponseEntity.status(HttpStatus.OK).body("댓글을 작성한 작성자만 댓글을 삭제 할수 있습니다.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("댓글을 작성한 작성자만 댓글을 삭제 할수 있습니다.");
         }
     }
 

@@ -33,7 +33,7 @@
     <select id="conflictValidJoin" resultType="java.lang.Integer">
         SELECT if(count(*) = 0, 0, 1)
         FROM ${table}
-        WHERE ${colum} = #{uuid}
+        WHERE ${colum} = #{uuid} AND facility_num = #{facilityNum}
     </select>
 
     <!-- 시설물 탈퇴 -->
@@ -47,7 +47,7 @@
     <select id="isValidJoin" resultType="java.lang.Integer" >
         SELECT if(count(*) = 0, 0, 1)
         FROM ${table}
-        WHERE ${colum} = #{uuid}
+        WHERE ${colum} = #{uuid} AND facility_num = #{facilityNum};
     </select>
 
     <!-- 내가 가입한 시설물 불러오기 ( Manager ) -->

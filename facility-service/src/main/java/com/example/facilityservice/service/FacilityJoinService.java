@@ -41,14 +41,14 @@ public class FacilityJoinService {
     }
 
     /* 시설물 탈퇴 */
-    public ResponseEntity resignationFacility(RequestResignationFacility resignationFacility, String table, String colum) {
+    public ResponseEntity resignationFacility(String facilityNum, String userUuid, String table, String colum) {
 
         /* 가입 되어 있지 않았을 때 */
-        if (facilityJoinMapper.isValidJoin(resignationFacility.getFacilityNum(),resignationFacility.getUuid(), table, colum) == 0){
+        if (facilityJoinMapper.isValidJoin(facilityNum,userUuid, table, colum) == 0){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(FACILITY_RESIGNATION_FAIL);
 
         } else {
-            facilityJoinMapper.resignationFacility(resignationFacility.getFacilityNum(),resignationFacility.getUuid(),table, colum);
+            facilityJoinMapper.resignationFacility(facilityNum, userUuid, table, colum);
             return ResponseEntity.status(HttpStatus.OK).body(FACILITY_RESIGNATION_COMPLETE);
         }
     }

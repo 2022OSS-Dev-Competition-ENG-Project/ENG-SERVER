@@ -1,9 +1,21 @@
 package com.example.facilityservice.service;
 
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static com.example.facilityservice.constant.FacilityContentConstant.FACILITY_CONTENT_IMAGE_SAVE_PATH;
 import static com.example.facilityservice.constant.FacilityContentConstant.FACILITY_CONTENT_IMAGE_SAVE_PATH_DB;
@@ -42,5 +54,7 @@ public class ContentImageService {
 
         return saveDbPath;
     }
+
+
 
 }

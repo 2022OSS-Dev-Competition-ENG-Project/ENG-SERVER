@@ -35,16 +35,18 @@ public class FacilityJoinController {
     }
 
     /* 시설물 탈퇴 - Manger */
-    @PostMapping("/resignation/manager")
-    public ResponseEntity resignationFacilityManager(@RequestBody RequestResignationFacility resignationFacility){
-        ResponseEntity responseEntity = facilityJoinService.resignationFacility(resignationFacility,"facility_join_manager", "manager_uuid");
+    @PostMapping("/resignation/manager{facilityNum}/{managerUuid}")
+    public ResponseEntity resignationFacilityManager(@PathVariable("facilityNum") String facilityNum,
+                                                     @PathVariable("managerUuid")String managerUuid){
+        ResponseEntity responseEntity = facilityJoinService.resignationFacility(facilityNum,managerUuid,"facility_join_manager", "manager_uuid");
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
     /* 시설물 탈퇴 - User */
-    @GetMapping("/resignation/user")
-    public ResponseEntity resignationFacilityUser(@RequestBody RequestResignationFacility resignationFacility){
-        ResponseEntity responseEntity = facilityJoinService.resignationFacility(resignationFacility,"facility_join_user", "user_uuid");
+    @GetMapping("/resignation/user/{facilityNum}/{userUuid}")
+    public ResponseEntity resignationFacilityUser(@PathVariable("facilityNum") String facilityNum,
+                                                  @PathVariable("userUuid")String userUuid){
+        ResponseEntity responseEntity = facilityJoinService.resignationFacility(facilityNum,userUuid,"facility_join_user", "user_uuid");
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 

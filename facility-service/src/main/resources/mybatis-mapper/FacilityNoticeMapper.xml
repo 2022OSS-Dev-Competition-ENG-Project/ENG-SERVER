@@ -38,7 +38,6 @@
                                      notice_title,
                                      notice_text,
                                      notice_images,
-                                     notice_look,
                                      notice_date
         )
         values (#{noticeNum},
@@ -47,7 +46,6 @@
                 #{noticeTitle},
                 #{noticeText},
                 #{noticeImages},
-                #{noticeLook},
                 #{noticeDate}
                )
     </insert>

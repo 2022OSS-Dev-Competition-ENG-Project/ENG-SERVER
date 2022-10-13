@@ -143,7 +143,7 @@
                u.user_name as writer_name,
                u.user_nick_name as writer_nick_name
         from (select * from facility_content where facility_num = #{facilityNum}) as fc
-                 INNER JOIN user u ON u.user_uuid = fc.user_uuid
+        INNER JOIN user u ON u.user_uuid = fc.user_uuid
         order by content_num desc limit ${count}
     </select>
 

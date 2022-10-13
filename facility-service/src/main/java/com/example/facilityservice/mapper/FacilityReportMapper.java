@@ -14,7 +14,7 @@ public interface FacilityReportMapper {
     void registerReport(FacilityReport facilityReport);
 
     /* 신고 하기 - 이미지 업데이트 */
-    void updateReportImage(@Param("reportNum") int reportNum,
+    void updateReportImage(@Param("reportNum") Integer reportNum,
                            @Param("reportImage") String reportImage);
 
     /* 신고 목록 불러오기 */

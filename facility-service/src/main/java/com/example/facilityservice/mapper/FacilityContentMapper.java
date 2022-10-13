@@ -29,9 +29,6 @@ public interface FacilityContentMapper {
     Integer validContentWriter(@Param("userUuid") String userUuid,
                                @Param("contentNum") Integer contentNum);
 
-
-
-
     /* 게시물 좋아요 */
     void facilityContentLike(@Param("userUuid") String userUuid,
                              @Param("contentNum") Integer contentNum);

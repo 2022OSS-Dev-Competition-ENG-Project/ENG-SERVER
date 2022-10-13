@@ -14,7 +14,6 @@
         <result property="reportImg" column="report_image"/>
         <result property="userUuid" column="user_uuid"/>
         <result property="facilityNum" column="user_uuid"/>
-
     </resultMap>
 
     <!-- 신고 하기 -->
@@ -36,6 +35,13 @@
                 #{userUuid},
                 #{facilityNum})
     </insert>
+
+    <!-- 신고 불러오기 -->
+    <select id="getReport" resultType="com.example.facilityservice.dto.FacilityReport">
+        select *
+        from report
+        where report_num = #{reportNum};
+    </select>
 
     <!-- 신고 하기 - 이미지 업데이트 -->
     <update id="updateReportImage">
@@ -71,7 +77,7 @@
     <select id="getMyReportList" resultMap="reportList">
         select r.report_num,
                r.report_title,
-               r.report_status
+               r.report_status,
                r.report_type,
                u.user_name,
                u.user_uuid,

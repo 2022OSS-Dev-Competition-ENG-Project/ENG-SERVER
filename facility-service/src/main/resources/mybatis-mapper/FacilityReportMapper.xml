@@ -5,4 +5,24 @@
 
 <mapper namespace="com.example.facilityservice.mapper.FacilityReportMapper">
 
+    <!-- 신고 하기 -->
+    <insert id="reportRegister" useGeneratedKeys="true" keyProperty="reportNum" keyColumn="report_num">
+        insert into facility_report(report_num,
+                                    report_title,
+                                    report_text,
+                                    report_type,
+                                    report_date,
+                                    report_img,
+                                    user_uuid,
+                                    facility_no)
+        values (#{reportNum},
+                #{reportTitle},
+                #{reportText},
+                #{reportType},
+                #{reportDate},
+                #{reportImg},
+                #{userUuid},
+                #{facilityNo})
+    </insert>
+
 </mapper>

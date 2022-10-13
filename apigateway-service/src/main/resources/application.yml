@@ -14,14 +14,8 @@ spring:
     name: apigateway-serivce
   cloud:
     gateway:
-      globalcors:
-        corsConfigurations:
-          '[/**]':
-            allowedOrigins: "*"
-            allow-credentials: false
-            allowedHeaders: "*"
-            allowedMethods: "*"
       default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
         - name: GlobalFilter
           args:
             baseMessage: Spring Cloud Gateway Global Filter
@@ -76,3 +70,4 @@ spring:
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/facility-service/(?<segment>.*), /${segment}
+

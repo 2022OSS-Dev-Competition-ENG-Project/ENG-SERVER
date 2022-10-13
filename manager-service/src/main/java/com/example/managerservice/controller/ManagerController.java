@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ManagerController {
 
     @Autowired

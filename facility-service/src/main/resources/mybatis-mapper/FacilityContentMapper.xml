@@ -73,7 +73,7 @@
     <!-- 게시물 상세 보기 - 존재 여부 -->
     <select id="contentBool" resultType="java.lang.Integer">
         select if(count(*) = 1,1,0)
-        from facility_content;
+        from facility_content
         where content_num = #{contentNum}
     </select>
 
@@ -88,7 +88,7 @@
     <select id="validJoinFacility" resultType="java.lang.Integer">
         select if(count(*) = 1, 1, 0)
         from manager
-        where manager_uuid = #{managerUuid};
+        where manager_uuid = #{managerUuid}
     </select>
 
     <!-- 게시물 삭제 - 작성자 인지 검증 -->

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.managerservice.mapper.ManagerMapper">
+
+    <resultMap type="com.example.managerservice.dto.Manager" id="managerInfo" >
+        <result property="manager_uuid" column="managerUuid"/>
+        <result property="manager_email" column="managerEmail"/>
+        <result property="manager_password" column="managerPassword"/>
+        <result property="manager_name" column="managerName"/>
+        <result property="manager_phone_number" column="managerPhoneNum"/>
+        <result property="manager_nick_name" column="managerNickname"/>
+        <result property="manager_join_date" column="managerJoinDate"/>
+    </resultMap>
+
+    <!-- Manger 회원가입 -->
+    <insert id="registerManager" parameterType="com.example.managerservice.dto.Manager">
+        insert into manager(manager_uuid,
+                            manager_email,
+                            manager_password,
+                            manager_name,
+                            manager_phone_number,
+                            manager_nick_name,
+                            manager_join_date
+                            )
+                            values ( #{managerUuid},
+                                     #{managerEmail},
+                                     #{managerPassword},
+                                     #{managerName},
+                                     #{managerPhoneNumber},
+                                     #{managerNickname},
+                                     #{managerJoinDate}
+                                     );
+    </insert>
+
+    <!-- Manager 회원가입 - PhoneNumber 중복 검사 -->
+    <select id="phoneNumberConflictCheck" resultType="java.lang.Integer">
+        select count(*)
+        from manager
+        where manager_phone_number = #{managerPhoneNumber}
+    </select>
+
+    <!-- Manager 회원가입 - Email 중복 검사 -->
+    <select id="emailConflictCheck" resultType="java.lang.Integer">
+        select count(*)
+        from manager
+        where manager_email = #{managerEmail}
+    </select>
+
+    <!-- Manager 회원가입 - 닉네임 중복 체크 -->
+    <select id="registerNicknameCheck" resultType="java.lang.Integer">
+        select count(*)
+        from manager
+        where manager_nick_name = #{managerNickname}
+    </select>
+
+    <!-- Manager 로그인 - 매니저 찾기 (managerEmail) -->
+    <select id="findManager" resultMap="managerInfo">
+        select *
+        from manager
+        where manager_email = #{managerEmail}
+    </select>
+
+    <!-- Manager 아이디 찾기 -->
+    <select id="findManagerId" resultType="java.lang.String">
+        select manager_email
+        from manager
+        where manager_phone_number = #{managerPhoneNumber} AND manager_name = #{managerName}
+    </select>
+
+    <!-- Manager 비밀번호 찾기 -->
+    <select id="findManagerPassword" resultType="java.lang.Integer">
+        select count(*)
+        from manager
+        where manager_email = #{managerEmail} AND manager_name = #{managerName}
+    </select>
+
+    <!-- Manager 비밀번호 찾기 - 비밀번호 초기화 -->
+    <update id="resetPassword">
+        update manager
+        set manager_password = #{resetPassword}
+        where manager_email = #{managerEmail}
+    </update>
+
+    <!-- Manager 마이페이지 - 비밀번호 변경 -->
+    <update id="changeManagerPassword" parameterType="com.example.managerservice.vo.RequestChangePassword">
+        update manager
+        set manager_password = #{changePassword}
+        where manager_uuid = #{managerUuid}
+    </update>
+
+    <!-- Manager 마이페이지 - 매니저 정보 불러오기 -->
+    <select id="findManagerUuid" resultType="com.example.managerservice.dto.Manager">
+        select *
+        from manager
+        where manager_uuid = #{managerUuid}
+    </select>
+
+    <!-- Manager 검증 -->
+    <select id="getValidManager" resultType="java.lang.Integer">
+        select if(count(*) = 1, 1, 0)
+        from  manager
+        where manager_uuid = #{managerUuid}
+    </select>
+</mapper>

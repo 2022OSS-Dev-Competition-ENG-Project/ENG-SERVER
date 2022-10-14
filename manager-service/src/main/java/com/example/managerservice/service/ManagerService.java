@@ -4,10 +4,7 @@ package com.example.managerservice.service;
 import com.example.managerservice.constant.RegisterConstant;
 import com.example.managerservice.dto.Manager;
 import com.example.managerservice.mapper.ManagerMapper;
-import com.example.managerservice.vo.RequestChangePassword;
-import com.example.managerservice.vo.RequestFindManagerId;
-import com.example.managerservice.vo.RequestFindManagerPassword;
-import com.example.managerservice.vo.RequestManagerLogin;
+import com.example.managerservice.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +16,10 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import static com.example.managerservice.constant.EmailConstant.*;
-import static com.example.managerservice.constant.MyPageConstant.*;
+import static com.example.managerservice.constant.EmailConstant.SMTP_EMAIL_CODE_CHECK_COMPLETE;
+import static com.example.managerservice.constant.EmailConstant.SMTP_EMAIL_CODE_CHECK_NOT_COMPLETE;
+import static com.example.managerservice.constant.MyPageConstant.PASSWORD_CHANGE_CLEAR;
+import static com.example.managerservice.constant.MyPageConstant.PASSWORD_CHANGE_FAIL;
 import static com.example.managerservice.constant.RegisterConstant.*;
 
 @Slf4j
@@ -113,7 +112,10 @@ public class ManagerService {
 
         /* subManager 와 Manager 간에 Password 매치, subManager AccessType 검사*/
         if (passwordEncoder.matches(loginData.getManagerPassword(),subManager.getManagerPassword())){
-            return ResponseEntity.status(HttpStatus.OK).body(subManager.getManagerUuid());
+            ResponseLogin responseLogin = new ResponseLogin();
+            responseLogin.setManagerUuid(subManager.getManagerUuid());
+            responseLogin.setManagerNickName(subManager.getManagerNickname());
+            return ResponseEntity.status(HttpStatus.OK).body(responseLogin);
         }else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(RegisterConstant.LOGIN_PASSWORD_FAIL);
         }

@@ -46,17 +46,15 @@ public class FacilityReportController {
     }
 
     /* 내가 신고한 리스트 불러오기 - Main */
-    @GetMapping("/report/my/main/{facilityNum}/{userUuid}")
-    public ResponseEntity getMyReportListMain (@PathVariable("facilityNum") String facilityNum,
-                                               @PathVariable("userUuid") String userUuid){
-        ResponseEntity responseEntity = facilityReportService.getMyReportList(facilityNum, userUuid,5);
+    @GetMapping("/report/my/main/{userUuid}")
+    public ResponseEntity getMyReportListMain (@PathVariable("userUuid") String userUuid){
+        ResponseEntity responseEntity = facilityReportService.getMyReportList(userUuid,5);
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
     /* 내가 신고한 리스트 불러오기 - All*/
-    @GetMapping("/report/my/{facilityNum}/{userUuid}")
-    public ResponseEntity getMyReportList (@PathVariable("facilityNum") String facilityNum,
-                                           @PathVariable("userUuid") String userUuid){
-        ResponseEntity responseEntity = facilityReportService.getMyReportList(facilityNum, userUuid, null);
+    @GetMapping("/report/my/{userUuid}")
+    public ResponseEntity getMyReportList (@PathVariable("userUuid") String userUuid){
+        ResponseEntity responseEntity = facilityReportService.getMyReportList(userUuid, null);
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 }

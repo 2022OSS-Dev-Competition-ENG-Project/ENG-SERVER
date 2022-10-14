@@ -13,7 +13,6 @@
         <result property="reportDate" column="report_date_time"/>
         <result property="reportImg" column="report_image"/>
         <result property="userUuid" column="user_uuid"/>
-        <result property="facilityNum" column="facility_num"/>
     </resultMap>
 
     <!-- 신고 하기 -->
@@ -70,7 +69,7 @@
                u.user_uuid,
                r.report_date_time
         from (  select * from report
-                where facility_num = #{facilityNum} AND user_uuid = #{userUuid}) as r
+                where user_uuid = #{userUuid}) as r
                 INNER JOIN user u ON u.user_uuid = r.user_uuid
     </select>
 
@@ -84,7 +83,7 @@
                u.user_uuid,
                r.report_date_time
         from (  select * from report
-                where facility_num = #{facilityNum} AND user_uuid = #{userUuid}) as r
+                where user_uuid = #{userUuid}) as r
                 INNER JOIN user u ON u.user_uuid = r.user_uuid
     </select>
 </mapper>

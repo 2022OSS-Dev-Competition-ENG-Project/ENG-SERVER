@@ -66,12 +66,12 @@ public class FacilityReportService {
     }
 
     /* 내가 신고한 리스트 불러오기 */
-    public ResponseEntity getMyReportList(String facilityNum, String userUuid,Integer count) {
+    public ResponseEntity getMyReportList(String userUuid,Integer count) {
         /* 5개 limit */
         if(count == null){
-            return ResponseEntity.status(HttpStatus.OK).body(facilityReportMapper.getMyReport(facilityNum,userUuid));
+            return ResponseEntity.status(HttpStatus.OK).body(facilityReportMapper.getMyReport(userUuid));
         }else {
-            return ResponseEntity.status(HttpStatus.OK).body(facilityReportMapper.getMyReportMain(facilityNum, userUuid,count));
+            return ResponseEntity.status(HttpStatus.OK).body(facilityReportMapper.getMyReportMain(userUuid,count));
         }
     }
 }

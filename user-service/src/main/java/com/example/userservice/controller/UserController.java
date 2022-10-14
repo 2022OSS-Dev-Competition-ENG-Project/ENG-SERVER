@@ -40,7 +40,8 @@ public class UserController {
     @GetMapping("/register/check/email/{userEmail}")
     public ResponseEntity registerEmailCheck(
             @PathVariable("userEmail")String userEmail) throws NullPointerException{
-        return ResponseEntity.status(HttpStatus.OK).body(userService.userEmailConform(userEmail));
+        ResponseEntity responseEntity = userService.userEmailConform(userEmail);
+        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
 

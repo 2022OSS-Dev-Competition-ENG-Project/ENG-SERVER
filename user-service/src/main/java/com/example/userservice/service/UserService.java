@@ -162,7 +162,7 @@ public class UserService {
             userDataDto.setUserEmail(findUuid(uuid).getUserEmail());
             userDataDto.setUserNickname(findUuid(uuid).getUserNickname());
             userDataDto.setUserJoinDate(findUuid(uuid).getUserJoinDate());
-            userDataDto.setUserImg(findUuid(uuid).getUserImg());
+            userDataDto.setUserProfileImage(findUuid(uuid).getUserProfileImage());
             return ResponseEntity.status(HttpStatus.OK).body(userDataDto);
         }
 

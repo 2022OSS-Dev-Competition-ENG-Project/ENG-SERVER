@@ -11,14 +11,14 @@ public class UserDataDto {
     private String userEmail;
     private String userNickname;
     private LocalDate userJoinDate;
-    private String userImg;
+    private String userProfileImage;
 
     public UserDataDto() {
         super();
         this.userEmail = userEmail;
         this.userNickname = userNickname;
         this.userJoinDate = userJoinDate;
-        this.userImg = userImg;
+        this.userProfileImage = userProfileImage;
     }
 
     public String getUserEmail() {
@@ -34,6 +34,6 @@ public class UserDataDto {
     }
 
     public String getUserImg() {
-        return userImg;
+        return userProfileImage;
     }
 }

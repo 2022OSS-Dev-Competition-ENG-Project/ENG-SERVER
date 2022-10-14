@@ -15,5 +15,5 @@ public class User {
     private LocalDate userJoinDate;
     private Integer userLoginKey;
     private Integer userAccessType;
-    private String userImg;
+    private String userProfileImage;
 }

@@ -89,6 +89,7 @@
         from user
         where user_name = #{userName}
     </select>
+
     <select id="UserNameConform" resultType="java.lang.Integer">
         select count(*)
         from user

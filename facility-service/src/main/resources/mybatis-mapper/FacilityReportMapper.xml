@@ -71,6 +71,7 @@
         from (  select * from report
                 where user_uuid = #{userUuid}) as r
                 INNER JOIN user u ON u.user_uuid = r.user_uuid
+                order by r.report_num desc
     </select>
 
     <!-- 내가 신고한 리스트 불러오기 - Main -->
@@ -85,5 +86,6 @@
         from (  select * from report
                 where user_uuid = #{userUuid}) as r
                 INNER JOIN user u ON u.user_uuid = r.user_uuid
+                order by r.report_num desc limit 5
     </select>
 </mapper>

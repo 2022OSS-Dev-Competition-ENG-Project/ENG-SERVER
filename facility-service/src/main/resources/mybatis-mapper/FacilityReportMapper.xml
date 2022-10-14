@@ -61,7 +61,7 @@
     </select>
 
     <!-- 내가 신고한 리스트 불러오기 - All -->
-    <select id="getMyReportListMain" resultMap="reportList">
+    <select id="getMyReport" resultMap="reportList">
         select r.report_num,
                r.report_title,
                r.report_status,
@@ -74,7 +74,7 @@
     </select>
 
     <!-- 내가 신고한 리스트 불러오기 - All -->
-    <select id="getMyReportList" resultMap="reportList">
+    <select id="getMyReportMain" resultMap="reportList">
         select r.report_num,
                r.report_title,
                r.report_status,

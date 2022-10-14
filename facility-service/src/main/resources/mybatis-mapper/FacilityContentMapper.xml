@@ -74,14 +74,14 @@
     <select id="contentBool" resultType="java.lang.Integer">
         select if(count(*) = 1,1,0)
         from facility_content
-        where content_num = #{contentNum}
+        where content_num = #{contentNum};
     </select>
 
     <!-- 게시물 삭제 -->
     <delete id="deleteContent">
         delete
         from facility_content
-        where content_num = #{contentNum}
+        where content_num = #{contentNum};
     </delete>
 
     <!-- 게시물 삭제 - 시설에 속해 있는지 또는 매니저인지 검증 -->

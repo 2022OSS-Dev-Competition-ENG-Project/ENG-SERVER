@@ -70,6 +70,13 @@
                  LEFT OUTER JOIN facility_content_like ul ON #{userUuid} = ul.user_uuid AND fc.content_num = ul.content_num;
     </select>
 
+    <!-- 게시물 상세 보기 - 존재 여부 -->
+    <select id="contentBool" resultType="java.lang.Integer">
+        select if(count(*) = 1,1,0)
+        from facility_content;
+        where content_num = #{contentNum}
+    </select>
+
     <!-- 게시물 삭제 -->
     <delete id="deleteContent">
         delete

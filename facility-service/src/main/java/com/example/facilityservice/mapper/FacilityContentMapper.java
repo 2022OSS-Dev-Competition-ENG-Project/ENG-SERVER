@@ -19,6 +19,9 @@ public interface FacilityContentMapper {
     ResponseContentDetail viewContentDetail(@Param("userUuid") String userUuid,
                                             @Param("contentNum") Integer contentNum);
 
+    /* 게시물 상세 보기 - 존재 여부 */
+    Integer contentBool(@Param("contentNum") Integer contentNum);
+
     /* 게시물 삭제*/
     void deleteContent(@Param("contentNum") Integer contentNum);
 
@@ -61,4 +64,5 @@ public interface FacilityContentMapper {
     /* 내가 쓴 게시물 불러오기 - Main */
     List<FacilityContent> getMyContentMain(@Param("userUuid") String userUuid,
                                            @Param("count") Integer count);
+
 }

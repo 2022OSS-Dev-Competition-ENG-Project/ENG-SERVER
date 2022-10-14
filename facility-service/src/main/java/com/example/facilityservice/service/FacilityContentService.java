@@ -41,8 +41,12 @@ public class FacilityContentService {
         return ResponseEntity.status(HttpStatus.CREATED).body(FACILITY_CONTENT_CREATE);
     }
 
-    /* 게시물 상세 보기*/
+    /* 게시물 상세 보기 */
     public ResponseEntity viewContentDetail(String userUuid, Integer contentNum) {
+        /* 게시물 상세 보기 - 존재 여부 */
+        if (facilityContentMapper.contentBool(contentNum) == 0){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(FACILITY_VIEW_FAIL);
+        }
         return ResponseEntity.status(HttpStatus.OK).body(facilityContentMapper.viewContentDetail(userUuid, contentNum));
     }
 

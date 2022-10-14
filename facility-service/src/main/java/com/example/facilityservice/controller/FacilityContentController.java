@@ -19,7 +19,6 @@ public class FacilityContentController {
         this.facilityContentService = facilityContentService;
     }
 
-
     /* 게시물 생성 */
     @PostMapping("/content/create")
     public ResponseEntity createContent(@RequestPart FacilityContent facilityContent) {
@@ -36,7 +35,7 @@ public class FacilityContentController {
     }
 
     /* 게시물 삭제 - Manager */
-    @GetMapping("/content/delete/mg/{managerUuid}/{contentNum}")
+    @GetMapping("/content/delete/mg/{contentNum}/{managerUuid}")
     public ResponseEntity deleteContentManager(@PathVariable("contentNum") Integer contentNum,
                                                @PathVariable("managerUuid") String managerUuid) {
         ResponseEntity responseEntity = facilityContentService.deleteContentManager(contentNum, managerUuid);

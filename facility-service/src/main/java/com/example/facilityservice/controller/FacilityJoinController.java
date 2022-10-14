@@ -35,7 +35,7 @@ public class FacilityJoinController {
     }
 
     /* 시설물 탈퇴 - Manger */
-    @PostMapping("/resignation/manager{facilityNum}/{managerUuid}")
+    @GetMapping("/resignation/manager{facilityNum}/{managerUuid}")
     public ResponseEntity resignationFacilityManager(@PathVariable("facilityNum") String facilityNum,
                                                      @PathVariable("managerUuid")String managerUuid){
         ResponseEntity responseEntity = facilityJoinService.resignationFacility(facilityNum,managerUuid,"facility_join_manager", "manager_uuid");

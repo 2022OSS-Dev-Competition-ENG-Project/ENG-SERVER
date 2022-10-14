@@ -4,8 +4,12 @@ public class FacilityContentConstant {
 
     /* 게시물 등록 */
     public static final String FACILITY_CONTENT_CREATE = "게시물이 정상적으로 등록되었습니다.";
-    /* 게시물 등록 */
+
+    /* 공지 등록 */
     public static final String FACILITY_NOTICE_CREATE = "게시물이 정상적으로 등록되었습니다.";
+
+    /* 게시물 상세 보기 */
+    public static final String FACILITY_VIEW_FAIL = "게시물 조회를 실패 하였습니다.";
 
     /* Server */
     public static final String FACILITY_CONTENT_IMAGE_SAVE_PATH = "/home/eng2/ENG-STORAGE/images/notice/";

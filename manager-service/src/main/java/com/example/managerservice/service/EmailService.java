@@ -33,7 +33,8 @@ public class EmailService {
         if(type.equals("EmailCheck")) {
             message.setSubject(SMTP_EMAIL_CHECK_TITLE_MESSAGE);
             message.setText(SMTP_EMAIL_CHECK_MESSAGE.replaceAll("\\$key", key));
-            redisService.setDataExpire(userEmail,key,60 * 3L);
+            redisService.deleteData(userEmail);
+            redisService.setDataExpire(userEmail,key,180);
         }
         if (type.equals("resetPassword")) {
             message.setSubject(SMTP_PASSWORD_CHANGE_TITLE_MESSAGE);

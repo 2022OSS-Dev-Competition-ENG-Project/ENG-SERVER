@@ -13,7 +13,7 @@
         <result property="reportDate" column="report_date_time"/>
         <result property="reportImg" column="report_image"/>
         <result property="userUuid" column="user_uuid"/>
-        <result property="facilityNum" column="user_uuid"/>
+        <result property="facilityNum" column="facility_num"/>
     </resultMap>
 
     <!-- 신고 하기 -->

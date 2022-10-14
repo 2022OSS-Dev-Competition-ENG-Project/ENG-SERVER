@@ -69,11 +69,12 @@
                u.user_name,
                u.user_uuid,
                r.report_date_time
-        from (select * from report where facility_num = #{facilityNum} AND user_uuid = #{userUuid}) as r
-                 INNER JOIN user u ON u.user_uuid = r.user_uuid
+        from (  select * from report
+                where facility_num = #{facilityNum} AND user_uuid = #{userUuid}) as r
+                INNER JOIN user u ON u.user_uuid = r.user_uuid
     </select>
 
-    <!-- 내가 신고한 리스트 불러오기 - All -->
+    <!-- 내가 신고한 리스트 불러오기 - Main -->
     <select id="getMyReportMain" resultMap="reportList">
         select r.report_num,
                r.report_title,
@@ -82,7 +83,8 @@
                u.user_name,
                u.user_uuid,
                r.report_date_time
-        from (select * from report where facility_num = #{facilityNum} AND user_uuid = #{userUuid) as r
-                 INNER JOIN user u ON u.user_uuid = r.user_uuid
+        from (  select * from report
+                where facility_num = #{facilityNum} AND user_uuid = #{userUuid}) as r
+                INNER JOIN user u ON u.user_uuid = r.user_uuid
     </select>
 </mapper>

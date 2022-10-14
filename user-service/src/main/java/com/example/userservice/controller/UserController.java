@@ -1,15 +1,10 @@
 package com.example.userservice.controller;
 
-import com.example.userservice.constant.ImageConstant;
-import com.example.userservice.constant.MyPageConstant;
-import com.example.userservice.constant.SignUpConstant;
-import com.example.userservice.dto.UserDataDto;
 import com.example.userservice.dto.User;
 import com.example.userservice.service.*;
 import com.example.userservice.vo.FindIdVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -79,7 +74,8 @@ public class UserController {
     /* 비밀번호 찾기 */
     @PostMapping(value = "/UserPasswordReset")
     public ResponseEntity FindUserPassword (@RequestBody User user) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.changeRandomPassword(user));
+        ResponseEntity responseEntity = userService.changeRandomPassword(user);
+        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
     /* 마이페이지 */
@@ -99,19 +95,16 @@ public class UserController {
 
     /* 프로필 이미지 저장 */
     @PostMapping("/SaveProfileImage/{uuid}")
-    public ResponseEntity<String> upload(@RequestParam("images") MultipartFile multipartFile,
+    public ResponseEntity upload(@RequestParam("images") MultipartFile multipartFile,
                                          @PathVariable("uuid")String userUuid) throws IOException {
-        //String userImg = "http://203.250.32.29:2201/api/user-service/ProfileImage/" + userId;
-        String userNickname = userService.findUuid(userUuid).getUserNickname();
-        String userImg = "http:/jlchj.iptime.org/ENG-STORAGE/images/profileImage/" + userUuid
-                + "/" + userNickname;
-        ImageUploader.upload(multipartFile,userImg,userUuid,userNickname);
-        return ResponseEntity.status(HttpStatus.OK).body(ImageConstant.IMAGE_SUCCESS);
+        ResponseEntity responseEntity = ImageUploader.upload(multipartFile,userUuid);
+        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
     /* 프로필 이미지 가져오기 */
     @GetMapping(value = "/ProfileImage/{uuid}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<ResponseEntity<byte[]>> getImage(@PathVariable("uuid")String uuid) throws IOException {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.getImmage(uuid));
+    public ResponseEntity<Object> getImage(@PathVariable("uuid")String uuid) throws IOException {
+        ResponseEntity responseEntity = userService.getImage(uuid);
+        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 }

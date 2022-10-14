@@ -188,11 +188,10 @@ public class UserService {
             return ResponseEntity.status(HttpStatus.OK).body(userName + MyPageConstant.MYPAGE_CLEAR);
         }
 
-        public  ResponseEntity<byte[]> getImmage (String uuid) {
+        public  ResponseEntity<byte[]> getImage (String uuid) {
             String savePath = SAVE_PATH;
             InputStream in = null;
-            String userNickname = userMapper.findUuid(uuid).getUserNickname();
-            String userImage = savePath + uuid + "/" + userNickname;
+            String userImage = savePath + uuid;
             try {
                 in = new FileInputStream(userImage);
             } catch (FileNotFoundException e) {

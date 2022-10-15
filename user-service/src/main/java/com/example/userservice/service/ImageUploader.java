@@ -30,7 +30,7 @@ public class ImageUploader {
     /* User ProfileImage 저장 */
     public static ResponseEntity upload(MultipartFile multipartFile, String userUuid) throws IOException {
         String savaPath = SAVE_PATH;
-        String userImg = "http://jlchj.iptime.org/user-service/ProfileImage/" + userUuid;
+        String userImg = "http://jlchj.iptime.org:8000/user-service/ProfileImage/" + userUuid;
         File file = new File(  savaPath + userUuid);
         /* 저장될 폴더가 있는지 확인*/
         if (!new File(savaPath).exists()) {

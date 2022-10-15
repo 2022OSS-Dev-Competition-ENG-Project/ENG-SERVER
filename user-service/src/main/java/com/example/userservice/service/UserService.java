@@ -132,8 +132,8 @@ public class UserService {
             Integer userName = userMapper.UserNameConform(user.getUserName());
             if (userEmail == 1 && userName == 1) {
                 user.setUserPassword(ChgUserPassword);
-                userMapper.changeRandomPassword(user);
                 emailService.sendMail(user.getUserEmail(), ChgUserPassword, "ChgUserPassword");
+                userMapper.changeRandomPassword(user);
                 return ResponseEntity.status(HttpStatus.OK).body(ChgUserPassword);
             } else if (userEmail != 1) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(SignUpConstant.FIND_PASSWORD_EMAIL_FAIL);
@@ -172,7 +172,7 @@ public class UserService {
             Integer DBName = userMapper.UserNameConform(findIdVo.getUserName());
             if (DBPhoneNu == 1 && DBName == 1) {
                 findIdVo.setUserEmail(userMapper.findId(findIdVo.getUserName()));
-                return ResponseEntity.status(HttpStatus.OK).body(findIdVo);
+                return ResponseEntity.status(HttpStatus.OK).body(findIdVo.getUserEmail());
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(SignUpConstant.FIND_ID_FAIL);
             }

@@ -30,7 +30,7 @@ public class EmailService {
         if(type.equals("EmailCheck")) {
             message.setSubject(EmailConstant.SMTP_EMAIL_CHECK_TITLE_MESSAGE);
             message.setText(EmailConstant.SMTP_EMAIL_CODE_CHECK_CONTENT.replaceAll("\\$key", key));
-            message.setText("\n 안증번호는" + key + "입니다.");
+            message.setText("\n 안증번호는 [" + key + "]입니다.");
             javaMailSender.send(message);
             redisService.setDataExpire(userEmail, key, 60 * 3L);
         }

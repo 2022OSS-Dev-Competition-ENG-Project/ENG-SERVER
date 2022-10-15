@@ -179,9 +179,8 @@ public class UserService {
         }
 
         /* User 마이페이지 - 비빌번호 재설정 */
-        public ResponseEntity changePW (String userUuid,User user){
-            user.setUserUuid(userUuid);
-            String userName = findUuid(userUuid).getUserName();
+        public ResponseEntity changePW (User user){
+            String userName = findUuid(user.getUserUuid()).getUserName();
             String ChgPassword = passwordEncoder.encode(user.getUserPassword());
             user.setUserPassword(ChgPassword);
             userMapper.changePW(user);

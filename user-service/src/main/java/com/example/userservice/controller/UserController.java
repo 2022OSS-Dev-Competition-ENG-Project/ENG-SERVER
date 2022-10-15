@@ -86,10 +86,9 @@ public class UserController {
     }
 
     /* 마이페이지(비밀번호 재설정) */
-    @GetMapping("/myPage/changePW/{userUuid}")
-    public ResponseEntity ChangePW(@PathVariable("userUuid") String userUuid,
-                                   @RequestBody User user) {
-        ResponseEntity responseEntity = userService.changePW(userUuid,user);
+    @PostMapping("/myPage/changePW")
+    public ResponseEntity ChangePW(@RequestBody User user) {
+        ResponseEntity responseEntity = userService.changePW(user);
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 

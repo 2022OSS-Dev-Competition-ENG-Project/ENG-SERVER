@@ -2,24 +2,28 @@ package com.example.userservice.service;
 
 import com.example.userservice.constant.EmailConstant;
 import com.example.userservice.constant.SignUpConstant;
-import org.apache.ibatis.mapping.Environment;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
+@Slf4j
 @Service
 public class EmailService {
 
     @Autowired
-    public EmailService(JavaMailSender javaMailSender, RedisService redisService) {
+    public EmailService(JavaMailSender javaMailSender, RedisService redisService, Environment env) {
         this.javaMailSender = javaMailSender;
         this.redisService = redisService;
+        this.env = env;
     }
     private JavaMailSender javaMailSender;
     private RedisService redisService;
+    private Environment env;
 
 
 
@@ -27,19 +31,19 @@ public class EmailService {
     public void sendMail(String userEmail, String key, String type){
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(userEmail);
+        message.setFrom(env.getProperty("secret_settings.address"));
         if(type.equals("EmailCheck")) {
             message.setSubject(EmailConstant.SMTP_EMAIL_CHECK_TITLE_MESSAGE);
-            message.setText(EmailConstant.SMTP_EMAIL_CODE_CHECK_CONTENT.replaceAll("\\$key", key));
+            message.setText(EmailConstant.SMTP_EMAIL_CODE_CHECK_CONTENT);
             message.setText("\n 안증번호는 [" + key + "]입니다.");
-            javaMailSender.send(message);
+            redisService.deleteData(userEmail);
             redisService.setDataExpire(userEmail, key, 60 * 3L);
         }
         if(type.equals("ChangePassword")) {
             message.setSubject(EmailConstant.SMTP_PASSWORD_CHANGE_TITLE_MESSAGE);
             message.setText(EmailConstant.SMTP_PASSWORD_CHANGE_MESSAGE);
             message.setText("\n 임시 비밀번호는 [" + key + "]입니다.");
-            javaMailSender.send(message);
-            redisService.setDataExpire(userEmail, key, 60 * 3L);
         }
+        javaMailSender.send(message);
     }
 }

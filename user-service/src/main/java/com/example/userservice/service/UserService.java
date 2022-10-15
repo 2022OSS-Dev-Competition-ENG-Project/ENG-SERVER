@@ -132,7 +132,7 @@ public class UserService {
             Integer userName = userMapper.UserNameConform(user.getUserName());
             if (userEmail == 1 && userName == 1) {
                 user.setUserPassword(ChgUserPassword);
-                emailService.sendMail(user.getUserEmail(), ChgUserPassword, "ChgUserPassword");
+                emailService.sendMail(user.getUserEmail(), ChgUserPassword, "ChangePassword");
                 userMapper.changeRandomPassword(user);
                 return ResponseEntity.status(HttpStatus.OK).body(ChgUserPassword);
             } else if (userEmail != 1) {

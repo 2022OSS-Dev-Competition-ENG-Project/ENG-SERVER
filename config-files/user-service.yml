@@ -19,10 +19,10 @@ spring:
       max-wait: -1
 
   mail:
-    host: smtp.gmail.com
+    host: smtp.naver.com
     port: 587
-    username: agc01075547865@gmail.com
-    password: axavjysasbikuhtg
+    username: cb7856
+    password: WYXEVHLYVUU8
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true

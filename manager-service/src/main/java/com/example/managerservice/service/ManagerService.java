@@ -114,7 +114,7 @@ public class ManagerService {
         if (passwordEncoder.matches(loginData.getManagerPassword(),subManager.getManagerPassword())){
             ResponseLogin responseLogin = new ResponseLogin();
             responseLogin.setManagerUuid(subManager.getManagerUuid());
-            responseLogin.setManagerNickName(subManager.getManagerNickname());
+            responseLogin.setManagerName(subManager.getManagerName());
             return ResponseEntity.status(HttpStatus.OK).body(responseLogin);
         }else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(RegisterConstant.LOGIN_PASSWORD_FAIL);
@@ -162,6 +162,11 @@ public class ManagerService {
         }else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(PASSWORD_CHANGE_FAIL);
         }
+    }
+
+    /* 시설물 가입 - 매니저 검색 ( OpenFeign ) */
+    public String findJoinManager(String managerName, String managerPhoneNumber){
+        return managerMapper.findJoinManager(managerName, managerPhoneNumber);
     }
 
     /* 매니저 검증 - OpenFeign */

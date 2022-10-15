@@ -44,4 +44,6 @@ public interface ManagerMapper {
     /* 매니저 검증 */
     Integer getValidManager(@Param("managerUuid") String managerUuid);
 
+    /* 시설물 가입 - 매니저 검색 ( OpenFegin) */
+    String findJoinManager(String managerName, String managerPhoneNumber);
 }

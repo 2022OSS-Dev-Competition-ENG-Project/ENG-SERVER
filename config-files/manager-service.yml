@@ -3,7 +3,7 @@ spring:
     host: smtp.naver.com
     port: 587
     username: ukidd12
-    password: ljh90140189!
+    password: ukidd0189!
     properties:
       mail:
         smtp:

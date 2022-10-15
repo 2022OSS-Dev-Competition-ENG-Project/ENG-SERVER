@@ -104,4 +104,11 @@
         from  manager
         where manager_uuid = #{managerUuid}
     </select>
+
+    <!-- 시설물 가입 - 매니저 검색 ( OpenFeign ) -->
+    <select id="findJoinManager" resultType="java.lang.String">
+        select manager_uuid
+        from manager
+        where manager_name = #{userName} AND manager_phone_number = #{managerPhoneNumber}
+    </select>
 </mapper>

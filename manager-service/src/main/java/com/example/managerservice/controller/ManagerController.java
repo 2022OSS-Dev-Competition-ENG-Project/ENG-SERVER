@@ -84,6 +84,13 @@ public class ManagerController {
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
+    /* 시설물 가입 - 매니저 검색 ( OpenFeign ) */
+    @GetMapping("/join/find/manager/{managerName}/{managerPhoneNumber}")
+    public String findJoinManager(@PathVariable("managerName") String managerName,
+                                  @PathVariable("managerPhoneNumber") String managerPhoneNumber){
+        return managerService.findJoinManager(managerName,managerPhoneNumber);
+    }
+
     /* 매니저 검증 - OpenFeign */
     @GetMapping("/valid/manager/{managerUuid}")
     public Integer getValidManager(@PathVariable("managerUuid") String managerUuid){

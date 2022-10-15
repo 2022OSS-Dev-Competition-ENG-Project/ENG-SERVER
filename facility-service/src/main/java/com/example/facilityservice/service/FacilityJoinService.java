@@ -1,5 +1,6 @@
 package com.example.facilityservice.service;
 
+import com.example.facilityservice.client.ManagerServiceClient;
 import com.example.facilityservice.dto.Facility;
 import com.example.facilityservice.mapper.FacilityJoinMapper;
 import com.example.facilityservice.vo.RequestJoinFacility;
@@ -18,6 +19,7 @@ import static com.example.facilityservice.constant.FacilityJoinConstant.*;
 public class FacilityJoinService {
 
     private FacilityJoinMapper facilityJoinMapper;
+    private ManagerServiceClient managerServiceClient;
 
     @Autowired
     public FacilityJoinService(FacilityJoinMapper facilityJoinMapper) {
@@ -86,6 +88,18 @@ public class FacilityJoinService {
             facilityJoinMapper.updateFacilityLike(userUuid, facilityNum, 0);
             return ResponseEntity.status(HttpStatus.OK).body(FACILITY_LIKE_CANCEL_COMPLETE);
         }
+    }
+
+    /* 시설물 가입 - 매니저 검색 ( OpenFeign ) */
+    public ResponseEntity findJoinManager(String managerName, String managerPhoneNumber){
+        try {
+            managerServiceClient.findJoinManager(managerName, managerPhoneNumber);
+        }catch (NullPointerException e){
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body("찾을수 없는 매니저 입니다.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(
+                managerServiceClient.findJoinManager(managerName, managerPhoneNumber));
+
     }
 
 

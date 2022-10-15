@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("")
 public class FacilityJoinController {
 
@@ -33,6 +33,7 @@ public class FacilityJoinController {
         ResponseEntity responseEntity = facilityJoinService.joinFacility(joinFacility,"facility_join_user", "user_uuid",0);
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
+
 
     /* 시설물 탈퇴 - Manger */
     @GetMapping("/resignation/manager{facilityNum}/{managerUuid}")
@@ -72,5 +73,13 @@ public class FacilityJoinController {
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
+    /* 시설물 가입 - 매니저 검색 */
+    @GetMapping("/join/find/manager/{managerName}/{managerPhoneNumber}")
+    public ResponseEntity findJoinManager(@PathVariable("managerName")String managerName,
+                                          @PathVariable("managerPhoneNumber")String managerPhoneNumber){
+        ResponseEntity responseEntity = facilityJoinService.findJoinManager(managerName,managerPhoneNumber);
+        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
+
+    }
 
 }

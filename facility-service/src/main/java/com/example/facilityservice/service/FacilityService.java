@@ -62,7 +62,7 @@ public class FacilityService {
         facilityMapper.rJoinFacility(facility);
 
         /* 생성한 시설물에 최초 관리자 등급 등록 */
-        facilityMapper.setGrade(facility.getManagerUuid(), "관리자");
+        facilityMapper.setGrade(facility.getManagerUuid(), facility.getFacilityNum(), "관리자");
 
 
         return ResponseEntity.status(HttpStatus.OK).body(REGISTER_COMPLETE);
@@ -103,4 +103,13 @@ public class FacilityService {
     }
 
 
+    /* QR 불러오기 */
+    public ResponseEntity findQr(String facilityNum) {
+        String result = facilityMapper.findQr(facilityNum);
+        if(result == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("찾으시는 시설물이 없습니다.");
+        }else {
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        }
+    }
 }

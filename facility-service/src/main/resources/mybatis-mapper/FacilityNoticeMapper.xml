@@ -107,4 +107,9 @@
         INNER JOIN manager m ON m.manager_uuid = fn.manager_uuid
         order by notice_date desc limit ${count}
     </select>
+
+    <!-- 공지 삭제 -->
+    <delete id="deleteNotice">
+        DELETE FROM facility_notice where notice_num = #{noticeNum}
+    </delete>
 </mapper>

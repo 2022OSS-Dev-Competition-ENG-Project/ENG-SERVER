@@ -6,7 +6,7 @@
 <mapper namespace="com.example.facilityservice.mapper.FacilityMapper">
 
     <!-- 시설물 생성 -->
-    <insert id="registerFacility" parameterType="com.example.facilityservice.vo.RequestFacilityRegister">
+    <insert id="registerFacility" parameterType="com.example.facilityservice.vo.RequestFacilityRegister"  useGeneratedKeys="true" keyProperty="reportNum" keyColumn="report_num">
         INSERT INTO facility VALUES (#{facilityNum}, #{facilityName}, #{facilityAddress}, #{facilityQr},#{managerUuid});
     </insert>
 
@@ -17,7 +17,7 @@
 
     <!-- 시설물 생성 - 매니저 등급 설정 -->
     <insert id="setGrade" >
-        INSERT INTO facility_manager_grade VALUES (#{managerUuid}, #{grade});
+        INSERT INTO facility_manager_grade VALUES (#{managerUuid},#{grade}, #{facilityNum});
     </insert>
 
     <!-- 시설물 생성, 시설물 수정 - 주소 중복 검사 -->
@@ -62,6 +62,13 @@
                        where facility_num = #{facilityNum} AND manager_uuid = #{managerUuid}) as fjm
         INNER JOIN facility_manager_grade fmg ON fmg.manager_uuid = fjm.manager_uuid
         WHERE fmg.manager_grade = '관리자';
+    </select>
+
+    <!-- QR 불러오기 -->
+    <select id="findQr" resultType="java.lang.String">
+        select if(facility_qr =null, null,facility_qr)
+        from facility
+        where facility_num = #{facilityNum}
     </select>
 
 

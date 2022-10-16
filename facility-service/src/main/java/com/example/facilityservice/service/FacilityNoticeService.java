@@ -69,4 +69,11 @@ public class FacilityNoticeService {
         }
         return ResponseEntity.status(HttpStatus.OK).body(facilityNoticeList);
     }
+
+    /* 공지 삭제 */
+    public ResponseEntity deleteNotice(Integer noticeNum) {
+        facilityNoticeMapper.deleteNotice(noticeNum);
+        return ResponseEntity.status(HttpStatus.OK).body("삭제 되었습니다.");
+
+    }
 }

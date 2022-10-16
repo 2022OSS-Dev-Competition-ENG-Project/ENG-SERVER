@@ -56,8 +56,13 @@ public class FacilityReportService {
     }
 
     /* 신고 목록 불러오기 */
-    public ResponseEntity getReportList(Integer facilityNum,Integer status) {
-        return ResponseEntity.status(HttpStatus.OK).body(facilityReportMapper.getReportList(facilityNum, status));
+    public ResponseEntity getReportList(String facilityNum, Integer status) {
+        if (status == null){
+            return ResponseEntity.status(HttpStatus.OK).body(facilityReportMapper.getReportListMain(facilityNum));
+        }else{
+            return ResponseEntity.status(HttpStatus.OK).body(facilityReportMapper.getReportList(facilityNum, status));
+        }
+
     }
 
     /* 신고 상세 보기 */
@@ -73,5 +78,11 @@ public class FacilityReportService {
         }else {
             return ResponseEntity.status(HttpStatus.OK).body(facilityReportMapper.getMyReportMain(userUuid,count));
         }
+    }
+
+    /* 신고 처리 */
+    public ResponseEntity changeReportStatus(Integer reportNum, Integer type) {
+        facilityReportMapper.changeReportStatus(reportNum,type);
+        return ResponseEntity.status(HttpStatus.OK).body("처리 되었습니다.");
     }
 }

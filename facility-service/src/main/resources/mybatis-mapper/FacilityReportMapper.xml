@@ -31,7 +31,7 @@
                 #{reportType},
                 #{reportDate},
                 #{reportImg},
-                #{userUuid},
+                #{userUuid},리
                 #{facilityNum})
     </insert>
 
@@ -55,9 +55,23 @@
                u.user_name,
                u.user_uuid,
                r.report_date_time
-        from (select * from report where facility_num = #{facilityNum} AND report_status = {status}) as r
+        from (select * from report where facility_num = #{facilityNum} AND report_status = #{status}) as r
         INNER JOIN user u ON u.user_uuid = r.user_uuid
     </select>
+
+    <!-- 신고 목록 불러오기 (제목, 종류, 작성자, 작성일) - Main -->
+    <select id="getReportListMain" resultMap="reportList">
+        select r.report_num,
+               r.report_title,
+               r.report_type,
+               u.user_name,
+               u.user_uuid,
+               r.report_date_time
+        from (select * from report where facility_num = #{facilityNum}) as r
+                 INNER JOIN user u ON u.user_uuid = r.user_uuid
+    </select>
+
+
 
     <!-- 내가 신고한 리스트 불러오기 - All -->
     <select id="getMyReport" resultMap="reportList">
@@ -88,4 +102,11 @@
                 INNER JOIN user u ON u.user_uuid = r.user_uuid
                 order by r.report_num desc limit 5
     </select>
+
+    <!-- 신고 처리 -->
+    <update id="changeReportStatus">
+        update report
+        set report_status = #{type}
+        where report_num = #{reportNum}
+    </update>
 </mapper>

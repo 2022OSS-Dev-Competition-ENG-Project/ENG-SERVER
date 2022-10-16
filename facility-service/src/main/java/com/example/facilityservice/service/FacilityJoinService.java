@@ -3,6 +3,7 @@ package com.example.facilityservice.service;
 import com.example.facilityservice.client.ManagerServiceClient;
 import com.example.facilityservice.dto.Facility;
 import com.example.facilityservice.mapper.FacilityJoinMapper;
+import com.example.facilityservice.mapper.FacilityMapper;
 import com.example.facilityservice.vo.RequestJoinFacility;
 import com.example.facilityservice.vo.RequestResignationFacility;
 import com.example.facilityservice.vo.ResponseGetMyFacility;
@@ -19,6 +20,7 @@ import static com.example.facilityservice.constant.FacilityJoinConstant.*;
 public class FacilityJoinService {
 
     private FacilityJoinMapper facilityJoinMapper;
+    private FacilityMapper facilityMapper;
     private ManagerServiceClient managerServiceClient;
 
     @Autowired
@@ -36,6 +38,9 @@ public class FacilityJoinService {
         /* 시설물 가입 */
         if(type == 0){
             facilityJoinMapper.joinFacilityUser(joinFacility.getFacilityNum(),joinFacility.getUuid(),table);
+            if(colum == "manager_uuid"){
+            facilityMapper.setGrade(joinFacility.getUuid(), joinFacility.getFacilityNum(), "매니저");
+            }
         }else {
             facilityJoinMapper.joinFacilityManager(joinFacility.getFacilityNum(),joinFacility.getUuid(),table);
         }
@@ -92,14 +97,13 @@ public class FacilityJoinService {
 
     /* 시설물 가입 - 매니저 검색 ( OpenFeign ) */
     public ResponseEntity findJoinManager(String managerName, String managerPhoneNumber){
-        try {
-            managerServiceClient.findJoinManager(managerName, managerPhoneNumber);
-        }catch (NullPointerException e){
-            ResponseEntity.status(HttpStatus.NOT_FOUND).body("찾을수 없는 매니저 입니다.");
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(
-                managerServiceClient.findJoinManager(managerName, managerPhoneNumber));
 
+        if (facilityJoinMapper.findJoinManager(managerName, managerPhoneNumber) == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("찾을수 없는 매니저 입니다.");
+        }else {
+            return ResponseEntity.status(HttpStatus.OK).body(facilityJoinMapper.findJoinManager(managerName, managerPhoneNumber));
+
+        }
     }
 
 

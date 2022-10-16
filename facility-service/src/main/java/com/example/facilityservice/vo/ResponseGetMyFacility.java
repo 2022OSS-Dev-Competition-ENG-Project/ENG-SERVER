@@ -10,5 +10,6 @@ public class ResponseGetMyFacility {
     private String facilityName;
     private String facilityOwner;
     private String facilityOwnerName;
+    private String facilityAddress;
     private Integer likeBool;
 }

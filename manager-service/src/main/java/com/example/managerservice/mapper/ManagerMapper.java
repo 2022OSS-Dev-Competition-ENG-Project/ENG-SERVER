@@ -46,4 +46,10 @@ public interface ManagerMapper {
 
     /* 시설물 가입 - 매니저 검색 ( OpenFegin) */
     String findJoinManager(String managerName, String managerPhoneNumber);
+
+    /* 매니저 직급 불러오기 */
+    String findManagerGrade(String managerUuid, String facilityNum);
+
+    /* 매니저 시설물에서 직급 변경 */
+    void changeGrade(String managerUuid, String facilityNum, String grade);
 }

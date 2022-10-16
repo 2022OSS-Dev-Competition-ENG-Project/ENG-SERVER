@@ -111,4 +111,9 @@
         from manager
         where manager_name = #{userName} AND manager_phone_number = #{managerPhoneNumber}
     </select>
+
+    <!-- 매니저 시설물에서 직급 변경 -->
+    <update id="changeGrade">
+
+    </update>
 </mapper>

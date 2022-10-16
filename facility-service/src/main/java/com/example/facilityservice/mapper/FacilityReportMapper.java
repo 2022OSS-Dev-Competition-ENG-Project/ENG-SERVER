@@ -17,9 +17,12 @@ public interface FacilityReportMapper {
     void updateReportImage(@Param("reportNum") Integer reportNum,
                            @Param("reportImage") String reportImage);
 
-    /* 신고 목록 불러오기 */
-    List<ResponseReportList> getReportList(@Param("facilityNum") Integer facilityNum,
+    /* 신고 목록 불러오기 - Main All */
+    List<ResponseReportList> getReportList(@Param("facilityNum") String facilityNum,
                                            @Param("status") Integer status);
+
+    /* 신고 목록 불러오기 - Main*/
+    List<ResponseReportList> getReportListMain(@Param("facilityNum") String facilityNum);
 
     /* 신고 상세 보기 */
     FacilityReport getReport(@Param("reportNum") Integer reportNum);
@@ -30,4 +33,8 @@ public interface FacilityReportMapper {
     /* 내가 신고한 리스트 불러오기 - Main */
     List<ResponseReportList> getMyReportMain(@Param("userUuid") String userUuid,
                                              @Param("count") Integer count);
+
+    /* 신고 처 */
+    void changeReportStatus(@Param("reportNum") Integer reportNum,
+                            @Param("type") Integer type);
 }

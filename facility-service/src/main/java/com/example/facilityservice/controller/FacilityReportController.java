@@ -26,13 +26,19 @@ public class FacilityReportController {
                                          @RequestPart(required = false) List<MultipartFile> images) throws Exception {
         ResponseEntity responseEntity = facilityReportService.registerReport(facilityReport,images);
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
+    }
 
+    /* 신고 목록 불러오기 - Main */
+    @GetMapping("/report/list/main/{facilityNum}")
+    public ResponseEntity getReportListMain(@PathVariable("facilityNum") String facilityNum){
+        ResponseEntity responseEntity = facilityReportService.getReportList(facilityNum, null);
+        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
     /* 신고 목록 불러오기 */
     @GetMapping("/report/list/{facilityNum}/{status}")
-    public ResponseEntity getReportList(@PathVariable("facilityNum") Integer facilityNum,
-                                    @PathVariable("status") Integer status){
+    public ResponseEntity getReportList(@PathVariable("facilityNum") String facilityNum,
+                                        @PathVariable("status") Integer status){
         ResponseEntity responseEntity = facilityReportService.getReportList(facilityNum, status);
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
@@ -41,6 +47,14 @@ public class FacilityReportController {
     @GetMapping("/report/{reportNum}")
     public ResponseEntity getReport(@PathVariable("reportNum") Integer reportNum){
         ResponseEntity responseEntity = facilityReportService.getReport(reportNum);
+        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
+    }
+
+    /* 신고 처리 */
+    @GetMapping("/report/{reportNum}/{type}")
+    public ResponseEntity changReportStatus(@PathVariable("reportNum") Integer reportNum,
+                                            @PathVariable("type") Integer type){
+        ResponseEntity responseEntity = facilityReportService.changeReportStatus(reportNum,type);
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 

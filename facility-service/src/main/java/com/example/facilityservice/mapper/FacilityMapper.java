@@ -17,7 +17,9 @@ public interface FacilityMapper {
     Integer conflictValidAddress(@Param("facilityAddress") String facilityAddress);
 
     /* 시설물 생성 - 최초 등급 설정*/
-    void setGrade(@Param("managerUuid") String managerUuid,@Param("grade") String grade);
+    void setGrade(@Param("managerUuid") String managerUuid,
+                  @Param("facilityNum") String facilityNum,
+                  @Param("grade") String grade);
 
     /* 시설물 수정 - 시설물 이름 */
     void facilityChangeName(RequestFacilityChangeName changeData);
@@ -34,4 +36,7 @@ public interface FacilityMapper {
     /* 시설물 삭제 - 관리자 검증 */
     Integer validManagerGrade(@Param("facilityNum") String facilityNum,
                               @Param("managerUuid") String managerUuid);
+
+    /* Qr 불러오기 */
+    String findQr(@Param("facilityNum") String facilityNum);
 }

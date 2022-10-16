@@ -48,4 +48,12 @@ public class FacilityNoticeController {
         ResponseEntity responseEntity = facilityNoticeService.getNoticeList(facilityNum, null);
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
+
+    /* 공지 삭제 */
+    @GetMapping("/notice/delete/{noticeNum}")
+    public ResponseEntity deleteNotice(@PathVariable("noticeNum") Integer noticeNum){
+        ResponseEntity responseEntity = facilityNoticeService.deleteNotice(noticeNum);
+        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
+
+    }
 }

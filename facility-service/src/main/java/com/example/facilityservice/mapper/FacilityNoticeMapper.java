@@ -28,4 +28,7 @@ public interface FacilityNoticeMapper {
     /* 공지 리스트 불러오기 - Main Banner(5) */
     List<ResponseGetNoticeList> getNoticeListLt(@Param("facilityNum") String facilityNum,
                                                 @Param("count") Integer count);
+
+    /* 공지 삭제 */
+    void deleteNotice(Integer noticeNum);
 }

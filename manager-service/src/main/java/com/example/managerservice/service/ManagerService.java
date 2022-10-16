@@ -18,6 +18,8 @@ import java.util.UUID;
 
 import static com.example.managerservice.constant.EmailConstant.SMTP_EMAIL_CODE_CHECK_COMPLETE;
 import static com.example.managerservice.constant.EmailConstant.SMTP_EMAIL_CODE_CHECK_NOT_COMPLETE;
+import static com.example.managerservice.constant.GradeConstant.GRADE_CHANGE_FAIL;
+import static com.example.managerservice.constant.GradeConstant.GRADE_CHANGE_FAIL_CONFLICT;
 import static com.example.managerservice.constant.MyPageConstant.PASSWORD_CHANGE_CLEAR;
 import static com.example.managerservice.constant.MyPageConstant.PASSWORD_CHANGE_FAIL;
 import static com.example.managerservice.constant.RegisterConstant.*;
@@ -174,4 +176,21 @@ public class ManagerService {
         return managerMapper.getValidManager(managerUuid);
     }
 
+    /* 매니저 시설물에서 직급 변경 */
+    public ResponseEntity changeGrade(String uuid,String managerUuid, String facilityNum,String grade) {
+        /* 변경 하려는 사용자의 직급 불러오기*/
+        String masterGrade = managerMapper.findManagerGrade(uuid,facilityNum);
+        if (masterGrade != "관리자"){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(GRADE_CHANGE_FAIL);
+        }
+
+        /* 직급 불러오기 */
+        String subGrade = managerMapper.findManagerGrade(managerUuid,facilityNum);
+        if(subGrade == grade){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(GRADE_CHANGE_FAIL_CONFLICT);
+        }
+
+        managerMapper.changeGrade(managerUuid,facilityNum,grade);
+        return ResponseEntity.status(HttpStatus.OK).body("good");
+    }
 }

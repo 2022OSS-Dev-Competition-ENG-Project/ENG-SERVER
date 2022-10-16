@@ -59,7 +59,6 @@ public class FacilityContentService {
             facilityContentMapper.deleteContent(contentNum);
             return ResponseEntity.status(HttpStatus.OK).body(FACILITY_CONTENT_MANAGER_DELETE_COMPLETE);
         }else {
-
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(FACILITY_CONTENT_MANAGER_VALID_FAIL);
         }
     }

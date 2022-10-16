@@ -12,12 +12,12 @@ public class FacilityContentConstant {
     public static final String FACILITY_VIEW_FAIL = "게시물 조회를 실패 하였습니다.";
 
     /* Server */
-//    public static final String FACILITY_CONTENT_IMAGE_SAVE_PATH = "/home/eng2/ENG-STORAGE/images/notice/";
-//    public static final String FACILITY_CONTENT_IMAGE_SAVE_PATH_DB = "http://jlchj.iptime.org:8000/facility-service/image/view/home&eng2&ENG-STORAGE&images&notice&";
+    public static final String FACILITY_CONTENT_IMAGE_SAVE_PATH = "/home/eng2/ENG-STORAGE/images/notice/";
+    public static final String FACILITY_CONTENT_IMAGE_SAVE_PATH_DB = "http://jlchj.iptime.org:8000/facility-service/image/view/home&eng2&ENG-STORAGE&images&notice&";
 //
-//    /*Local*/
-    public static final String FACILITY_CONTENT_IMAGE_SAVE_PATH = "/Users/jeonghunlee/image/notice/";
-    public static final String FACILITY_CONTENT_IMAGE_SAVE_PATH_DB = "http://jlchj.iptime.org:8000/facility-service/image/view/Users&jeonghunlee&image&notice&";
+    /*Local*/
+//    public static final String FACILITY_CONTENT_IMAGE_SAVE_PATH = "/Users/jeonghunlee/image/notice/";
+//    public static final String FACILITY_CONTENT_IMAGE_SAVE_PATH_DB = "http://jlchj.iptime.org:8000/facility-service/image/view/Users&jeonghunlee&image&notice&";
 
     /* 게시물 삭제*/
     public static final String FACILITY_CONTENT_DELETE_VALID_COMPLETE = "게시물을 정상적으로 삭제 하였습니다.";

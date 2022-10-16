@@ -125,7 +125,6 @@ public class UserService {
         }
 
         /* User 비밀번호 찾기 - 랜덤 비밀번호 암호화 */
-        // 로직수정해라 이메일이랑 이름 검색은 완료 했는데 이메일이 안간다.
         public ResponseEntity changeRandomPassword (User user) {
             String ChgUserPassword = RandomObject();
             Integer userEmail = userMapper.UserEmailConform(user.getUserEmail());
@@ -134,7 +133,7 @@ public class UserService {
                 user.setUserPassword(ChgUserPassword);
                 emailService.sendMail(user.getUserEmail(), ChgUserPassword, "ChangePassword");
                 userMapper.changeRandomPassword(user);
-                return ResponseEntity.status(HttpStatus.OK).body(ChgUserPassword);
+                return ResponseEntity.status(HttpStatus.OK).body(SignUpConstant.FIND_PASSWORD_NAME_SUCCESS);
             } else if (userEmail != 1) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(SignUpConstant.FIND_PASSWORD_EMAIL_FAIL);
             } else {

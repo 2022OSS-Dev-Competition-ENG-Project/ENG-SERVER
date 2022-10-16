@@ -21,4 +21,5 @@ public class SignUpConstant {
     public static final String FIND_ID_FAIL = "입력하신 정보가 없습니다.";
     public static final String FIND_PASSWORD_EMAIL_FAIL = "이메일을 다시 확인해주세요.";
     public static final String FIND_PASSWORD_NAME_FAIL = "이름을 다시 확인해주세요.";
+    public static final String FIND_PASSWORD_NAME_SUCCESS = "이메일을 통해 변경된 비밀번호가 전송되었습니다.";
 }

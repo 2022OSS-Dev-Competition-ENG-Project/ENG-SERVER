@@ -37,7 +37,7 @@ public class EmailService {
             message.setText(EmailConstant.SMTP_EMAIL_CODE_CHECK_CONTENT);
             message.setText("\n 안증번호는 [" + key + "]입니다.");
             redisService.deleteData(userEmail);
-            redisService.setDataExpire(userEmail, key, 60 * 3L);
+            redisService.setDataExpire(userEmail, key, 180);
         }
         if(type.equals("ChangePassword")) {
             message.setSubject(EmailConstant.SMTP_PASSWORD_CHANGE_TITLE_MESSAGE);

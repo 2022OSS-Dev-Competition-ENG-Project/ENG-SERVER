@@ -81,4 +81,11 @@ public class FacilityJoinController {
 
     }
 
+    /* 시설물에 가입된 매니저 불러오기 */
+    @GetMapping("/join/manager/{facilityNum}")
+    public ResponseEntity getFacilityManagerList(@PathVariable("facilityNum") String facilityNum){
+        ResponseEntity responseEntity = facilityJoinService.getFacilityManagerList(facilityNum);
+        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
+    }
+
 }

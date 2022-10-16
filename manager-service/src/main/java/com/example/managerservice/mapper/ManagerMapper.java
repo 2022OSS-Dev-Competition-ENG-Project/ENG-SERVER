@@ -45,11 +45,15 @@ public interface ManagerMapper {
     Integer getValidManager(@Param("managerUuid") String managerUuid);
 
     /* 시설물 가입 - 매니저 검색 ( OpenFegin) */
-    String findJoinManager(String managerName, String managerPhoneNumber);
+    String findJoinManager(@Param("managerName") String managerName,
+                           @Param("managerPhoneNumber") String managerPhoneNumber);
 
     /* 매니저 직급 불러오기 */
-    String findManagerGrade(String managerUuid, String facilityNum);
+    String findManagerGrade(@Param("managerUuid") String managerUuid,
+                            @Param("facilityNum") String facilityNum);
 
     /* 매니저 시설물에서 직급 변경 */
-    void changeGrade(String managerUuid, String facilityNum, String grade);
+    void changeGrade(@Param("managerUuid") String managerUuid,
+                     @Param("facilityNum") String facilityNum,
+                     @Param("grade") String grade);
 }

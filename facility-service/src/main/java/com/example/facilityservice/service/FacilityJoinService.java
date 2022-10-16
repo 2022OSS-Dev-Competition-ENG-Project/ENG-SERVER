@@ -1,11 +1,10 @@
 package com.example.facilityservice.service;
 
 import com.example.facilityservice.client.ManagerServiceClient;
-import com.example.facilityservice.dto.Facility;
 import com.example.facilityservice.mapper.FacilityJoinMapper;
 import com.example.facilityservice.mapper.FacilityMapper;
 import com.example.facilityservice.vo.RequestJoinFacility;
-import com.example.facilityservice.vo.RequestResignationFacility;
+import com.example.facilityservice.vo.ResponseFacilityManagerList;
 import com.example.facilityservice.vo.ResponseGetMyFacility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -106,6 +105,9 @@ public class FacilityJoinService {
         }
     }
 
-
-
+    /* 시설물에 가입된 매니저 불러오기 */
+    public ResponseEntity getFacilityManagerList(String facilityNum) {
+        List<ResponseFacilityManagerList> facilityManagerLists = facilityJoinMapper.getFacilityManagerList(facilityNum);
+        return ResponseEntity.status(HttpStatus.OK).body(facilityManagerLists);
+    }
 }

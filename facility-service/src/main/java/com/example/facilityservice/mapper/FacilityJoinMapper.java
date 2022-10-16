@@ -1,8 +1,6 @@
 package com.example.facilityservice.mapper;
 
-import com.example.facilityservice.dto.Facility;
-import com.example.facilityservice.vo.RequestJoinFacility;
-import com.example.facilityservice.vo.RequestResignationFacility;
+import com.example.facilityservice.vo.ResponseFacilityManagerList;
 import com.example.facilityservice.vo.ResponseGetMyFacility;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -63,4 +61,7 @@ public interface FacilityJoinMapper {
 
     /* 시설물 가입 - 매니저 검색 ( OpenFeign ) */
     String findJoinManager(@Param("managerName") String managerName,@Param("managerPhoneNumber") String managerPhoneNumber);
+
+    /* 시설물에 가입된 매니저 불러오기 */
+    List<ResponseFacilityManagerList> getFacilityManagerList(@Param("facilityNum") String facilityNum);
 }

@@ -112,8 +112,17 @@
         where manager_name = #{userName} AND manager_phone_number = #{managerPhoneNumber}
     </select>
 
+    <!-- 매니저 직급 불러오기 -->
+    <select id="findManagerGrade" resultType="java.lang.String">
+        select manager_grade
+        from facility_manager_grade
+        where manager_uuid = #{managerUuid} AND facilityNum = #{facilityNum}
+    </select>
+
     <!-- 매니저 시설물에서 직급 변경 -->
     <update id="changeGrade">
-
+        update facility_manager_grade
+        set manager_grade = #{grade}
+        where manager_uuid =#{managerUuid} AND facility_num = #{facilityNum}
     </update>
 </mapper>

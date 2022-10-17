@@ -4,6 +4,7 @@ import com.example.facilityservice.vo.ResponseFacilityManagerList;
 import com.example.facilityservice.vo.ResponseGetMyFacility;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -64,4 +65,12 @@ public interface FacilityJoinMapper {
 
     /* 시설물에 가입된 매니저 불러오기 */
     List<ResponseFacilityManagerList> getFacilityManagerList(@Param("facilityNum") String facilityNum);
+
+    /* 시설물에 가입된 매니저 삭제 - 매니저 직급 불러오기 */
+    String getManagerGrade(@Param("managerUuid") String managerUuid,
+                         @Param("facilityNum") String facilityNum);
+
+    /* 시설물에 가입된 매니저 삭제 */
+    void joinDeleteManager(@Param("managerUuid") String managerUuid,
+                                     @Param("facilityNum") String facilityNum);
 }

@@ -107,14 +107,4 @@ public class ManagerController {
         ResponseEntity responseEntity = managerService.changeGrade(uuid,managerUuid,facilityNum,grade);
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
-
-    /* 매니저 시설물에서 삭제 */
-    @GetMapping("/change/grade/{uuid}/{managerUuid}/{facilityNum}/{grade}")
-    public ResponseEntity deleteFacilityManage(@PathVariable("uuid") String uuid,
-                                      @PathVariable("managerUuid") String managerUuid,
-                                      @PathVariable("facilityNum") String facilityNum,
-                                      @PathVariable("grade") String grade){
-        ResponseEntity responseEntity = managerService.changeGrade(uuid,managerUuid,facilityNum,grade);
-        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
-    }
 }

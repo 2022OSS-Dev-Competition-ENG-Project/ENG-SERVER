@@ -118,4 +118,18 @@
         INNER JOIN facility_manager_grade fmg ON fmg.manager_uuid = fjm.manager_uuid AND fmg.facility_num = fjm.facility_num
         INNER JOIN facility f ON f.facility_num = fjm.facility_num
     </select>
+
+    <!-- 시설물에 가입된 매니저 삭제 - 매니저 직급 불러오기 -->
+    <select id="getManagerGrade" resultType="java.lang.String">
+        select manager_grade
+        from facility_manager_grade
+        where manager_uuid = #{managerUuid} AND facility_num = #{facilityNum};
+    </select>
+
+    <!-- 시설물에 가입된 매니저 삭제 -->
+    <delete id="joinDeleteManager">
+        delete
+        from facility_join_manager
+        where manager_uuid = #{managerUuid} AND facility_num = #{facilityNum};
+    </delete>
 </mapper>

@@ -116,7 +116,7 @@
     <select id="findManagerGrade" resultType="java.lang.String">
         select manager_grade
         from facility_manager_grade
-        where manager_uuid = #{managerUuid} AND facilityNum = #{facilityNum}
+        where manager_uuid = #{managerUuid} AND facility_num = #{facilityNum}
     </select>
 
     <!-- 매니저 시설물에서 직급 변경 -->

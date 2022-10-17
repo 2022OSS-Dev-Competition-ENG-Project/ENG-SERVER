@@ -180,7 +180,7 @@ public class ManagerService {
     public ResponseEntity changeGrade(String uuid,String managerUuid, String facilityNum,String grade) {
         /* 변경 하려는 사용자의 직급 불러오기*/
         String masterGrade = managerMapper.findManagerGrade(uuid,facilityNum);
-        if (masterGrade != "관리자"){
+        if (!masterGrade.equals("관리자")){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(GRADE_CHANGE_FAIL);
         }
 
@@ -191,6 +191,6 @@ public class ManagerService {
         }
 
         managerMapper.changeGrade(managerUuid,facilityNum,grade);
-        return ResponseEntity.status(HttpStatus.OK).body("good");
+        return ResponseEntity.status(HttpStatus.OK).body("등급이 정상적으로 변경되었습니다.");
     }
 }

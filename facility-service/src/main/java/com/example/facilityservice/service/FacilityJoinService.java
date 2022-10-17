@@ -23,8 +23,10 @@ public class FacilityJoinService {
     private ManagerServiceClient managerServiceClient;
 
     @Autowired
-    public FacilityJoinService(FacilityJoinMapper facilityJoinMapper) {
+    public FacilityJoinService(FacilityJoinMapper facilityJoinMapper, FacilityMapper facilityMapper, ManagerServiceClient managerServiceClient) {
         this.facilityJoinMapper = facilityJoinMapper;
+        this.facilityMapper = facilityMapper;
+        this.managerServiceClient = managerServiceClient;
     }
 
     /* 시설물 가입 */
@@ -34,14 +36,13 @@ public class FacilityJoinService {
         if (facilityJoinMapper.conflictValidJoin(joinFacility.getFacilityNum(),joinFacility.getUuid(), table, colum) == 1){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(FACILITY_JOIN_CONFLICT);
         }
+
         /* 시설물 가입 */
         if(type == 0){
-            facilityJoinMapper.joinFacilityUser(joinFacility.getFacilityNum(),joinFacility.getUuid(),table);
-            if(colum == "manager_uuid"){
-            facilityMapper.setGrade(joinFacility.getUuid(), joinFacility.getFacilityNum(), "매니저");
-            }
+            facilityJoinMapper.joinFacilityUser(joinFacility.getFacilityNum(), joinFacility.getUuid(), table);
         }else {
-            facilityJoinMapper.joinFacilityManager(joinFacility.getFacilityNum(),joinFacility.getUuid(),table);
+            facilityJoinMapper.joinFacilityManager(joinFacility.getFacilityNum(), joinFacility.getUuid(), table);
+            facilityMapper.setGrade(joinFacility.getUuid(), joinFacility.getFacilityNum(), "매니저");
         }
             return ResponseEntity.status(HttpStatus.OK).body(FACILITY_JOIN_COMPLETE);
     }
@@ -101,7 +102,6 @@ public class FacilityJoinService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("찾을수 없는 매니저 입니다.");
         }else {
             return ResponseEntity.status(HttpStatus.OK).body(facilityJoinMapper.findJoinManager(managerName, managerPhoneNumber));
-
         }
     }
 
@@ -109,5 +109,21 @@ public class FacilityJoinService {
     public ResponseEntity getFacilityManagerList(String facilityNum) {
         List<ResponseFacilityManagerList> facilityManagerLists = facilityJoinMapper.getFacilityManagerList(facilityNum);
         return ResponseEntity.status(HttpStatus.OK).body(facilityManagerLists);
+    }
+
+
+    /* 시설물에 가입된 매니저 삭제 */
+    public ResponseEntity joinDeleteManager(String uuid, String managerUuid, String facilityNum) {
+        /* 매니저 등급 불러오기
+        * 삭제하려는 매니저의 등급이 관리자여야 한다.
+        * */
+        if (!facilityJoinMapper.getManagerGrade(uuid,facilityNum).equals("관리자") ||
+                facilityJoinMapper.getManagerGrade(managerUuid,facilityNum).equals("관리자")){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("삭제하려는 매니저의 계정이 관리자 직급이 아니거나");
+        }else {
+            facilityJoinMapper.joinDeleteManager(managerUuid, facilityNum);
+            return ResponseEntity.status(HttpStatus.OK).body("성공적으로 매니저를 추방하였습니다.");
+        }
+
     }
 }

@@ -88,4 +88,13 @@ public class FacilityJoinController {
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
+    /* 시설물에 가입된 매니저 삭제 */
+    @GetMapping("/join/delete/{facilityNum}/{uuid}/{managerUuid}")
+    public ResponseEntity deleteFacilityManage(@PathVariable("uuid") String uuid, /* 삭제를 하려는 사람 */
+                                               @PathVariable("managerUuid") String managerUuid, /* 삭제를 당하는 사람 */
+                                               @PathVariable("facilityNum") String facilityNum){
+        ResponseEntity responseEntity = facilityJoinService.joinDeleteManager(uuid,managerUuid,facilityNum);
+        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
+    }
+
 }

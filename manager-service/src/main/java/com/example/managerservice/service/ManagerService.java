@@ -178,6 +178,14 @@ public class ManagerService {
 
     /* 매니저 시설물에서 직급 변경 */
     public ResponseEntity changeGrade(String uuid,String managerUuid, String facilityNum,String grade) {
+
+        String facilityOwner = managerMapper.findFacilityOwner(facilityNum);
+
+        /* 시설물 주인의 uuid 불러오기 */
+        if(facilityOwner.equals(managerUuid)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("권한이 없습니다");
+        }
+
         /* 변경 하려는 사용자의 직급 불러오기*/
         String masterGrade = managerMapper.findManagerGrade(uuid,facilityNum);
         if (!masterGrade.equals("관리자")){

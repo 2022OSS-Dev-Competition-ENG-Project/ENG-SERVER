@@ -16,7 +16,6 @@ public class QrConstant {
     public static final int QR_CODE_COLOR = 0xFF2e4e96;
     public static final int QR_CODE_BACKGROUND_COLOR = 0xFFFFFFFF;
 
-    /* QR Code Location 불러오기 */
-    public static final String QR_CODE_NOT_FOUND ="존재 하지 않는 QR 코드 입니다.";
+    public static final String NOT_FOUND_QR = "찾으시는 시설물의 QR 코드가 존재하지 않습니다.";
 
 }

@@ -1,11 +1,15 @@
 package com.example.facilityservice.service;
 
+import com.example.facilityservice.mapper.QrMapper;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageConfig;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
@@ -20,6 +24,14 @@ import static com.example.facilityservice.constant.QrConstant.*;
 
 @Service
 public class QrService {
+
+    private QrMapper qrMapper;
+
+    @Autowired
+    public QrService(QrMapper qrMapper) {
+        this.qrMapper = qrMapper;
+    }
+
     /* QR 코드 생성 */
     public String generateQRCodeImage(String facilityNum, String facilityName, String facilityAddress) throws WriterException, IOException {
 
@@ -43,5 +55,15 @@ public class QrService {
         ImageIO.write(bufferedImage, "png", temp);
         String saveDBUrl = QR_CODE_SAVE_PATH_DB + fileName + facilityName + facilityAddress + ".png";
         return saveDBUrl;
+    }
+
+    /* 시설물 QR 불러오기 */
+    public ResponseEntity findQr(String facilityNum) {
+        String result = qrMapper.findQr(facilityNum);
+        if(result == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(NOT_FOUND_QR);
+        }else {
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        }
     }
 }

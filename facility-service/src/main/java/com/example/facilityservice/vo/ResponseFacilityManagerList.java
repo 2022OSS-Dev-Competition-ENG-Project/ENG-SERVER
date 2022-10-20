@@ -7,8 +7,10 @@ public class ResponseFacilityManagerList {
 
     private String managerUuid;
     private String managerName;
-    private String facilityAddress;
+    private String managerPhoneNumber;
     private String managerGrade;
+    private String facilityAddress;
     private String facilityName;
+
 
 }

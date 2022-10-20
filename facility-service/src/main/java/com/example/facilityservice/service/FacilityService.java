@@ -55,7 +55,6 @@ public class FacilityService {
                 facility.getFacilityAddress()));
 
         /* 시설물 생성 */
-        /* FacilityJoin은 Logic 상이 아닌 다중 테이블 Insert를 사용하여 SQL에서 동작합니다.*/
         facilityMapper.registerFacility(facility);
 
         /* 생성한 시설물에 가입 */
@@ -63,7 +62,6 @@ public class FacilityService {
 
         /* 생성한 시설물에 최초 관리자 등급 등록 */
         facilityMapper.setGrade(facility.getManagerUuid(), facility.getFacilityNum(), "관리자");
-
 
         return ResponseEntity.status(HttpStatus.OK).body(REGISTER_COMPLETE);
     }
@@ -76,7 +74,7 @@ public class FacilityService {
             facilityMapper.facilityChangeName(changeData);
             return ResponseEntity.status(HttpStatus.OK).body(FACILITY_CHANGE_NAME);
         }else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(FACILITY_CHANGE_NAME_FAIL);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(FACILITY_CHANGE_NAME_CONFLICT);
         }
     }
 
@@ -87,7 +85,7 @@ public class FacilityService {
             facilityMapper.facilityChangeAddress(changeData);
             return ResponseEntity.status(HttpStatus.OK).body(FACILITY_CHANGE_ADDRESS);
         }else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(FACILITY_CHANGE_ADDRESS_FAIL);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(FACILITY_CHANGE_ADDRESS_CONFLICT);
         }
     }
 
@@ -102,14 +100,4 @@ public class FacilityService {
         }
     }
 
-
-    /* QR 불러오기 */
-    public ResponseEntity findQr(String facilityNum) {
-        String result = facilityMapper.findQr(facilityNum);
-        if(result == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("찾으시는 시설물이 없습니다.");
-        }else {
-            return ResponseEntity.status(HttpStatus.OK).body(result);
-        }
-    }
 }

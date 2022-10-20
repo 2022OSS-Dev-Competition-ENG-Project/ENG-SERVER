@@ -61,7 +61,8 @@ public interface FacilityJoinMapper {
 
 
     /* 시설물 가입 - 매니저 검색 ( OpenFeign ) */
-    String findJoinManager(@Param("managerName") String managerName,@Param("managerPhoneNumber") String managerPhoneNumber);
+    String findJoinManager(@Param("managerName") String managerName,
+                           @Param("managerPhoneNumber") String managerPhoneNumber);
 
     /* 시설물에 가입된 매니저 불러오기 */
     List<ResponseFacilityManagerList> getFacilityManagerList(@Param("facilityNum") String facilityNum);

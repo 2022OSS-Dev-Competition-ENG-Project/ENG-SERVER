@@ -95,11 +95,13 @@ public class FacilityJoinService {
         }
     }
 
-    /* 시설물 가입 - 매니저 검색 ( OpenFeign ) */
+    /* 시설물 가입 - 매니저 검색 ( OpenFeign )
+    *  매니저의 이름과 전화번호 데이터를 입력했을 경우 매니저의 UUID값을 Return 받을수 있다.
+    * */
     public ResponseEntity findJoinManager(String managerName, String managerPhoneNumber){
 
         if (facilityJoinMapper.findJoinManager(managerName, managerPhoneNumber) == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("찾을수 없는 매니저 입니다.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MANAGER_NOT_FOUND);
         }else {
             return ResponseEntity.status(HttpStatus.OK).body(facilityJoinMapper.findJoinManager(managerName, managerPhoneNumber));
         }
@@ -119,10 +121,10 @@ public class FacilityJoinService {
         * */
         if (!facilityJoinMapper.getManagerGrade(uuid,facilityNum).equals("관리자") ||
                 facilityJoinMapper.getManagerGrade(managerUuid,facilityNum).equals("관리자")){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("삭제하려는 매니저의 계정이 관리자 직급이 아니거나");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(NOT_CONDITION_DELETE);
         }else {
             facilityJoinMapper.joinDeleteManager(managerUuid, facilityNum);
-            return ResponseEntity.status(HttpStatus.OK).body("성공적으로 매니저를 추방하였습니다.");
+            return ResponseEntity.status(HttpStatus.OK).body(SUCCESS_DELETE_MANAGER);
         }
 
     }

@@ -56,4 +56,7 @@ public interface ManagerMapper {
     void changeGrade(@Param("managerUuid") String managerUuid,
                      @Param("facilityNum") String facilityNum,
                      @Param("grade") String grade);
+
+    /* 시설물 생성자 UUID 불러오기 */
+    String findFacilityOwner(@Param("facilityNum") String facilityNum);
 }

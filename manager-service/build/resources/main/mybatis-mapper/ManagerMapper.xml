@@ -125,4 +125,11 @@
         set manager_grade = #{grade}
         where manager_uuid =#{managerUuid} AND facility_num = #{facilityNum}
     </update>
+
+    <!-- 시설물 생성자 UUID 불러오기 -->
+    <select id="findFacilityOwner" resultType="java.lang.String">
+        select facility_owner
+        from facility
+        where facility_num = #{facilityNum}
+    </select>
 </mapper>

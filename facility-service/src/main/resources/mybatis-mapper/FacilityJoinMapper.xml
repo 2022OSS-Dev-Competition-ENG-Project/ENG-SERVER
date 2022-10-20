@@ -102,6 +102,7 @@
     <resultMap type="com.example.facilityservice.vo.ResponseFacilityManagerList" id="managerList">
         <result property="managerUuid" column="manager_uuid"/>
         <result property="managerName" column="manager_name"/>
+        <result property="managerPhoneNumber" column="manager_phone_number"/>
         <result property="facilityAddress" column="facility_address"/>
         <result property="facilityName" column="facility_name"/>
         <result property="managerGrade" column="manager_grade"/>
@@ -112,7 +113,8 @@
                m.manager_name,
                f.facility_address,
                f.facility_name,
-               fmg.manager_grade
+               fmg.manager_grade,
+               m.manager_phone_number
         from (select * from facility_join_manager where facility_num = #{facilityNum}) as fjm
         INNER JOIN manager m ON fjm.manager_uuid = m.manager_uuid
         INNER JOIN facility_manager_grade fmg ON fmg.manager_uuid = fjm.manager_uuid AND fmg.facility_num = fjm.facility_num

@@ -1,6 +1,8 @@
 package com.example.facilityservice.controller;
 
+import com.example.facilityservice.service.QrService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -23,13 +25,27 @@ import java.nio.file.Paths;
 public class ImageController {
 
 
+
+    @Autowired
+    public ImageController(QrService qrService) {
+        this.qrService = qrService;
+    }
+
+    private QrService qrService;
+
+    /* 시설물 QR 불러오기 */
+    @GetMapping("/find/qr/{facilityNum}")
+    public ResponseEntity findQr(@PathVariable("facilityNum") String facilityNum){
+        ResponseEntity responseEntity = qrService.findQr(facilityNum);
+        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
+    }
+
     /* 공지사항 이미지 불러오기 통합 */
     @GetMapping(value = "/image/view/{Path}",produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity getImage(@PathVariable("Path") String path) throws IOException {
 
         /* savePath에서 & 문자 모두 /로 치환 */
         String savePath =  "/" + path.replaceAll("&","/");
-        log.info(savePath);
         Resource resource = new FileSystemResource(savePath);
 
         if (!resource.exists())

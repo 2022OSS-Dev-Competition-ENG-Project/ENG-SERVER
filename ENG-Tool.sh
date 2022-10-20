@@ -42,7 +42,6 @@ elif [ "$arg1" == "start" ] ; then
         fi
 
     elif [ "$arg2" == "user" ] ; then
-
         if [ -z CURRENT_PID ] ; then
             echo "[+] user-service starting"
             nohup java -jar user-service/build/libs/user-service-0.0.1-SNAPSHOT.jar&

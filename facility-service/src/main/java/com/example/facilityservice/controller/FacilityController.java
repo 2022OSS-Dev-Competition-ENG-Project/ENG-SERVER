@@ -53,11 +53,5 @@ public class FacilityController {
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 
-    /* 시설물 QR 불러오기 */
-    @GetMapping("/find/qr/{facilityNum}")
-    public ResponseEntity findQr(@PathVariable("facilityNum") String facilityNum){
-        ResponseEntity responseEntity = facilityService.findQr(facilityNum);
-        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
-    }
 
 }

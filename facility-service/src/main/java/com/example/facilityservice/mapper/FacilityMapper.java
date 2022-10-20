@@ -37,6 +37,4 @@ public interface FacilityMapper {
     Integer validManagerGrade(@Param("facilityNum") String facilityNum,
                               @Param("managerUuid") String managerUuid);
 
-    /* Qr 불러오기 */
-    String findQr(@Param("facilityNum") String facilityNum);
 }

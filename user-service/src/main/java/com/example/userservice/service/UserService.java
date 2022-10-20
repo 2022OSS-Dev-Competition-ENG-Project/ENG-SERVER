@@ -29,6 +29,12 @@ import static com.example.userservice.constant.EmailConstant.*;
 @Slf4j
 @Service
 public class UserService {
+
+    UserMapper userMapper;
+    PasswordEncoder passwordEncoder;
+    EmailService emailService;
+    RedisService redisService;
+
     @Autowired
     public UserService(UserMapper userMapper, PasswordEncoder passwordEncoder, EmailService emailService, RedisService redisService) {
         this.userMapper = userMapper;
@@ -37,14 +43,11 @@ public class UserService {
         this.redisService = redisService;
     }
 
-    UserMapper userMapper;
-    PasswordEncoder passwordEncoder;
-    EmailService emailService;
-    RedisService redisService;
-
     /* User 회원가입 */
     public ResponseEntity signupUser(User user) {
+        /* User Uuid 생성 */
         user.setUserUuid(UUID.randomUUID().toString());
+        /* User 회원가입 날짜 */
         user.setUserJoinDate(LocalDate.now());
         /* 휴대폰 번호 중복 체크 */
         if (userMapper.PhoneNumberCheck(user.getUserPhoneNumber()) == 0) {
@@ -64,9 +67,8 @@ public class UserService {
             /* 이메일 인증을 위한 Key값 생성 */
             String key = RandomStringUtils.randomNumeric(6);
             if (userMapper.UserEmailConform(userEmail) == 0) {
-                /* 이메일 발송*/
+                /* 이메일 발송 */
                 emailService.sendMail(userEmail,key,"EmailCheck");
-                /**/
                 return ResponseEntity.status(HttpStatus.OK).body(EMAIL_CHECK_CLEAR);
             } else {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(EMAIL_CHECK_FAIL);
@@ -79,6 +81,7 @@ public class UserService {
             String key = redisService.getData(userEmail);
             if (key == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(SMTP_EMAIL_CODE_CHECK_NOT_COMPLETE);
             if(Integer.parseInt(key) == Integer.parseInt(code)){
+                /* Redis에 key값을 가진 데이터 삭제 */
                 redisService.deleteData(userEmail);
                 return ResponseEntity.status(HttpStatus.OK).body(SMTP_EMAIL_CODE_CHECK_COMPLETE);
             }else {
@@ -88,6 +91,7 @@ public class UserService {
 
         /* User 회원가입 - 중복된 Nickname 검사하기 */
         public ResponseEntity userNickConform (String userNickname){
+            /* NickName 검사하기 */
             Integer conform = userMapper.UserNicknameConform(userNickname);
             if (conform == 0) {
                 return ResponseEntity.status(HttpStatus.OK).body(NICKNAME_CHECK_CLEAR);
@@ -99,6 +103,7 @@ public class UserService {
         /* User 로그인 */
         public ResponseEntity userLogin (User user){
             String ResponsePw = user.getUserPassword();
+            /* Email 찾기 */
             try {
                 findEmail(user).getUserEmail();
             }
@@ -106,6 +111,7 @@ public class UserService {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(SignUpConstant.LOGIN_ID_FAIL);
             }
             String encodePassword = (findEmail(user)).getUserPassword();
+            /* 입력받은 비밀번호와 암호화로 저장된 비밀번호 비교 */
             if (passwordEncoder.matches(ResponsePw,encodePassword)) {
                 String DBUuid = findEmail(user).getUserUuid();
                 return ResponseEntity.status(HttpStatus.OK).body(DBUuid);
@@ -119,6 +125,16 @@ public class UserService {
             return userMapper.findEmail(user);
         }
 
+        /* User 마이페이지 - 유저 정보 불러오기 */
+        public ResponseEntity<Object> myPage (String uuid) {
+            UserDataDto userDataDto = new UserDataDto();
+            userDataDto.setUserEmail(findUuid(uuid).getUserEmail());
+            userDataDto.setUserNickname(findUuid(uuid).getUserNickname());
+            userDataDto.setUserJoinDate(findUuid(uuid).getUserJoinDate());
+            userDataDto.setUserProfileImage(findUuid(uuid).getUserProfileImage());
+            return ResponseEntity.status(HttpStatus.OK).body(userDataDto);
+        }
+
         /* User 마이페이지 - 유저 정보 검색 */
         public User findUuid (String uuid){
             return userMapper.findUuid(uuid);
@@ -126,11 +142,15 @@ public class UserService {
 
         /* User 비밀번호 찾기 - 랜덤 비밀번호 암호화 */
         public ResponseEntity changeRandomPassword (User user) {
+            /* 임시 비밀번호 생성 */
             String ChgUserPassword = RandomObject();
+            /* 입력받은 Email, Name로 회원가입했는지 검사 */
             Integer userEmail = userMapper.UserEmailConform(user.getUserEmail());
             Integer userName = userMapper.UserNameConform(user.getUserName());
             if (userEmail == 1 && userName == 1) {
-                user.setUserPassword(ChgUserPassword);
+                /* 임시 비밀번호 암호화 */
+                user.setUserPassword(passwordEncoder.encode(ChgUserPassword));
+                /* 이메일 발송 */
                 emailService.sendMail(user.getUserEmail(), ChgUserPassword, "ChangePassword");
                 userMapper.changeRandomPassword(user);
                 return ResponseEntity.status(HttpStatus.OK).body(SignUpConstant.FIND_PASSWORD_NAME_SUCCESS);
@@ -141,12 +161,12 @@ public class UserService {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(SignUpConstant.FIND_PASSWORD_NAME_FAIL);
             }
         }
-
+        /* User 비밀번호 찾기 - 임시 비밀번호 10자리 만들기 */
         public String RandomObject () {
             Random rnd = new Random();
             StringBuffer buf = new StringBuffer();
 
-            for (int i = 0; i < 20; i++) {
+            for (int i = 0; i < 10; i++) {
                 if (rnd.nextBoolean()) {
                     buf.append((char) ((int) (rnd.nextInt(26)) + 97));
                 } else {
@@ -156,21 +176,14 @@ public class UserService {
             return buf.toString();
         }
 
-        public ResponseEntity<Object> myPage (String uuid) {
-            UserDataDto userDataDto = new UserDataDto();
-            userDataDto.setUserEmail(findUuid(uuid).getUserEmail());
-            userDataDto.setUserNickname(findUuid(uuid).getUserNickname());
-            userDataDto.setUserJoinDate(findUuid(uuid).getUserJoinDate());
-            userDataDto.setUserProfileImage(findUuid(uuid).getUserProfileImage());
-            return ResponseEntity.status(HttpStatus.OK).body(userDataDto);
-        }
-
         /* User 아이디 찾기 */
         public ResponseEntity findId (FindIdVo findIdVo){
+            /* 입력받은 PhoneNumber, Name으로 회원가입했는지 검사 */
             Integer DBPhoneNu = userMapper.PhoneNumberCheck(findIdVo.getUserPhoneNumber());
             Integer DBName = userMapper.UserNameConform(findIdVo.getUserName());
             if (DBPhoneNu == 1 && DBName == 1) {
-                findIdVo.setUserEmail(userMapper.findId(findIdVo.getUserName()));
+                /* Email 찾기 */
+                findIdVo.setUserEmail(userMapper.findName(findIdVo.getUserName()));
                 return ResponseEntity.status(HttpStatus.OK).body(findIdVo.getUserEmail());
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(SignUpConstant.FIND_ID_FAIL);
@@ -180,12 +193,14 @@ public class UserService {
         /* User 마이페이지 - 비빌번호 재설정 */
         public ResponseEntity changePW (User user){
             String userName = findUuid(user.getUserUuid()).getUserName();
+            /* 입력받은 변경할 비밀번호 암호화 */
             String ChgPassword = passwordEncoder.encode(user.getUserPassword());
             user.setUserPassword(ChgPassword);
             userMapper.changePW(user);
             return ResponseEntity.status(HttpStatus.OK).body(userName + MyPageConstant.MYPAGE_CLEAR);
         }
 
+        /* User 프로필 이미지 가져오기 */
         public  ResponseEntity<byte[]> getImage (String uuid) {
             String savePath = SAVE_PATH;
             InputStream in = null;

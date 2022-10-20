@@ -13,7 +13,5 @@ public class User {
     private String userNickname;
     private String userPhoneNumber;
     private LocalDate userJoinDate;
-    private Integer userLoginKey;
-    private Integer userAccessType;
     private String userProfileImage;
 }

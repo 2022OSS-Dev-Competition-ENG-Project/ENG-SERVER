@@ -29,10 +29,11 @@ public interface UserMapper {
     /* User 비밀번호 찾기 - 랜덤 비밀번호 생성 */
     void changeRandomPassword(User userDto);
 
-    /* User 아이디 찾기 */
-    String findId(String userName);
-    Integer UserNameConform(@Param("userName") String userName);
+    /* User 아이디 찾기 - Name 검색 */
+    String findName(String userName);
 
+    /* User 아이디 찾기 - Name으로 회원가입했는지 검사 */
+    Integer UserNameConform(@Param("userName") String userName);
 
     /* User 마이페이지 - 비빌번호 재설정 */
     void changePW(User userDto);

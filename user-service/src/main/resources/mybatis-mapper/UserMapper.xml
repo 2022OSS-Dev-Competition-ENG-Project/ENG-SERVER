@@ -13,8 +13,6 @@
         <result property="user_phone_number" column="userPhoneNumber"/>
         <result property="user_join_date" column="userJoinDate"/>
         <result property="user_nick_name" column="userNickname"/>
-        <result property="user_access_type" column="userAccessType"/>
-        <result property="user_login_key" column="userLoginKey"/>
     </resultMap>
     <resultMap  type="com.example.userservice.vo.FindIdVo" id="findIdVo">
         <result property="user_email" column="userId"/>

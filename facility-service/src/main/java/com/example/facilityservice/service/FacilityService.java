@@ -61,7 +61,7 @@ public class FacilityService {
         facilityMapper.rJoinFacility(facility);
 
         /* 생성한 시설물에 최초 관리자 등급 등록 */
-        facilityMapper.setGrade(facility.getManagerUuid(), facility.getFacilityNum(), "관리자");
+        facilityMapper.setGrade(facility.getManagerUuid(), facility.getFacilityNum(), "오너");
 
         return ResponseEntity.status(HttpStatus.OK).body(REGISTER_COMPLETE);
     }

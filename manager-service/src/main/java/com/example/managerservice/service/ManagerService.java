@@ -188,7 +188,7 @@ public class ManagerService {
 
         /* 변경 하려는 사용자의 직급 불러오기*/
         String masterGrade = managerMapper.findManagerGrade(uuid,facilityNum);
-        if (!masterGrade.equals("마스터") || !masterGrade.equals("오너")){
+        if (!masterGrade.equals("마스터") && !masterGrade.equals("오너")){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(GRADE_CHANGE_FAIL);
         }
 

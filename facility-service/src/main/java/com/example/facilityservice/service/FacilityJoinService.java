@@ -119,10 +119,16 @@ public class FacilityJoinService {
         /* 매니저 등급 불러오기
         * 삭제하려는 매니저의 등급이 관리자여야 한다.
         * */
+
+        if (facilityJoinMapper.getManagerGrade(uuid,facilityNum).equals("오너")){
+            facilityJoinMapper.joinDeleteManager(managerUuid, facilityNum);
+            return ResponseEntity.status(HttpStatus.OK).body(SUCCESS_DELETE_MANAGER);
+        }
+
         if (!facilityJoinMapper.getManagerGrade(uuid,facilityNum).equals("관리자") ||
                 facilityJoinMapper.getManagerGrade(managerUuid,facilityNum).equals("관리자")){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(NOT_CONDITION_DELETE);
-        }else {
+        } else {
             facilityJoinMapper.joinDeleteManager(managerUuid, facilityNum);
             return ResponseEntity.status(HttpStatus.OK).body(SUCCESS_DELETE_MANAGER);
         }

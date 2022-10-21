@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.facilityservice.mapper.QrMapper">
+
+    <!-- QR 불러오기 -->
+    <select id="findQr" resultType="java.lang.String">
+        select if(facility_qr =null, null,facility_qr)
+        from facility
+        where facility_num = #{facilityNum}
+    </select>
+
+</mapper>

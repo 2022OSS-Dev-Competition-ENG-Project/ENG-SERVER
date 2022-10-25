@@ -116,16 +116,11 @@ public class FacilityJoinService {
 
     /* 시설물에 가입된 매니저 삭제 */
     public ResponseEntity joinDeleteManager(String uuid, String managerUuid, String facilityNum) {
-        /* 매니저 등급 불러오기
-        * 삭제하려는 매니저의 등급이 관리자여야 한다.
-        * */
-
-
 
         /* 삭제를 하려는 사람이 오너일 경우 */
         if (facilityJoinMapper.getManagerGrade(uuid,facilityNum).equals("오너")){
             /* 오너이면서 자기 자신을 삭제하려 했을 경우*/
-            if (uuid.equals(managerUuid)){
+            if (uuid == managerUuid){
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(NOT_CONDITION_DELETE);
             }
             facilityJoinMapper.joinDeleteManager(managerUuid, facilityNum);
@@ -138,7 +133,7 @@ public class FacilityJoinService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(NOT_CONDITION_DELETE);
         } else {
             /* 마스터이면서 자기 자신을 삭제 하려 했을 경우 */
-            if (uuid.equals(managerUuid)){
+            if (uuid == managerUuid){
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(NOT_CONDITION_DELETE);
             }
             facilityJoinMapper.joinDeleteManager(managerUuid, facilityNum);

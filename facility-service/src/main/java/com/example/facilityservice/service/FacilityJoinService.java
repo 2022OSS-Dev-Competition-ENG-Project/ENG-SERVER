@@ -120,7 +120,7 @@ public class FacilityJoinService {
         /* 삭제를 하려는 사람이 오너일 경우 */
         if (facilityJoinMapper.getManagerGrade(uuid,facilityNum).equals("오너")){
             /* 오너이면서 자기 자신을 삭제하려 했을 경우*/
-            if (uuid == managerUuid){
+            if (uuid.equals(managerUuid)){
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(NOT_CONDITION_DELETE);
             }
             facilityJoinMapper.joinDeleteManager(managerUuid, facilityNum);
@@ -133,7 +133,7 @@ public class FacilityJoinService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(NOT_CONDITION_DELETE);
         } else {
             /* 마스터이면서 자기 자신을 삭제 하려 했을 경우 */
-            if (uuid == managerUuid){
+            if (uuid.equals(managerUuid)){
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(NOT_CONDITION_DELETE);
             }
             facilityJoinMapper.joinDeleteManager(managerUuid, facilityNum);

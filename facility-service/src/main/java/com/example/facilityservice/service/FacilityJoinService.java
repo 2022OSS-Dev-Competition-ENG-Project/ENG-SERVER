@@ -120,15 +120,27 @@ public class FacilityJoinService {
         * 삭제하려는 매니저의 등급이 관리자여야 한다.
         * */
 
+
+
+        /* 삭제를 하려는 사람이 오너일 경우 */
         if (facilityJoinMapper.getManagerGrade(uuid,facilityNum).equals("오너")){
+            /* 오너이면서 자기 자신을 삭제하려 했을 경우*/
+            if (uuid.equals(managerUuid)){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(NOT_CONDITION_DELETE);
+            }
             facilityJoinMapper.joinDeleteManager(managerUuid, facilityNum);
             return ResponseEntity.status(HttpStatus.OK).body(SUCCESS_DELETE_MANAGER);
         }
 
-        if (!facilityJoinMapper.getManagerGrade(uuid,facilityNum).equals("관리자") ||
-                facilityJoinMapper.getManagerGrade(managerUuid,facilityNum).equals("관리자")){
+        /* 삭제를 하려는 사람이 마스터이고 삭제를 당하는 사람이 마스터 일경우 */
+        if (!facilityJoinMapper.getManagerGrade(uuid,facilityNum).equals("마스터") ||
+                facilityJoinMapper.getManagerGrade(managerUuid,facilityNum).equals("마스터")){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(NOT_CONDITION_DELETE);
         } else {
+            /* 마스터이면서 자기 자신을 삭제 하려 했을 경우 */
+            if (uuid.equals(managerUuid)){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(NOT_CONDITION_DELETE);
+            }
             facilityJoinMapper.joinDeleteManager(managerUuid, facilityNum);
             return ResponseEntity.status(HttpStatus.OK).body(SUCCESS_DELETE_MANAGER);
         }

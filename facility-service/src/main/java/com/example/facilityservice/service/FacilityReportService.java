@@ -46,7 +46,7 @@ public class FacilityReportService {
         if (files != null) {
             StringBuilder sb = new StringBuilder();
             for (String item : reportImageService.saveContentImage(files, facilityReport.getFacilityNum(), facilityReport.getReportNum())) {
-                sb.append(item + " ");
+                sb.append(item + "|");
             }
             /* reportDto에 reportImg를 방금 들어온 경로로 업데이트 한다. */
             facilityReport.setReportImg(sb.toString());

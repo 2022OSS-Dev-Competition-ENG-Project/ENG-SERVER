@@ -34,7 +34,7 @@ public class EmailService {
             message.setSubject(SMTP_EMAIL_CHECK_TITLE_MESSAGE);
             message.setText(SMTP_EMAIL_CHECK_MESSAGE.replaceAll("\\$key", key));
             redisService.deleteData(userEmail);
-            redisService.setDataExpire(userEmail,key,1800);
+            redisService.setDataExpire(userEmail,key,180L);
         }
         if (type.equals("resetPassword")) {
             message.setSubject(SMTP_PASSWORD_CHANGE_TITLE_MESSAGE);

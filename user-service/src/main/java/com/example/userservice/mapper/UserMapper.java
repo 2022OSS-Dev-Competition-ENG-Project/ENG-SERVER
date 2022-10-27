@@ -1,7 +1,6 @@
 package com.example.userservice.mapper;
 
 import com.example.userservice.dto.User;
-import com.example.userservice.vo.FindIdVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -30,7 +29,7 @@ public interface UserMapper {
     void changeRandomPassword(User userDto);
 
     /* User 아이디 찾기 - Name 검색 */
-    String findName(String userName);
+    User FindEmail(User user);
 
     /* User 아이디 찾기 - Name으로 회원가입했는지 검사 */
     Integer UserNameConform(@Param("userName") String userName);

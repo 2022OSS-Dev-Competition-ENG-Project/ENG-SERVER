@@ -82,8 +82,8 @@
     </update>
 
     <!--User 아이디 찾기-->
-    <select id="findId" resultType="java.lang.String">
-        select user_email
+    <select id="FindEmail" resultType="com.example.userservice.dto.User">
+        select *
         from user
         where user_name = #{userName}
     </select>

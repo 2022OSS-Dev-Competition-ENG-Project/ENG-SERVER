@@ -65,8 +65,8 @@ public class UserController {
 
     /* 아이디 찾기 */
     @PostMapping (value = "/FindUserid")
-    public ResponseEntity FindUserId (@RequestBody FindIdVo findIdVo){
-        ResponseEntity responseEntity = userService.findId(findIdVo);
+    public ResponseEntity FindUserId (@RequestBody User user){
+        ResponseEntity responseEntity = userService.FindId(user);
         return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
     }
 

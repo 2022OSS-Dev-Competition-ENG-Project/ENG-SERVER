@@ -177,14 +177,14 @@ public class UserService {
         }
 
         /* User 아이디 찾기 */
-        public ResponseEntity findId (FindIdVo findIdVo){
+        public ResponseEntity FindId (User user){
             /* 입력받은 PhoneNumber, Name으로 회원가입했는지 검사 */
-            Integer DBPhoneNu = userMapper.PhoneNumberCheck(findIdVo.getUserPhoneNumber());
-            Integer DBName = userMapper.UserNameConform(findIdVo.getUserName());
+            Integer DBPhoneNu = userMapper.PhoneNumberCheck(user.getUserPhoneNumber());
+            Integer DBName = userMapper.UserNameConform(user.getUserName());
             if (DBPhoneNu == 1 && DBName == 1) {
                 /* Email 찾기 */
-                findIdVo.setUserEmail(userMapper.findName(findIdVo.getUserName()));
-                return ResponseEntity.status(HttpStatus.OK).body(findIdVo.getUserEmail());
+                String DBEmail = String.valueOf(userMapper.FindEmail(user).getUserEmail());
+                return ResponseEntity.status(HttpStatus.OK).body(DBEmail);
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(SignUpConstant.FIND_ID_FAIL);
             }

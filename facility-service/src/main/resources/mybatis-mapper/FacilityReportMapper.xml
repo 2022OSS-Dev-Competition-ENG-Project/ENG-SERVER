@@ -5,13 +5,26 @@
 
 <mapper namespace="com.example.facilityservice.mapper.FacilityReportMapper">
 
-    <resultMap id="reportList" type="com.example.facilityservice.vo.ResponseReportList">
+    <resultMap id="report" type="com.example.facilityservice.dto.FacilityReport">
         <result property="reportNum" column="report_num"/>
         <result property="reportTitle" column="report_title"/>
-        <result property="reportText" column="report_text"/>
+        <result property="reportText" column="report_text–"/>
         <result property="reportType" column="report_type"/>
         <result property="reportDate" column="report_date_time"/>
         <result property="reportImg" column="report_image"/>
+        <result property="reportStatus" column="report_status"/>
+        <result property="userUuid" column="user_uuid"/>
+        <result property="facilityNum" column="facility_num"/>
+    </resultMap>
+
+    <resultMap id="reportList" type="com.example.facilityservice.vo.ResponseReportList">
+        <result property="reportNum" column="report_num"/>
+        <result property="reportTitle" column="report_title"/>
+        <result property="reportText" column="report_text–"/>
+        <result property="reportType" column="report_type"/>
+        <result property="reportDate" column="report_date_time"/>
+        <result property="reportImage" column="report_image"/>
+        <result property="reportStatus" column="report_status"/>
         <result property="userUuid" column="user_uuid"/>
     </resultMap>
 
@@ -36,7 +49,7 @@
     </insert>
 
     <!-- 신고 불러오기 -->
-    <select id="getReport" resultMap="reportList">
+    <select id="getReport" resultMap="report">
         select *
         from report
         where report_num = #{reportNum};

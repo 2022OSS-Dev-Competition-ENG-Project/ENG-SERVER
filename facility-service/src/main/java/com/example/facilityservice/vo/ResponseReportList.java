@@ -10,8 +10,10 @@ import java.time.LocalDateTime;
 public class ResponseReportList {
     private int reportNum;
     private String reportTitle;
+    private String reportText;
     private String reportType;
     private LocalDateTime reportDate;
+    private String reportImage;
     private Integer reportStatus;
     private String userUuid;
     private String userName;

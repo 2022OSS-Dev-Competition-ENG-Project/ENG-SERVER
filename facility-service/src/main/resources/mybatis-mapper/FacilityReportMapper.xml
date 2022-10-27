@@ -36,7 +36,7 @@
     </insert>
 
     <!-- 신고 불러오기 -->
-    <select id="getReport" resultType="com.example.facilityservice.dto.FacilityReport">
+    <select id="getReport" resultMap="reportList">
         select *
         from report
         where report_num = #{reportNum};

@@ -8,7 +8,7 @@
     <resultMap id="report" type="com.example.facilityservice.dto.FacilityReport">
         <result property="reportNum" column="report_num"/>
         <result property="reportTitle" column="report_title"/>
-        <result property="reportText" column="report_text–"/>
+        <result property="reportText" column="report_text"/>
         <result property="reportType" column="report_type"/>
         <result property="reportDate" column="report_date_time"/>
         <result property="reportImg" column="report_image"/>

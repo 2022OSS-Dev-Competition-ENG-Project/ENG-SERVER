@@ -61,7 +61,7 @@
         FROM (select * from facility_join_manager
                        where facility_num = #{facilityNum} AND manager_uuid = #{managerUuid}) as fjm
         INNER JOIN facility_manager_grade fmg ON fmg.manager_uuid = fjm.manager_uuid
-        WHERE fmg.manager_grade = '관리자';
+        WHERE fmg.manager_grade = '오너';
     </select>
 
 
